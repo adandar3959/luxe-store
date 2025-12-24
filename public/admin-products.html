@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products | Admin</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <style>
+        /* Specific Styles for this page */
+        .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn-add { background: #695CFE; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .btn-add:hover { background: #5a4edc; }
+        
+        .product-img-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #333; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); }
+        .modal-content { background-color: #1e1e2d; margin: 5% auto; padding: 30px; border-radius: 12px; width: 500px; color: white; border: 1px solid #333; }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: white; }
+        
+        /* Form grid inside modal */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-width { grid-column: span 2; }
+        input, textarea, select { background: #151521; border: 1px solid #333; color: white; padding: 10px; border-radius: 5px; width: 100%; margin-top: 5px; }
+        
+        .stock-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .btn-small { padding: 5px 10px; font-size: 12px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    
+
+    <div class="sidebar">
+        <div class="logo"><i class='bx bxs-pie-chart-alt-2'></i> Sales<br>MANAGEMENT</div>
+         <a href="admin-dashboard.html" class="menu-item"><i class='bx bxs-dashboard'></i> Dashboard</a>
+        <a href="profile.html" class="menu-item"><i class='bx bx-user'></i> Profile</a>
+        <a href="admin-products.html" class="menu-item"><i class='bx bx-shopping-bag'></i> Products</a>
+        <a href="admin-orders.html" class="menu-item"><i class='bx bx-cart'></i> Orders</a>
+        <a href="admin-customers.html" class="menu-item"><i class='bx bx-group'></i> Customers</a>
+        <a href="admin-employees.html" class="menu-item"><i class='bx bx-id-card'></i> Employees</a>
+        <a href="admin-finance.html" class="menu-item active"><i class='bx bx-wallet'></i> Finance</a>
+        <a href="categories.html" class="menu-item active"><i class='bx bx-category'></i> Categories</a>
+        <a href="index.html" class="menu-item"><i class='bx bx-store'></i> View Store</a>
+        
+    </div>
+
+    <div class="main-content">
+        <div class="header-actions">
+            <div>
+                <h2>Products Inventory</h2>
+
+                <div class="upload-container" style="background: #1e1e2f; border-radius: 10px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid #2b2b40;">
+    
+                    <div style="display: flex; justify-content: space-between; align-items: start; gap: 20px; flex-wrap: wrap;">
+                        
+                        <div style="flex: 1; min-width: 250px;">
+                            <h3 style="margin: 0 0 8px 0; color: #fff; font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                                <i class='bx bxs-cloud-upload' style="color: #695CFE; font-size: 20px;"></i> 
+                                Bulk Import Products
+                            </h3>
+                            <p style="margin: 0; color: #a0a0b0; font-size: 13px; line-height: 1.5;">
+                                Use this feature to add multiple products at once. <br>
+                                Accepted format: <strong>.csv</strong> with headers (name, price, brand, etc).
+                            </p>
+                            <div style="margin-top: 12px;">
+                                <button onclick="downloadTemplate()" style="background: transparent; border: 1px solid #695CFE; color: #695CFE; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; gap: 5px; transition: 0.2s;">
+                                    <i class='bx bxs-download'></i> Download CSV Template
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="drop-zone" id="dropZone" style="flex: 1; min-width: 300px; position: relative; border: 2px dashed #3f3f5f; border-radius: 8px; background: #252539; transition: all 0.3s ease;">
+                            
+                            <input type="file" id="csvFileInput" accept=".csv" style="width: 100%; height: 100%; opacity: 0; position: absolute; top: 0; left: 0; cursor: pointer; z-index: 10;">
+                            
+                            <div style="padding: 20px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                                <i class='bx bx-file' style="font-size: 32px; color: #695CFE; margin-bottom: 8px;"></i>
+                                <span id="fileNameDisplay" style="color: #ccc; font-size: 14px; font-weight: 500;">Click or Drag CSV file here</span>
+                                <span id="uploadStatus" style="font-size: 12px; margin-top: 5px; height: 15px; display: block;"></span>
+                            </div>
+
+                        </div>
+
+                        <div style="display: flex; align-items: center;">
+                            <button onclick="uploadCSV()" style="background: #695CFE; color: white; border: none; padding: 0 20px; height: 50px; border-radius: 8px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 15px rgba(105, 92, 254, 0.4); transition: transform 0.2s;">
+                                Upload
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <p style="color:#a0a0a0">Total Products: <span id="totalProductCount">totalProductCount</span></p>
+            </div>
+            <button class="btn-add" onclick="openAddModal()"><i class='bx bx-plus'></i> Add Product</button>
+        </div>
+
+        <div class="card">
+            <table class="main-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Brand</th>
+                        <th>Total Stock</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody">
+                    <tr><td colspan="6" style="text-align:center">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" style="margin-bottom:20px;">Add New Product</h2>
+            
+            <form id="productForm">
+                <input type="hidden" id="editId">
+                
+                <label>Product Name</label>
+                <input type="text" id="pName" required>
+
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div>
+                        <label>Price (Rs)</label>
+                        <input type="number" id="pPrice" required>
+                    </div>
+                    <div>
+                        <label>Brand</label>
+                        <input type="text" id="pBrand" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="pParentCategory" onchange="handleParentChange()" style="width:100%; padding:10px; background:#2b2b40; color:white; border:1px solid #333; margin-bottom:10px; border-radius:5px;">
+                        <option value="">Select Parent Category</option>
+                        </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Subcategory (Optional)</label>
+                    <select id="pSubCategory" style="width:100%; padding:10px; background:#2b2b40; color:white; border:1px solid #333; margin-bottom:15px; border-radius:5px;">
+                        <option value="">Select Subcategory</option>
+                        </select>
+                </div>
+
+                <label>Image URL</label>
+                <input type="text" id="pImage" placeholder="http://..." required>
+
+                <label>Description</label>
+                <textarea id="pDesc" rows="3" style="width:100%; background:#2b2b40; color:white; border:1px solid #333; margin-bottom:15px;"></textarea>
+
+                <div style="background:#2b2b40; padding:10px; border-radius:8px; border:1px solid #695CFE;">
+                    <label style="color:#695CFE; font-weight:bold;">Stock</label>
+                    <input type="number" id="pQty" placeholder="Qty" required>
+                </div>
+
+                <button type="submit" class="btn-add" style="width:100%; margin-top:20px;">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin-products.js"></script>
+    <script src="js/sidebar-access.js"></script>    
+</body>
+</html>

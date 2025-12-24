@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers | Admin</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <i class='bx bxs-pie-chart-alt-2'></i> Sales<br>MANAGEMENT
+        </div>
+        <a href="admin-dashboard.html" class="menu-item active"><i class='bx bxs-dashboard'></i> Dashboard</a>
+        <a href="profile.html" class="menu-item"><i class='bx bx-user'></i> Profile</a>
+        <a href="admin-products.html" class="menu-item"><i class='bx bx-shopping-bag'></i> Products</a>
+        <a href="admin-orders.html" class="menu-item"><i class='bx bx-cart'></i> Orders</a>
+        <a href="admin-customers.html" class="menu-item"><i class='bx bx-group'></i> Customers</a>
+        <a href="admin-employees.html" class="menu-item"><i class='bx bx-id-card'></i> Employees</a>
+        <a href="admin-finance.html" class="menu-item"><i class='bx bx-wallet'></i> Finance</a>
+        <a href="categories.html" class="menu-item active"><i class='bx bx-category'></i> Categories</a>        
+        <a href="index.html" class="menu-item"><i class='bx bx-store'></i> View Store</a>  
+        <a href="#" class="menu-item logout-btn" style="color: #FF4560;"><i class='bx bx-log-out'></i> Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <h2 class="section-title">Customer Management</h2>
+            <div class="admin-profile">
+                <i class='bx bxs-bell'></i>
+                <div class="admin-img">A</div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="stats-grid">
+            <div class="card">
+                <div class="icon-box blue"><i class='bx bx-group'></i></div>
+                <h3 id="totalCustomers">0</h3>
+                <p>Total Customers</p>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="card">
+            <h3>Registered Customers</h3>
+            <table class="main-table">
+                <thead>
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Joined Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="customerTableBody">
+                    <tr><td colspan="5" style="text-align:center">Loading customers...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            if (!userInfo || userInfo.role !== 'admin') {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+
+            try {
+                const res = await fetch('http://localhost:5000/api/admin/customers', {
+                    headers: { 'Authorization': `Bearer ${userInfo.token}` }
+                });
+                const customers = await res.json();
+
+                // Update Count
+                document.getElementById('totalCustomers').innerText = customers.length;
+
+                // Render Table
+                const tbody = document.getElementById('customerTableBody');
+                tbody.innerHTML = '';
+
+                if (customers.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No customers found.</td></tr>';
+                    return;
+                }
+
+                customers.forEach(user => {
+                    const date = new Date(user.createdAt).toLocaleDateString();
+                    const initial = user.name.charAt(0).toUpperCase();
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><div class="avatar-circle" style="width:35px; height:35px; background:#695CFE; color:white; display:flex; align-items:center; justify-content:center; border-radius:50%; font-weight:bold;">${initial}</div></td>
+                        <td style="font-weight:600">${user.name}</td>
+                        <td style="color:#aaa">${user.email}</td>
+                        <td>${date}</td>
+                        <td><i class='bx bx-trash' style="color:#FF4560; cursor:pointer;" onclick="alert('Delete feature coming soon')"></i></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error(error);
+                alert('Error fetching customers');
+            }
+        });
+    </script>
+    <script src="js/sidebar-access.js"></script>
+</body>
+</html>

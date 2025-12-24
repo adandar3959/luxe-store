@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Management Dashboard</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <i class='bx bxs-pie-chart-alt-2'></i> 
+            Sales<br>MANAGEMENT
+        </div>
+        
+        <a href="admin-dashboard.html" class="menu-item active"><i class='bx bxs-dashboard'></i> Dashboard</a>
+        <a href="profile.html" class="menu-item"><i class='bx bx-user'></i> Profile</a>
+        <a href="admin-products.html" class="menu-item"><i class='bx bx-shopping-bag'></i> Products</a>
+        <a href="admin-orders.html" class="menu-item"><i class='bx bx-cart'></i> Orders</a>
+        <a href="admin-customers.html" class="menu-item"><i class='bx bx-group'></i> Customers</a>
+        <a href="admin-employees.html" class="menu-item"><i class='bx bx-id-card'></i> Employees</a>
+        <a href="admin-finance.html" class="menu-item"><i class='bx bx-wallet'></i> Finance</a>
+        <a href="categories.html" class="menu-item active"><i class='bx bx-category'></i> Categories</a>        
+        <a href="index.html" class="menu-item"><i class='bx bx-store'></i> View Store</a>    
+</div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <i class='bx bx-search'></i>
+            <input type="text" placeholder="Search here...">
+            <div class="admin-profile">
+                <i class='bx bxs-bell'></i>
+                <div class="admin-img" id="adminAvatar">A</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Today's Sales</h2>
+        <p class="section-subtitle">Sales Summary</p>
+        
+        <div class="stats-grid">
+            <div class="card">
+                <div class="icon-box yellow"><i class='bx bx-stats'></i></div>
+                <h3 id="statSales">$0</h3>
+                <p>Total Sales</p>
+            </div>
+            <div class="card">
+                <div class="icon-box blue"><i class='bx bx-notepad'></i></div>
+                <h3 id="statOrders">0</h3>
+                <p>Total Orders</p>
+            </div>
+            <div class="card">
+                <div class="icon-box purple"><i class='bx bx-shopping-bag'></i></div>
+                <h3 id="statProducts">0</h3>
+                <p>Products Sold</p>
+            </div>
+            <div class="card">
+                <div class="icon-box blue"><i class='bx bx-user-plus'></i></div>
+                <h3 id="statCustomers">0</h3>
+                <p>New Customers</p>
+            </div>
+        </div>
+
+        <div class="middle-section">
+            <div class="card earnings-box">
+                <h3>Earnings</h3>
+                <p>Total Expense</p>
+                <h2 class="earning-amount">$0.00</h2>
+                <div class="gauge-circle">80%</div>
+                <p class="profit-text">Profit is 48% More than last Month</p>
+            </div>
+
+            <div class="card">
+                <h3>Top Products</h3>
+                <table class="simple-table">
+                    <tbody id="topProductsTable">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Recent Orders</h3>
+            <table class="main-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTable"> 
+                    <tr><td colspan="5" style="text-align:center;">Loading orders...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/admin-dashboard.js"></script>
+    <script src="js/sidebar-access.js"></script>
+</body>
+</html>

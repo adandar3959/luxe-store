@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restock Alert | Luxe</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <style>
+        .stock-alert {
+            color: #FF4560;
+            font-weight: bold;
+            background: rgba(255, 69, 96, 0.1);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .btn-update {
+            background-color: #695CFE;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo"><i class='bx bxl-sketch'></i> LUXE.</div>
+        <a href="profile.html" class="menu-item"><i class='bx bx-user'></i> Profile</a>
+        <a href="admin-products.html" class="menu-item"><i class='bx bx-shopping-bag'></i> Products</a>
+        <a href="admin-orders.html" class="menu-item"><i class='bx bx-cart'></i> Orders</a>
+        <a href="categories.html" class="menu-item"><i class='bx bx-category'></i> Categories</a>
+        <a href="index.html" class="menu-item"><i class='bx bx-store'></i> View Store</a>
+        <a href="#" class="menu-item logout-btn"><i class='bx bx-log-out'></i> Logout</a>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <div>
+                <h2 class="page-title" style="color: #FF4560;">Restock Alerts</h2>
+                <p style="color: #a0a0a0; font-size: 14px;">Products with stock level 5 or lower.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <table class="main-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Current Stock</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="restockTableBody">
+                    <tr><td colspan="5" style="text-align:center">Loading low stock items...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/sidebar-access.js"></script>
+    <script src="js/restock.js"></script>
+</body>
+</html>

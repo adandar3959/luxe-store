@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Sign Up | LUXE</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* (Keep your existing CSS here) */
+        body { background: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: sans-serif; }
+        .auth-container { background: #fff; width: 400px; padding: 40px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; }
+        .logo { font-size: 24px; font-weight: bold; margin-bottom: 30px; display: block; color: #1a1a1a; text-decoration: none; }
+        .tab-box { display: flex; justify-content: space-around; border-bottom: 2px solid #eee; margin-bottom: 30px; }
+        .tab-btn { background: none; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; color: #777; font-weight: 500; transition: 0.3s; }
+        .tab-btn.active { color: #1a1a1a; border-bottom: 2px solid #1a1a1a; margin-bottom: -2px; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; font-size: 13px; margin-bottom: 5px; font-weight: 500; }
+        .form-group input { width: 100%; padding: 12px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 6px; outline: none; }
+        .btn-submit { width: 100%; background: #1a1a1a; color: white; padding: 12px; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; transition: 0.3s; }
+        .btn-submit:hover { background: #695CFE; }
+        .hidden { display: none; }
+        .error-msg { color: red; font-size: 13px; margin-bottom: 15px; display: none; }
+        .admin-link-box { margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; }
+        .admin-link-box a { color: #1a1a1a; font-weight: 600; text-decoration: none; }
+
+        /* --- NEW MODAL STYLES --- */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+        .modal-content { background-color: #fff; padding: 30px; border-radius: 12px; width: 350px; position: relative; text-align: left; }
+        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <a href="index.html" class="logo">LUXE.</a>
+        
+        <div class="tab-box">
+            <button class="tab-btn active" onclick="switchTab('login')">Login</button>
+            <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <p class="error-msg" id="errorMsg">Error message here</p>
+
+        <form id="authForm">
+            <div class="form-group hidden" id="nameGroup">
+                <label>Full Name</label>
+                <input type="text" id="name" placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="john@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+                <div style="text-align: right; margin-top: 5px;" id="forgotLinkBox">
+                    <a href="#" onclick="openForgotModal()" style="font-size: 12px; color: #695CFE; text-decoration: none;">Forgot Password?</a>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">Login</button>
+        </form>
+
+        <div class="admin-link-box">
+            <p>Staff ?  <a href="admin-login.html">Admin SignUp</a></p>
+        </div>
+    </div>
+
+    <div id="forgotModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeForgotModal()">&times;</span>
+            <h3 style="margin-top: 0;">Reset Password</h3>
+            
+            <div id="step1">
+                <p style="font-size:13px; color:#666;">Enter your email to receive an OTP.</p>
+                <div class="form-group">
+                    <input type="email" id="forgotEmail" placeholder="Enter your email">
+                </div>
+                <button class="btn-submit" onclick="sendOTP()">Send OTP</button>
+            </div>
+
+            <div id="step2" class="hidden">
+                <p style="font-size:13px; color:#00b894;">OTP Sent! Check your email.</p>
+                <div class="form-group">
+                    <label>Enter OTP</label>
+                    <input type="text" id="otpInput" placeholder="6-digit code">
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="newPassInput" placeholder="New Password">
+                </div>
+                <button class="btn-submit" onclick="resetPassword()">Update Password</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/customer-login.js"></script>
+    <script>
+        // Modal Logic
+        const API_URL_BASE = 'http://localhost:5000/api/users'; // Adjust if needed
+
+        function openForgotModal() {
+            document.getElementById('forgotModal').style.display = 'flex';
+            document.getElementById('step1').classList.remove('hidden');
+            document.getElementById('step2').classList.add('hidden');
+        }
+        function closeForgotModal() {
+            document.getElementById('forgotModal').style.display = 'none';
+        }
+
+        async function sendOTP() {
+            const email = document.getElementById('forgotEmail').value;
+            if(!email) return alert("Please enter email");
+
+            try {
+                const res = await fetch(`${API_URL_BASE}/forgot-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+                
+                if(res.ok) {
+                    document.getElementById('step1').classList.add('hidden');
+                    document.getElementById('step2').classList.remove('hidden');
+                } else {
+                    alert(data.message || "Failed to send OTP");
+                }
+            } catch (err) { console.error(err); alert("Error sending OTP"); }
+        }
+
+        async function resetPassword() {
+            const email = document.getElementById('forgotEmail').value;
+            const otp = document.getElementById('otpInput').value;
+            const newPassword = document.getElementById('newPassInput').value;
+
+            if(!otp || !newPassword) return alert("Please fill all fields");
+
+            try {
+                const res = await fetch(`${API_URL_BASE}/reset-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otp, newPassword })
+                });
+                const data = await res.json();
+
+                if(res.ok) {
+                    alert("Password Changed Successfully! Please Login.");
+                    closeForgotModal();
+                } else {
+                    alert(data.message || "Failed to reset");
+                }
+            } catch (err) { console.error(err); alert("Error resetting password"); }
+        }
+    </script>
+</body>
+</html>

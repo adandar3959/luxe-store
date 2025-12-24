@@ -1,0 +1,53 @@
+const mongoose = require('mongoose');
+
+const orderSchema = new mongoose.Schema({
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+
+    orderItems: [
+        {
+            name: { type: String, required: true },
+            qty: { type: Number, required: true },
+            image: { type: String, required: true },
+            price: { type: Number, required: true },
+            size: { type: String, required: true }, 
+            color: { type: String, required: true }, 
+            product: { 
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: 'Product', 
+                required: true 
+            }
+        }
+    ],
+
+    shippingAddress: {
+        street: { type: String, required: true },
+        city: { type: String, required: true },
+        zipCode: { type: String, required: true },
+        country: { type: String, required: true },
+        phone: { type: String, required: true }
+    },
+
+    paymentInfo: {
+        id: { type: String },
+        status: { type: String },
+        type: { type: String, required: true } 
+    },
+
+    itemsPrice: { type: Number, required: true, default: 0.0 },
+    taxPrice: { type: Number, required: true, default: 0.0 },
+    shippingPrice: { type: Number, required: true, default: 0.0 },
+    totalPrice: { type: Number, required: true, default: 0.0 },
+
+    orderStatus: {
+        type: String,
+        required: true,
+        default: 'Pending',
+        enum: ['Pending','Processing', 'Shipped', 'Delivered', 'Cancelled']
+    },
+
+    deliveredAt: Date,
+    paidAt: Date
+
+}, { timestamps: true });
+
+module.exports = mongoose.model('Order', orderSchema);

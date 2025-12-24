@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | LUXE</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/product.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">LUXE.</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="category.html?category=Men">Men</a></li>
+                <li><a href="category.html?category=Women">Women</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <i class='bx bx-search'></i>
+                </div>
+                
+                <a href="wishlist.html"><i class='bx bx-heart'></i></a>
+                <a href="login.html"><i class='bx bx-user'></i></a>
+                <a href="cart.html" class="cart-icon">
+                    <i class='bx bx-shopping-bag'></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <div class="menu-toggle" id="menuToggle"><i class='bx bx-menu'></i></div>
+            </div>
+
+        </div>
+    </nav>
+
+    <section class="product-details-section">
+        <div class="product-container">
+            
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img id="mainImg" src="" alt="Product Image">
+                </div>
+                <div class="small-images">
+                    <img class="sm-img active" onclick="changeImage(this)" src="" alt="">
+                    <img class="sm-img" onclick="changeImage(this)" src="" alt="">
+                    <img class="sm-img" onclick="changeImage(this)" src="" alt="">
+                    <img class="sm-img" onclick="changeImage(this)" src="" alt="">
+                </div>
+            </div>
+
+            <div class="product-info">
+                <div class="breadcrumbs">Home / Men / T-Shirts</div>
+                <h1 id="productName">Loading...</h1>
+                <div class="rating">
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star'></i>
+                    <i class='bx bxs-star-half'></i>
+                    <span>(120 Reviews)</span>
+                </div>
+                <h2 class="price" id="productPrice">$0.00</h2>
+                
+                <div class="description">
+                    <h3>Details</h3>
+                    <p id="productDesc">Loading description...</p>
+                </div>
+
+                <div class="options">
+                    <h3>Select Size</h3>
+                    <div class="sizes">
+                        <div class="size-box">S</div>
+                        <div class="size-box active">M</div>
+                        <div class="size-box">L</div>
+                        <div class="size-box">XL</div>
+                        <div class="size-box">XXL</div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <input type="number" value="1" min="1" id="quantity">
+                    <button class="btn-primary" onclick="addToCart()">Add To Cart</button>
+                    <button class="btn-outline"><i class='bx bx-heart'></i></button>
+                </div>
+
+                <div class="meta-info">
+                    <p>SKU: <span id="sku">N/A</span></p>
+                    <p>Category: <span>Casual Wear</span></p>
+                    <p>Tags: <span>Cotton, Summer, Modern</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products-section">
+        <div class="section-header">
+            <h2>You May Also Like</h2>
+        </div>
+        <div class="product-grid" id="relatedContainer">
+            </div>
+    </section>
+
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2025 LUXE Clothing.</p>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script> <script src="js/nav.js"></script>
+    <script src="js/product.js"></script>
+</body>
+</html>

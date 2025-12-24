@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Payment | LUXE</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .payment-container { max-width: 600px; margin: 100px auto; padding: 20px; }
+        .payment-option {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .payment-option:hover, .payment-option.selected {
+            border-color: #695CFE;
+            background: #f4f4ff;
+        }
+        .payment-option i { font-size: 24px; color: #1a1a1a; }
+        .hidden-form { display: none; margin-top: 15px; padding-left: 30px; }
+        .form-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        .confirm-btn {
+            width: 100%; padding: 15px; background: #1a1a1a; color: #fff; font-size: 16px; 
+            border: none; cursor: pointer; margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">LUXE.</div>
+        </div>
+    </nav>
+
+    <div class="payment-container">
+        <h2>Select Payment Method</h2>
+        
+        <div class="payment-option selected" id="codOption" onclick="selectPayment('COD')">
+            <i class='bx bx-money'></i>
+            <div>
+                <h4>Cash on Delivery</h4>
+                <small>Pay when you receive the order</small>
+            </div>
+        </div>
+
+        <div class="payment-option" id="cardOption" onclick="selectPayment('Card')">
+            <i class='bx bx-credit-card'></i>
+            <div>
+                <h4>Credit / Debit Card</h4>
+                <small>Secure encrypted payment</small>
+            </div>
+        </div>
+
+        <div id="cardForm" class="hidden-form">
+            <input type="text" class="form-input" placeholder="Card Number">
+            <div style="display:flex; gap:10px;">
+                <input type="text" class="form-input" placeholder="MM/YY">
+                <input type="text" class="form-input" placeholder="CVC">
+            </div>
+        </div>
+
+        <button class="confirm-btn" onclick="confirmOrder()">Confirm Order</button>
+    </div>
+
+    <script src="js/payment.js"></script>
+</body>
+</html>

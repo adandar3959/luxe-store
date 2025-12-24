@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Employees | Admin</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <style>
+        /* Modal & Form Styles reused from Products page */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); }
+        .modal-content { background-color: #1e1e2d; margin: 10% auto; padding: 30px; border-radius: 12px; width: 400px; color: white; border: 1px solid #333; }
+        input { background: #151521; border: 1px solid #333; color: white; padding: 10px; border-radius: 5px; width: 100%; margin-top: 5px; margin-bottom: 15px; }
+        label { font-size: 13px; color: #aaa; }
+        .btn-add { background: #695CFE; color: white; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; float: right; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo"><i class='bx bxs-pie-chart-alt-2'></i> Sales<br>MANAGEMENT</div>
+        <a href="admin-dashboard.html" class="menu-item active"><i class='bx bxs-dashboard'></i> Dashboard</a>
+        <a href="profile.html" class="menu-item"><i class='bx bx-user'></i> Profile</a>
+        <a href="admin-products.html" class="menu-item"><i class='bx bx-shopping-bag'></i> Products</a>
+        <a href="admin-orders.html" class="menu-item"><i class='bx bx-cart'></i> Orders</a>
+        <a href="admin-customers.html" class="menu-item"><i class='bx bx-group'></i> Customers</a>
+        <a href="admin-employees.html" class="menu-item"><i class='bx bx-id-card'></i> Employees</a>
+        <a href="admin-finance.html" class="menu-item"><i class='bx bx-wallet'></i> Finance</a>
+        <a href="categories.html" class="menu-item active"><i class='bx bx-category'></i> Categories</a>        
+        <a href="index.html" class="menu-item"><i class='bx bx-store'></i> View Store</a>  
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <h2 class="section-title">Employee Management</h2>
+            <button class="btn-add" onclick="openModal()">+ Add Employee</button>
+        </div>
+
+        <br>
+
+        <div class="card">
+            <h3>Staff List</h3>
+            <table class="main-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Position</th>
+                        <th>Salary</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTable">
+                    <tr><td colspan="5" style="text-align:center">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <span onclick="closeModal()" style="float:right; cursor:pointer; font-size:24px;">&times;</span>
+            <h3 id="modalTitle">Add Employee</h3>
+            <br>
+            <form id="employeeForm">
+                <input type="hidden" id="editId">
+                
+                <label>Full Name</label>
+                <input type="text" id="eName" required>
+
+                <label>Email</label>
+                <input type="email" id="eEmail" required>
+
+                <label>Password</label>
+                <input type="password" id="ePass" placeholder="Set a temporary password">
+
+                <label>Position</label>
+                <input type="text" id="ePos" placeholder="e.g. Manager">
+
+                <label>Salary ($)</label>
+                <input type="number" id="eSalary" required>
+
+                <button type="submit" class="btn-add" style="width:100%">Save Employee</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/admin-employees.js"></script>
+    <script src="js/sidebar-access.js"></script>
+</body>
+</html>

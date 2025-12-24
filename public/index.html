@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXE | Modern Clothing</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    </head> 
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container"> 
+            <div class="logo">LUXE.</div>
+
+            <ul class="nav-links" id="navLinks">    
+                <li><a href="index.html">Home</a></li>
+                </ul>
+            
+            <div class="nav-icons">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <i class='bx bx-search'></i>
+                </div>
+                
+                <a href="wishlist.html"><i class='bx bx-heart'></i></a>
+                <a href="login.html" id="userLink"><i class='bx bx-user'></i></a>
+                
+                <a href="cart.html" class="cart-icon">
+                    <i class='bx bx-shopping-bag'></i>
+                    <span class="cart-count">0</span>   
+                </a>
+                <div class="menu-toggle" id="menuToggle"><i class='bx bx-menu'></i></div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h4>New Arrivals</h4>
+            <h1>Autumn Collection 2025</h1>
+            <p>Discover the latest trends in fashion. Quality comfort for every occasion.</p>
+            <a href="category.html" class="btn-primary">Shop Now</a>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="feature-box">
+            <i class='bx bx-shipping'></i>
+            <h6>Free Shipping</h6>
+        </div>
+        <div class="feature-box">
+            <i class='bx bx-check-shield'></i>
+            <h6>Secure Payment</h6>
+        </div>
+        <div class="feature-box">
+            <i class='bx bx-support'></i>
+            <h6>24/7 Support</h6>
+        </div>
+    </section>
+    
+    <section class="products-section">
+        <div class="section-header">
+            <h2>Trending Now</h2>
+            <a href="category.html" class="view-all-btn">View All</a>
+        </div>
+        
+        <div class="product-grid" id="productContainer"></div>
+
+        <div class="pagination" id="homePagination"></div>
+    </section>
+
+    <section class="home-categories">
+        <div class="section-header">
+            <h2>Shop by Category</h2>
+            <p style="color:#777; margin-top:5px;">Explore our curated collections</p>
+        </div>
+        
+        <div class="category-grid" id="homeCategoryContainer">
+            <h3>Loading Categories...</h3>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>LUXE.</h3>
+                <p>Redefining modern fashion with quality and sustainability.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Shop</h4>
+                <a href="category.html">All Products</a>
+                <a href="index.html">New Arrivals</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <a href="#">Contact Us</a>
+                <a href="#">FAQ</a>
+                <a href="#">Returns</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 LUXE Clothing. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/nav.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

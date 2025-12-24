@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection | LUXE</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Simple styling to match your design */
+        .category-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .category-header { text-align: center; margin-bottom: 50px; margin-top: 80px; } /* Margin top for fixed navbar */
+        .category-header h1 { font-size: 2.5rem; margin-bottom: 10px; text-transform: capitalize; }
+        .category-header p { color: #666; font-size: 1rem; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">LUXE.</div>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                </ul>
+
+            <div class="nav-icons">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <i class='bx bx-search'></i>
+                </div>
+                
+                <a href="wishlist.html"><i class='bx bx-heart'></i></a>
+                <a href="login.html" id="userLink"><i class='bx bx-user'></i></a>
+                <a href="cart.html" class="cart-icon">
+                    <i class='bx bx-shopping-bag'></i>
+                    <span class="cart-count">0</span>   
+                </a>
+                <div class="menu-toggle" id="menuToggle"><i class='bx bx-menu'></i></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="category-container">
+        <header class="category-header">
+            <h1 id="categoryTitle">All Products</h1>
+            <p id="categoryDesc">Explore our premium collection of modern clothing.</p>
+        </header>
+
+        <div id="allProductsContainer" class="product-grid">
+            <h2 style="text-align:center;">Loading products...</h2>
+        </div>
+        
+        <div class="pagination" id="pagination"></div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>LUXE.</h3>
+                <p>Redefining modern fashion with quality and sustainability.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Shop</h4>
+                <a href="index.html">Home</a>
+                <a href="category.html">All Products</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <a href="#">Contact Us</a>
+                <a href="#">FAQ</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 LUXE Clothing. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/nav.js"></script>
+    <script src="js/category.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist | LUXE</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .wishlist-container { max-width: 1200px; margin: 100px auto; padding: 0 20px; }
+        .wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; margin-top: 30px; }
+        .wish-card { position: relative; border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
+        .wish-remove { 
+            position: absolute; top: 10px; right: 10px; background: #fff; border-radius: 50%; 
+            padding: 5px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><a href="index.html">LUXE.</a></div>
+            <div class="nav-icons">
+                 <a href="wishlist.html"><i class='bx bx-heart'></i></a> 
+                 <a href="cart.html"><i class='bx bx-shopping-bag'></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="wishlist-container">
+        <h2>My Wishlist</h2>
+        <div class="wishlist-grid" id="wishlistContainer">
+            <p>Your wishlist is empty.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('wishlistContainer');
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            if (wishlist.length === 0) {
+                container.innerHTML = '<p>No items liked yet.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            wishlist.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.classList.add('wish-card');
+                div.innerHTML = `
+                    <div class="wish-remove" onclick="removeFromWishlist(${index})"><i class='bx bx-x'></i></div>
+                    <img src="${item.image || 'https://via.placeholder.com/300'}" style="width:100%; height:250px; object-fit:cover;">
+                    <div style="padding:15px;">
+                        <h4>${item.name}</h4>
+                        <<div style="...">Rs. ${item.price.toLocaleString()}</div>
+                        <button onclick="window.location.href='product.html?id=${item.id}'" class="btn-primary" style="width:100%; border:none; cursor:pointer;">View</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        });
+
+        function removeFromWishlist(index) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            wishlist.splice(index, 1);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            location.reload(); // Refresh page to show changes
+        }
+    </script>
+</body>
+</html> 

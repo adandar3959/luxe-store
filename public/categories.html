@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Management | Luxe</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <style>
+        /* --- DASHBOARD STYLES --- */
+        body { background-color: #151521; color: white; font-family: 'Poppins', sans-serif; }
+
+        .page-header { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
+        .page-title { font-size: 24px; font-weight: 700; color: white; }
+        .btn-add-cat {
+            background-color: #695CFE; color: white; border: none; padding: 12px 24px;
+            border-radius: 8px; font-weight: 600; cursor: pointer; width: fit-content;
+        }
+
+        /* Stats Boxes */
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .stat-box {
+            background: #1e1e2d; border: 1px solid #2d2d3f; padding: 25px;
+            border-radius: 16px; display: flex; align-items: center; gap: 20px;
+        }
+        .icon-square { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .icon-purple { background: rgba(105, 92, 254, 0.15); color: #695CFE; }
+        .icon-orange { background: rgba(255, 165, 0, 0.15); color: orange; }
+        .stat-info h3 { font-size: 28px; margin: 0; color: white; }
+        .stat-info p { margin: 0; color: #888; font-size: 14px; }
+
+        /* SECTIONS & HEADINGS */
+        .section-heading {
+            font-size: 18px; color: #fff; margin-bottom: 15px; border-left: 4px solid #695CFE; padding-left: 10px; font-weight: 600;
+        }
+
+        /* TABLE STYLES */
+        .table-container { margin-bottom: 40px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        th { text-align: left; color: #888; font-size: 13px; padding: 0 20px 10px 20px; }
+        tbody tr { background: #1e1e2d; transition: 0.2s; }
+        tbody tr:hover { transform: translateY(-2px); background: #232334; }
+        td { padding: 15px 20px; color: white; vertical-align: middle; border-top: 1px solid #2d2d3f; border-bottom: 1px solid #2d2d3f; }
+        
+        td:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-left: 1px solid #2d2d3f; }
+        td:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-right: 1px solid #2d2d3f; }
+
+        /* Badges & Text */
+        .badge { padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: inline-block; width: 60px; text-align: center;}
+        .badge-main { background: rgba(0, 227, 150, 0.15); color: #00E396; } 
+        .badge-sub { background: rgba(255, 165, 0, 0.15); color: orange; }
+
+        .sub-indicator { display: block; font-size: 11px; color: #666; margin-top: 4px; }
+        .count-pill { background: #2b2b40; padding: 5px 12px; border-radius: 20px; font-size: 12px; color: #ccc; border: 1px solid #3f3f55; }
+        
+        .action-icons i { font-size: 18px; cursor: pointer; margin-right: 10px; transition: 0.2s; }
+        .action-icons i:hover { transform: scale(1.2); }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo"><i class='bx bxl-sketch'></i> LUXE.</div>
+        <a href="profile.html" class="menu-item"><i class='bx bx-user'></i> Profile</a>
+        <a href="admin-products.html" class="menu-item"><i class='bx bx-shopping-bag'></i> Products</a>
+        <a href="admin-orders.html" class="menu-item"><i class='bx bx-cart'></i> Orders</a>
+        <a href="categories.html" class="menu-item active"><i class='bx bx-category'></i> Categories</a>        
+        <a href="index.html" class="menu-item"><i class='bx bx-store'></i> View Store</a>  
+    </div>
+
+    <div class="main-content">
+        
+        <div class="page-header">
+            <h2 class="page-title">Category Management</h2>
+            <button class="btn-add-cat" onclick="openModal()">+ Add Category</button>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="icon-square icon-purple"><i class='bx bx-grid-alt'></i></div>
+                <div class="stat-info"><h3 id="totalParents">0</h3><p>Main Categories</p></div>
+            </div>
+            <div class="stat-box">
+                <div class="icon-square icon-orange"><i class='bx bx-subdirectory-right'></i></div>
+                <div class="stat-info"><h3 id="totalSubs">0</h3><p>Sub Categories</p></div>
+            </div>
+        </div>
+
+        <h3 class="section-heading">Main Categories</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Total Products</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="mainCatBody">
+                    <tr><td colspan="4" style="text-align:center">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="section-heading" style="border-left-color: orange;">Sub Categories</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Parent</th>
+                        <th>Total Products</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="subCatBody">
+                    <tr><td colspan="4" style="text-align:center">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="modal" id="catModal">
+        <div class="modal-content" style="width:400px;">
+            <h3>Add Category</h3>
+            <input type="hidden" id="catId">
+            <label>Category Name</label>
+            <input type="text" id="catName" placeholder="e.g. Shirts">
+            <label>Parent Category (Optional)</label>
+            <select id="catParent">
+                <option value="">None (Top Level)</option>
+            </select>
+            <div style="margin-top:20px; display:flex; gap:10px; justify-content:flex-end;">
+                <button onclick="closeModal()" style="background:transparent; border:1px solid #555; color:white; padding:8px 15px; border-radius:5px;">Cancel</button>
+                <button onclick="saveCategory()" style="background:#695CFE; border:none; color:white; padding:8px 15px; border-radius:5px;">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="prodModal">
+        <div class="modal-content">
+            <h3 id="prodModalTitle">Products</h3>
+            <p id="prodModalDesc" style="color:#888; font-size:12px; margin-bottom:10px;"></p>
+            <div id="modalProductList" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(60px,1fr)); gap:10px; max-height:400px; overflow-y:auto;"></div>
+            <button onclick="document.getElementById('prodModal').style.display='none'" style="margin-top:15px; width:100%; padding:10px; background:#333; border:none; color:white; border-radius:5px;">Close</button>
+        </div>
+    </div>
+
+    <script src="js/categories.js"></script>
+</body>
+</html>
