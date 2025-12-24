@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const headers = { 'Authorization': `Bearer ${userInfo.token}` };
 
         const [resStats, resOrders] = await Promise.all([
-            fetch('http://localhost:5000/api/admin/stats', { headers }),
-            fetch('http://localhost:5000/api/orders', { headers })
+            fetch('/api/admin/stats', { headers }),
+            fetch('/api/orders', { headers })
         ]);
 
         if (!resStats.ok || !resOrders.ok) throw new Error('Failed to fetch data');

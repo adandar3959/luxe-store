@@ -6,7 +6,7 @@ async function fetchFinanceData() {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     
     try {
-        const res = await fetch('http://localhost:5000/api/admin/finance', {
+        const res = await fetch('/api/admin/finance', {
             headers: { 'Authorization': `Bearer ${userInfo.token}` }
         });
         const data = await res.json();
@@ -67,7 +67,7 @@ window.paySalary = async (id, amount) => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
     try {
-        const res = await fetch('http://localhost:5000/api/admin/finance/pay-salary', {
+        const res = await fetch('/api/admin/finance/pay-salary', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',

@@ -22,8 +22,8 @@ async function loadProducts() {
 
     try {
         const [prodRes, catRes] = await Promise.all([
-            fetch('http://localhost:5000/api/products'),
-            fetch('http://localhost:5000/api/categories')
+            fetch('/api/products'),
+            fetch('/api/categories')
         ]);
 
         let products = await prodRes.json();
@@ -92,7 +92,7 @@ function renderHomePagination() {
         card.classList.add('product-card');
         card.onclick = () => window.location.href = `product.html?id=${product._id}`;
 
-        const imgUrl = product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:5000/uploads/${product.image}`) : 'https://via.placeholder.com/300';
+        const imgUrl = product.image ? (product.image.startsWith('http') ? product.image : `/uploads/${product.image}`) : 'https://via.placeholder.com/300';
 
         card.innerHTML = `
             <div class="img-box">
@@ -136,7 +136,7 @@ async function loadUserCart() {
     if (!token) return; 
 
     try {
-        const response = await fetch('http://localhost:5000/api/cart', {
+        const response = await fetch('/api/cart', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -167,8 +167,8 @@ async function loadHomeCategories() {
     try {
         // Fetch Categories & Products (Parallel for speed)
         const [catRes, prodRes] = await Promise.all([
-            fetch('http://localhost:5000/api/categories'),
-            fetch('http://localhost:5000/api/products')
+            fetch('/api/categories'),
+            fetch('/api/products')
         ]);
 
         const categories = await catRes.json();
@@ -194,7 +194,7 @@ async function loadHomeCategories() {
             let bgImage = 'https://via.placeholder.com/400x600?text=No+Image';
             
             if (cat.image) {
-                bgImage = cat.image.startsWith('http') ? cat.image : `http://localhost:5000/uploads/${cat.image}`;
+                bgImage = cat.image.startsWith('http') ? cat.image : `/uploads/${cat.image}`;
             } else {
                 // Find a product in this category to steal its image
                 const representativeProduct = products.find(p => {
@@ -206,7 +206,7 @@ async function loadHomeCategories() {
                 if (representativeProduct && representativeProduct.image) {
                     bgImage = representativeProduct.image.startsWith('http') 
                         ? representativeProduct.image 
-                        : `http://localhost:5000/uploads/${representativeProduct.image}`;
+                        : `/uploads/${representativeProduct.image}`;
                 }
             }
 

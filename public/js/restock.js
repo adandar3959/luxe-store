@@ -1,4 +1,4 @@
-const LOW_STOCK_URL = 'http://localhost:5000/api/products/lowstock';
+const LOW_STOCK_URL = '/api/products/lowstock';
 const token = localStorage.getItem('userToken');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -34,7 +34,7 @@ async function loadLowStockProducts() {
         }
 
         products.forEach(p => {
-            const imgUrl = p.image ? (p.image.startsWith('http') ? p.image : `http://localhost:5000/uploads/${p.image}`) : 'https://via.placeholder.com/50';
+            const imgUrl = p.image ? (p.image.startsWith('http') ? p.image : `/uploads/${p.image}`) : 'https://via.placeholder.com/50';
             
             // Determine status text
             let statusText = "Low Stock";

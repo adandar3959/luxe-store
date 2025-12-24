@@ -18,8 +18,8 @@ async function loadCategoryPage() {
     try {
         // 2. Fetch Data
         const [prodRes, catRes] = await Promise.all([
-            fetch('http://localhost:5000/api/products'),
-            fetch('http://localhost:5000/api/categories')
+            fetch('/api/products'),
+            fetch('/api/categories')
         ]);
 
         let products = await prodRes.json();
@@ -82,7 +82,7 @@ function renderPagination() {
         card.classList.add('product-card');
         card.onclick = () => window.location.href = `product.html?id=${product._id}`;
 
-        const imgUrl = product.image ? (product.image.startsWith('http') ? product.image : `http://localhost:5000/uploads/${product.image}`) : 'https://via.placeholder.com/300';
+        const imgUrl = product.image ? (product.image.startsWith('http') ? product.image : `/uploads/${product.image}`) : 'https://via.placeholder.com/300';
 
         card.innerHTML = `
             <div class="img-box">

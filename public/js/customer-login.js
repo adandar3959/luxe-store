@@ -42,8 +42,8 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
 
     // Determine URL
     const url = isLogin 
-        ? 'http://localhost:5000/api/users/login' 
-        : 'http://localhost:5000/api/users';
+        ? '/api/users/login' 
+        : '/api/users';
 
     // Prepare Data
     const bodyData = { email, password };

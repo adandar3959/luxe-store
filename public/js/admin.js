@@ -8,12 +8,12 @@ async function loadDashboard() {
 
     try {
         // 1. Fetch Orders (Requires the updated backend route I gave you earlier)
-        const resOrders = await fetch('http://localhost:5000/api/orders');
+        const resOrders = await fetch('/api/orders');
         if (!resOrders.ok) throw new Error('Failed to fetch orders');
         const orders = await resOrders.json();
 
         // 2. Fetch Products
-        const resProducts = await fetch('http://localhost:5000/api/products');
+        const resProducts = await fetch('/api/products');
         const products = await resProducts.json();
 
         // 3. Update Stats Cards

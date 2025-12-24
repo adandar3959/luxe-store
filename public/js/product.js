@@ -1,6 +1,6 @@
 // --- HELPER: Handles all image logic ---
 function resolveImg(imgInput) {
-    const BACKEND_URL = 'http://localhost:5000/uploads/';
+    const BACKEND_URL = '/uploads/';
     const FALLBACK_IMG = 'https://via.placeholder.com/600?text=No+Image';
 
     if (!imgInput) return FALLBACK_IMG;
@@ -28,7 +28,7 @@ async function syncCartToDB(cart) {
     if (!userInfo || !token) return; 
 
     try {
-        await fetch('http://localhost:5000/api/cart', {
+        await fetch('/api/cart', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!productId) return;
 
     try {
-        const response = await fetch(`http://localhost:5000/api/products/${productId}`);
+        const response = await fetch(`/api/products/${productId}`);
         const product = await response.json();
 
         document.title = `${product.name} | LUXE`;
@@ -129,7 +129,7 @@ function renderVariations(variations) {
 async function loadRelatedProducts(currentId) {
     const container = document.getElementById('relatedContainer');
     try {
-        const res = await fetch('http://localhost:5000/api/products');
+        const res = await fetch('/api/products');
         const allProducts = await res.json();
         const related = allProducts.filter(p => p._id !== currentId).slice(0, 4);
 

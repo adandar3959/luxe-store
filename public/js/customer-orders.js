@@ -13,7 +13,7 @@ async function loadMyOrders() {
     }
 
     try {
-        const response = await fetch('http://localhost:5000/api/orders/myorders', {
+        const response = await fetch('/api/orders/myorders', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -79,7 +79,7 @@ window.cancelOrder = async (orderId) => {
     const token = localStorage.getItem('userToken');
 
     try {
-        const response = await fetch(`http://localhost:5000/api/orders/${orderId}/cancel`, {
+        const response = await fetch(`/api/orders/${orderId}/cancel`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,

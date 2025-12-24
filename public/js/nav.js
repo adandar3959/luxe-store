@@ -11,7 +11,7 @@ async function loadCategoriesForNav() {
     if (!navLinksContainer) return;
 
     try {
-        const response = await fetch('http://localhost:5000/api/categories');
+        const response = await fetch('/api/categories');
         const allCategories = await response.json(); 
 
         navLinksContainer.innerHTML = '<li><a href="index.html">Home</a></li>';

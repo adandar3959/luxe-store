@@ -1,5 +1,5 @@
-const API_URL = 'http://localhost:5000/api/products';
-const CAT_URL = 'http://localhost:5000/api/categories';
+const API_URL = '/api/products';
+const CAT_URL = '/api/categories';
 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 const token = localStorage.getItem('userToken');
 
@@ -64,7 +64,7 @@ function renderTable(products) {
             if (matchedCat) catDisplay = matchedCat.name;
         }
 
-        const imgUrl = p.image ? (p.image.startsWith('http') ? p.image : `http://localhost:5000/uploads/${p.image}`) : 'https://via.placeholder.com/50';
+        const imgUrl = p.image ? (p.image.startsWith('http') ? p.image : `/uploads/${p.image}`) : 'https://via.placeholder.com/50';
 
         return `
             <tr>

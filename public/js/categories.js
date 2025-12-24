@@ -1,5 +1,5 @@
-const API_URL = 'http://localhost:5000/api/categories';
-const PROD_URL = 'http://localhost:5000/api/products';
+const API_URL = '/api/categories';
+const PROD_URL = '/api/products';
 const token = localStorage.getItem('userToken');
 
 let allCategories = [];
@@ -159,7 +159,7 @@ window.viewProducts = (catId) => {
 
     // 2. UPDATE: Render a Card instead of just an Image
     items.forEach(p => {
-        const img = p.image ? (p.image.startsWith('http') ? p.image : `http://localhost:5000/uploads/${p.image}`) : 'https://via.placeholder.com/150';
+        const img = p.image ? (p.image.startsWith('http') ? p.image : `/uploads/${p.image}`) : 'https://via.placeholder.com/150';
         
         // Check if price exists, otherwise show 0
         const price = p.price ? p.price : 0; 

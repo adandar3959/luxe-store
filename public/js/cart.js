@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- HELPER FUNCTIONS ---
 
 function getUniversalImg(imageSource) {
-    const BACKEND_URL = 'http://localhost:5000/uploads/';
+    const BACKEND_URL = '/uploads/';
     const DEFAULT_IMG = 'https://via.placeholder.com/150';
 
     if (!imageSource) return DEFAULT_IMG;
@@ -108,7 +108,7 @@ window.removeFromCart = async (index) => {
     const token = localStorage.getItem('userToken');
     if (token) {
         try {
-            await fetch('http://localhost:5000/api/cart', {
+            await fetch('/api/cart', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

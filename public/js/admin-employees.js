@@ -16,7 +16,7 @@ async function fetchEmployees() {
     const tbody = document.getElementById('employeeTable');
 
     try {
-        const res = await fetch('http://localhost:5000/api/admin/employees', {
+        const res = await fetch('/api/admin/employees', {
             headers: { 'Authorization': `Bearer ${userInfo.token}` }
         });
         const employees = await res.json();
@@ -81,8 +81,8 @@ document.getElementById('employeeForm').addEventListener('submit', async (e) => 
 
     const method = id ? 'PUT' : 'POST';
     const url = id 
-        ? `http://localhost:5000/api/admin/employees/${id}`
-        : `http://localhost:5000/api/admin/employees`;
+        ? `/api/admin/employees/${id}`
+        : `/api/admin/employees`;
 
     await fetch(url, {
         method: method,
@@ -102,7 +102,7 @@ window.deleteEmployee = async (id) => {
     if(!confirm("Fire this employee?")) return;
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     
-    await fetch(`http://localhost:5000/api/admin/employees/${id}`, {
+    await fetch(`/api/admin/employees/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${userInfo.token}` }
     });
