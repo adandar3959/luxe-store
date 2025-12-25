@@ -103,10 +103,8 @@ function renderVariations(product) {
     const sizeContainer = document.querySelector('.sizes');
     sizeContainer.innerHTML = ''; 
 
-    // Use product.sizes if variations doesn't exist
-    const availableSizes = (product.variations && product.variations.length > 0) 
-        ? [...new Set(product.variations.map(v => v.size))]
-        : (product.sizes || []);
+    // Use product.sizes which you just added in the Admin panel
+    const availableSizes = product.sizes || [];
 
     if (availableSizes.length === 0) {
         sizeContainer.innerHTML = '<p>One Size Available</p>';
@@ -118,7 +116,7 @@ function renderVariations(product) {
         btn.classList.add('size-box');
         btn.innerText = size;
         
-        // Make the first one active by default
+        // Auto-select the first size
         if (index === 0) btn.classList.add('active');
 
         btn.onclick = () => {
@@ -128,26 +126,33 @@ function renderVariations(product) {
         sizeContainer.appendChild(btn);
     });
 }
-
 async function loadRelatedProducts(currentId) {
     const container = document.getElementById('relatedContainer');
+    if (!container) return;
+
     try {
-        const res = await fetch('/api/products');
+        // Use full URL to avoid 404s on Render
+        const res = await fetch('https://luxe-store-nmvs.onrender.com/api/products');
         const allProducts = await res.json();
+        
+        // Filter out the product currently being viewed
         const related = allProducts.filter(p => p._id !== currentId).slice(0, 4);
 
         container.innerHTML = '';
-        related.forEach(p => {
-            const relatedImgData = (p.images && p.images.length > 0) ? p.images[0] : p.image;
-            const displayImg = resolveImg(relatedImgData);
+        if (related.length === 0) {
+            container.innerHTML = '<p style="color:#888;">No related products found.</p>';
+            return;
+        }
 
+        related.forEach(p => {
+            const displayImg = resolveImg(p.image);
             const card = document.createElement('div');
             card.classList.add('product-card');
             card.innerHTML = `
-                <img src="${displayImg}" class="product-img" style="height:250px; object-fit:cover; width:100%">
-                <div class="product-details" style="padding:10px">
-                    <h4 style="font-size:14px">${p.name}</h4>
-                    <div style="color:#695CFE; font-weight:bold">Rs. ${p.price.toLocaleString()}</div>
+                <img src="${displayImg}" class="product-img">
+                <div class="product-details">
+                    <h4>${p.name}</h4>
+                    <div class="price">Rs. ${p.price.toLocaleString()}</div>
                 </div>
             `;
             card.onclick = () => window.location.href = `product.html?id=${p._id}`;
