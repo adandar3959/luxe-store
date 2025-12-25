@@ -99,31 +99,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-function renderVariations(variations) {
+function renderVariations(product) {
     const sizeContainer = document.querySelector('.sizes');
     sizeContainer.innerHTML = ''; 
 
-    if (!variations || variations.length === 0) {
-        sizeContainer.innerHTML = '<p>One Size</p>';
+    // Use product.sizes if variations doesn't exist
+    const availableSizes = (product.variations && product.variations.length > 0) 
+        ? [...new Set(product.variations.map(v => v.size))]
+        : (product.sizes || []);
+
+    if (availableSizes.length === 0) {
+        sizeContainer.innerHTML = '<p>One Size Available</p>';
         return;
     }
 
-    const uniqueSizes = [...new Set(variations.map(v => v.size))];
-    const uniqueColors = [...new Set(variations.map(v => v.color))];
-
-    uniqueSizes.forEach(size => {
+    availableSizes.forEach((size, index) => {
         const btn = document.createElement('div');
         btn.classList.add('size-box');
         btn.innerText = size;
+        
+        // Make the first one active by default
+        if (index === 0) btn.classList.add('active');
+
         btn.onclick = () => {
             document.querySelectorAll('.size-box').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         };
         sizeContainer.appendChild(btn);
     });
-
-    const colorHtml = `<div style="margin-top:15px;"><strong>Available Colors:</strong> ${uniqueColors.join(', ')}</div>`;
-    sizeContainer.insertAdjacentHTML('afterend', colorHtml);
 }
 
 async function loadRelatedProducts(currentId) {

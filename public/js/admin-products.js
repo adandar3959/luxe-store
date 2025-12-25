@@ -109,6 +109,10 @@ window.openAddModal = () => {
     document.getElementById('modalTitle').innerText = 'Add New Product';
     document.getElementById('pParentCategory').value = "";
     document.getElementById('pSubCategory').innerHTML = '<option value="">Select Subcategory</option>';
+    
+    // Uncheck all size boxes
+    document.querySelectorAll('input[name="pSizes"]').forEach(cb => cb.checked = false);
+
     document.getElementById('productModal').style.display = 'block';
 };
 
@@ -125,6 +129,10 @@ window.openEditModal = (id) => {
     document.getElementById('pQty').value = product.countInStock;
     document.getElementById('modalTitle').innerText = 'Edit Product';
 
+    // CHECK THE RELEVANT SIZE BOXES
+    document.querySelectorAll('input[name="pSizes"]').forEach(cb => {
+        cb.checked = product.sizes && product.sizes.includes(cb.value);
+    });
     // AUTO-SELECT LOGIC (UPDATED FOR IDs)
     const catID = product.category;
     const categoryObj = allCategories.find(c => c._id === catID);
@@ -163,20 +171,21 @@ document.getElementById('productForm').addEventListener('submit', async (e) => {
     const parentSelect = document.getElementById('pParentCategory');
     const subSelect = document.getElementById('pSubCategory');
 
-    // 👇 KEY CHANGE: We save the ID (value) not the text
-    let finalCategory = subSelect.value;
-    if (!finalCategory) {
-        finalCategory = parentSelect.value;
-    }
+    let finalCategory = subSelect.value || parentSelect.value;
+
+    // COLLECT SELECTED SIZES
+    const selectedSizes = Array.from(document.querySelectorAll('input[name="pSizes"]:checked'))
+                               .map(cb => cb.value);
 
     const productData = {
         name: document.getElementById('pName').value,
         price: Number(document.getElementById('pPrice').value),
         brand: document.getElementById('pBrand').value,
-        category: finalCategory, // This is now an ID (e.g. 64f0...)
+        category: finalCategory,
         image: document.getElementById('pImage').value,
         description: document.getElementById('pDesc').value,
         countInStock: Number(document.getElementById('pQty').value),
+        sizes: selectedSizes // NEW FIELD SENT TO BACKEND
     };
 
     const method = id ? 'PUT' : 'POST';

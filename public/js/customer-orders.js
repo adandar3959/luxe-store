@@ -34,6 +34,7 @@ async function loadMyOrders() {
             noOrdersMsg.style.display = 'none';
             tableBody.innerHTML = ''; 
 
+            // Sort by newest first
             orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
             orders.forEach(order => {
@@ -46,17 +47,27 @@ async function loadMyOrders() {
                 const dateObj = new Date(order.createdAt);
                 const dateStr = dateObj.toLocaleDateString();
 
-                // --- FIX IS HERE ---
+                // --- 1. GENERATE ITEM LIST WITH SIZES ---
+                // This creates a small list of items to show under the Order ID
+                const itemDetails = order.orderItems.map(item => 
+                    `<div style="font-size: 11px; color: #888; margin-top: 2px;">
+                        ${item.name} <strong style="color: #695CFE;">(${item.size || 'N/A'})</strong> x${item.qty}
+                    </div>`
+                ).join('');
+
+                // --- 2. CANCELLATION LOGIC ---
                 let actionBtn = '-';
-                
-                // CHANGE 'Processing' TO 'Pending'
-                // We only allow cancellation if the order hasn't started processing yet.
+                // Only allow cancellation if status is strictly 'Pending'
                 if (statusText === 'Pending') { 
                     actionBtn = `<button class="btn-cancel-order" onclick="cancelOrder('${order._id}')">Cancel Order</button>`;
                 }
 
+                // --- 3. RENDER TABLE ROW ---
                 row.innerHTML = `
-                    <td>#${order._id.slice(-6).toUpperCase()}</td> 
+                    <td>
+                        <div style="font-weight: 600; color: #fff;">#${order._id.slice(-6).toUpperCase()}</div>
+                        ${itemDetails} 
+                    </td> 
                     <td>${dateStr}</td>
                     <td>Rs. ${order.totalPrice.toLocaleString()}</td>
                     <td><span class="status ${statusClass}">${statusText}</span></td>

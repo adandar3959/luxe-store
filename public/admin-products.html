@@ -142,14 +142,35 @@
                     <label>Category</label>
                     <select id="pParentCategory" onchange="handleParentChange()" style="width:100%; padding:10px; background:#2b2b40; color:white; border:1px solid #333; margin-bottom:10px; border-radius:5px;">
                         <option value="">Select Parent Category</option>
-                        </select>
+                    </select>
                 </div>
 
                 <div class="form-group">
                     <label>Subcategory (Optional)</label>
                     <select id="pSubCategory" style="width:100%; padding:10px; background:#2b2b40; color:white; border:1px solid #333; margin-bottom:15px; border-radius:5px;">
                         <option value="">Select Subcategory</option>
-                        </select>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 8px;">Available Sizes</label>
+                    <div id="sizeCheckboxContainer" style="display: flex; gap: 10px; flex-wrap: wrap; background: #252539; padding: 10px; border-radius: 8px; border: 1px solid #333;">
+                        <label style="display: flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="pSizes" value="S" style="width: auto; margin: 0;"> S
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="pSizes" value="M" style="width: auto; margin: 0;"> M
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="pSizes" value="L" style="width: auto; margin: 0;"> L
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="pSizes" value="XL" style="width: auto; margin: 0;"> XL
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer;">
+                            <input type="checkbox" name="pSizes" value="XXL" style="width: auto; margin: 0;"> XXL
+                        </label>
+                    </div>
                 </div>
 
                 <label>Image URL</label>
@@ -164,7 +185,7 @@
                 </div>
 
                 <button type="submit" class="btn-add" style="width:100%; margin-top:20px;">Save Product</button>
-            </form>
+            </form>        
         </div>
     </div>
 
