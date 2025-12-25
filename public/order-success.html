@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation | LUXE</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root { --primary: #695CFE; --dark: #1a1a1a; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; padding: 40px 20px; }
+        .slip-wrapper { max-width: 600px; margin: 0 auto; }
+        .order-slip { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .slip-header { text-align: center; border-bottom: 2px dashed #eee; padding-bottom: 20px; margin-bottom: 20px; }
+        .logo-text { font-size: 24px; font-weight: bold; letter-spacing: 2px; }
+        .slip-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+        .item-list { margin: 20px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .total-box { font-size: 18px; font-weight: bold; color: var(--primary); text-align: right; margin-top: 20px; }
+        .actions { display: flex; gap: 10px; margin-top: 30px; }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-download { background: var(--primary); color: white; }
+        .btn-home { background: var(--dark); color: white; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="slip-wrapper">
+    <div id="invoice" class="order-slip">
+        <div class="slip-header">
+            <div class="logo-text">LUXE.</div>
+            <p style="color: #00c851; font-weight: bold;"><i class='bx bxs-check-circle'></i> ORDER CONFIRMED</p>
+            <small id="orderDate"></small>
+        </div>
+
+        <div class="slip-body">
+            <div class="slip-row"><strong>Order ID:</strong> <span id="slipOrderId"></span></div>
+            <div class="slip-row"><strong>Customer:</strong> <span id="slipCustomer"></span></div>
+            <div class="slip-row"><strong>Method:</strong> <span id="slipMethod"></span></div>
+            
+            <div class="item-list" id="slipItems">
+                </div>
+
+            <div class="slip-row"><strong>Shipping Address:</strong></div>
+            <p id="slipAddress" style="font-size: 13px; color: #666;"></p>
+
+            <div class="total-box">Total: <span id="slipTotal"></span></div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-download" onclick="downloadSlip()">
+            <i class='bx bxs-download'></i> Download Slip
+        </button>
+        <a href="index.html" class="btn btn-home">Back to Store</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const order = JSON.parse(localStorage.getItem('lastOrder'));
+        if (!order) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        document.getElementById('slipOrderId').innerText = order._id;
+        document.getElementById('orderDate').innerText = new Date(order.createdAt).toLocaleString();
+        document.getElementById('slipCustomer').innerText = order.shippingAddress.street.split(',')[0] || "Customer";
+        document.getElementById('slipMethod').innerText = order.paymentMethod;
+        document.getElementById('slipTotal').innerText = `Rs. ${order.totalPrice.toLocaleString()}`;
+        document.getElementById('slipAddress').innerText = `${order.shippingAddress.street}, ${order.shippingAddress.city}, ${order.shippingAddress.zipCode}`;
+
+        const itemContainer = document.getElementById('slipItems');
+        order.orderItems.forEach(item => {
+            const itemRow = document.createElement('div');
+            itemRow.className = 'slip-row';
+            itemRow.innerHTML = `<span>${item.name} (${item.size}) x${item.qty}</span> <span>Rs. ${(item.price * item.qty).toLocaleString()}</span>`;
+            itemContainer.appendChild(itemRow);
+        });
+    });
+
+    function downloadSlip() {
+        const element = document.getElementById('invoice');
+        const opt = {
+            margin: 1,
+            filename: 'LUXE-Order-Slip.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
+</body>
+</html>

@@ -74,16 +74,17 @@ async function confirmOrder() {
 
         const data = await response.json();
 
+        // ... inside your confirmOrder function, in the "if (response.ok)" block:
         if (response.ok) {
-            alert(`Success! Order Placed via ${selectedMethod}`);
+            // Save order details temporarily for the slip
+            localStorage.setItem('lastOrder', JSON.stringify(data)); 
             
-            // ✅ Clear Data from Browser
+            // Clear Cart but keep the lastOrder for the next screen
             localStorage.removeItem('cart');
-            // localStorage.removeItem('shippingAddress'); // Optional: Keep address for next time if you want
             
-            // Redirect Home
-            window.location.href = 'index.html'; 
-        } else {
+            // Redirect to the slip page
+            window.location.href = 'order-success.html'; 
+        }else {
             alert("Order Failed: " + (data.message || "Unknown Error"));
         }
 
