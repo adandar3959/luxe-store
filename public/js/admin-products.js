@@ -1,4 +1,4 @@
-const API_URL = '/api/products';
+﻿const API_URL = '/api/products';
 const CAT_URL = '/api/categories';
 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 const token = localStorage.getItem('userToken');
@@ -11,8 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCategoriesForDropdown();
     loadProducts();
 });
-
-// --- 1. LOAD DATA ---
 async function loadCategoriesForDropdown() {
     try {
         const res = await fetch(CAT_URL);
@@ -35,13 +33,10 @@ async function loadProducts() {
     try {
         const res = await fetch(API_URL);
         allProducts = await res.json();
-        
-        // --- UPDATE TOTAL COUNT ---
         const countSpan = document.getElementById('totalProductCount');
         if (countSpan) {
             countSpan.innerText = allProducts.length;
         }
-        // --------------------------
 
         renderTable(allProducts);
     } catch (error) { console.error("Error loading products:", error); }
@@ -54,10 +49,7 @@ function renderTable(products) {
         tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No Products Found</td></tr>';
         return;
     }
-    
-    // Create a single HTML string for better performance
     const rows = products.map(p => {
-        // Helper to show Name instead of ID in the table
         let catDisplay = p.category;
         if (allCategories.length > 0 && p.category && p.category.length > 10) {
             const matchedCat = allCategories.find(c => c._id === p.category);
@@ -83,8 +75,6 @@ function renderTable(products) {
 
     tbody.innerHTML = rows;
 }
-
-// --- 2. MODAL LOGIC (UPDATED FOR IDs) ---
 window.handleParentChange = () => {
     const parentId = document.getElementById('pParentCategory').value;
     const subSelect = document.getElementById('pSubCategory');
@@ -96,7 +86,6 @@ window.handleParentChange = () => {
     
     children.forEach(cat => {
         const option = document.createElement('option');
-        // 👇 IMPORTANT: We now define the VALUE as the ID, but show the NAME
         option.value = cat._id; 
         option.innerText = cat.name;
         subSelect.appendChild(option);
@@ -109,8 +98,6 @@ window.openAddModal = () => {
     document.getElementById('modalTitle').innerText = 'Add New Product';
     document.getElementById('pParentCategory').value = "";
     document.getElementById('pSubCategory').innerHTML = '<option value="">Select Subcategory</option>';
-    
-    // Uncheck all size boxes
     document.querySelectorAll('input[name="pSizes"]').forEach(cb => cb.checked = false);
 
     document.getElementById('productModal').style.display = 'block';
@@ -128,12 +115,9 @@ window.openEditModal = (id) => {
     document.getElementById('pDesc').value = product.description;
     document.getElementById('pQty').value = product.countInStock;
     document.getElementById('modalTitle').innerText = 'Edit Product';
-
-    // CHECK THE RELEVANT SIZE BOXES
     document.querySelectorAll('input[name="pSizes"]').forEach(cb => {
         cb.checked = product.sizes && product.sizes.includes(cb.value);
     });
-    // AUTO-SELECT LOGIC (UPDATED FOR IDs)
     const catID = product.category;
     const categoryObj = allCategories.find(c => c._id === catID);
     
@@ -142,18 +126,15 @@ window.openEditModal = (id) => {
 
     if (categoryObj) {
         if (categoryObj.parentId) {
-            // It's a Subcategory -> Select Parent then Child
             parentSelect.value = categoryObj.parentId;
             window.handleParentChange(); 
             subSelect.value = categoryObj._id; // Select by ID
         } else {
-            // It's a Parent Category
             parentSelect.value = categoryObj._id;
             window.handleParentChange();
             subSelect.value = "";
         }
     } else {
-        // Fallback or empty
         parentSelect.value = "";
         window.handleParentChange();
     }
@@ -167,8 +148,6 @@ document.getElementById('productForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const id = document.getElementById('editId').value;
-    
-    // FIX: Scrape all checked boxes with the name 'pSizes'
     const selectedSizes = Array.from(document.querySelectorAll('input[name="pSizes"]:checked'))
                                .map(cb => cb.value);
 
@@ -176,7 +155,6 @@ document.getElementById('productForm').addEventListener('submit', async (e) => {
         name: document.getElementById('pName').value,
         price: Number(document.getElementById('pPrice').value),
         brand: document.getElementById('pBrand').value,
-        // ... (other fields like category, image, description)
         countInStock: Number(document.getElementById('pQty').value),
         sizes: selectedSizes // This must match the field name in your Product Model
     };
@@ -206,8 +184,6 @@ document.getElementById('productForm').addEventListener('submit', async (e) => {
         console.error("Save failed:", error);
     }
 });
-
-// Delete function
 window.deleteProduct = async (id) => {
     if(!confirm("Delete?")) return;
     try {

@@ -1,5 +1,4 @@
-// --- HELPER: Handles all image logic ---
-function resolveImg(imgInput) {
+﻿function resolveImg(imgInput) {
     const BACKEND_URL = '/uploads/';
     const FALLBACK_IMG = 'https://via.placeholder.com/600?text=No+Image';
     if (!imgInput) return FALLBACK_IMG;
@@ -9,18 +8,13 @@ function resolveImg(imgInput) {
     const formattedName = cleanName.startsWith('/') ? cleanName.substring(1) : cleanName;
     return `${BACKEND_URL}${formattedName}`;
 }
-
-// --- NEW HELPER: Update Wishlist Navigation Count ---
 function updateWishlistCount() {
     const countElement = document.getElementById('wishlistCount');
     if (!countElement) return;
     const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
     countElement.innerText = wishlist.length;
-    // Show/Hide badge based on count
     countElement.style.display = wishlist.length > 0 ? 'flex' : 'none';
 }
-
-// --- Sync Cart to MongoDB ---
 async function syncCartToDB(cart) {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const token = localStorage.getItem('userToken');
@@ -51,12 +45,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
     if (!productId) return;
-
-    // Initialize the counter on page load
     updateWishlistCount();
 
     try {
-        // --- FIX: Fetch both product and categories to resolve the ID to a Name ---
         const [prodRes, catRes] = await Promise.all([
             fetch(`/api/products/${productId}`),
             fetch('/api/categories')
@@ -69,9 +60,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('productName').innerText = product.name;
         document.getElementById('productPrice').innerText = `Rs. ${product.price.toLocaleString()}`;
         document.getElementById('productDesc').innerText = product.description;
-
-        // --- DYNAMIC METADATA ---
-        // FIX: Find the category name that matches the ID saved in the product
         const catDisplay = document.getElementById('displayCategory');
         if (catDisplay) {
             const matchedCategory = categories.find(c => c._id === product.category);
@@ -161,7 +149,6 @@ async function loadRelatedProducts(currentId) {
 }
 
 function setupButtons(product) {
-    // --- CART ---
     const cartBtn = document.querySelector('.btn-primary'); 
     const quantityInput = document.getElementById('quantity');
     if (product.countInStock <= 0) {
@@ -191,8 +178,6 @@ function setupButtons(product) {
         syncCartToDB(cart); 
         alert("Item Added to Cart!");
     };
-
-    // --- WISHLIST ---
     const wishBtn = document.querySelector('.btn-outline'); 
     let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
     if (wishlist.some(item => item.id === product._id)) {

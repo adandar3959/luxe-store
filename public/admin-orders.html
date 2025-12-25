@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="css/admin-dashboard.css">
     
     <style>
-        /* --- 4-COLUMN STATS GRID --- */
+        
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
         }
 
-        /* --- MODAL STYLES --- */
+        
         .modal {
             display: none; 
             position: fixed;
@@ -277,8 +277,6 @@
                 
                 if (!res.ok) throw new Error('Could not fetch orders');
                 let orders = await res.json();
-                
-                // --- 1. STATS CALCULATION ---
                 const totalEl = document.getElementById('totalCount');
                 const processEl = document.getElementById('processingCount');
                 const deliverEl = document.getElementById('deliveredCount');
@@ -287,8 +285,6 @@
                 totalEl.innerText = orders.length;
 
                 const clean = (s) => (s || "").toLowerCase().trim();
-
-                // "Processing" stats now also catch legacy "pending" orders so they are counted somewhere
                 processEl.innerText = orders.filter(o => {
                     const s = clean(o.orderStatus || o.status);
                     return s === 'processing' || s === 'pending';
@@ -303,13 +299,9 @@
                     const s = clean(o.orderStatus || o.status);
                     return s === 'cancelled';
                 }).length;
-
-                // --- 2. SORTING ---
                 orders.sort((a, b) => {
                     const statusA = clean(a.orderStatus || a.status);
                     const statusB = clean(b.orderStatus || b.status);
-                    
-                    // Group Processing/Pending together as priority
                     const priorityGroup = ['processing', 'pending'];
                     
                     const isAPriority = priorityGroup.includes(statusA);
@@ -319,8 +311,6 @@
                     if (!isAPriority && isBPriority) return 1;
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
-
-                // --- 3. RENDER TABLE ---
                 tableBody.innerHTML = '';
                 if (orders.length === 0) {
                     tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No orders found.</td></tr>';
@@ -336,7 +326,6 @@
                     else if (order.shippingAddress && order.shippingAddress.fullName) customerName = order.shippingAddress.fullName;
 
                     const rawStatus = order.orderStatus || "Processing";
-                    // Display 'Processing' even if DB says 'Pending' for consistency
                     const displayStatus = rawStatus.toLowerCase() === 'pending' ? 'Processing' : rawStatus;
                     
                     const total = order.totalPrice ? `$${order.totalPrice.toFixed(2)}` : "$0.00";
@@ -385,15 +374,10 @@
             
             document.getElementById('modalCustomerName').textContent = custName;
             document.getElementById('modalAddress').textContent = address;
-
-            // Set Dropdown
             const statusSelect = document.getElementById('modalStatusSelect');
-            // If DB says 'Pending', select 'Processing' in the dropdown
             let currentStatus = order.orderStatus || 'Processing';
             if(currentStatus === 'Pending') currentStatus = 'Processing';
             statusSelect.value = currentStatus;
-
-            // ROLE CHECK
             const updateBtn = document.getElementById('updateStatusBtn');
             const adminNote = document.getElementById('adminViewNote');
 
@@ -406,8 +390,6 @@
                 updateBtn.style.display = 'block';
                 adminNote.style.display = 'none';
             }
-
-            // Products
             const productBody = document.getElementById('modalProductList');
             productBody.innerHTML = '';
             

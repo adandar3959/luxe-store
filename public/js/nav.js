@@ -1,11 +1,9 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     updateUserInterface();
     setupSearch();
     setupMobileMenu();
     loadCategoriesForNav(); // 👈 Now runs on every page
 });
-
-// --- 1. DYNAMIC NAVBAR (Mega Menu) ---
 async function loadCategoriesForNav() {
     const navLinksContainer = document.getElementById('navLinks');
     if (!navLinksContainer) return;
@@ -21,8 +19,6 @@ async function loadCategoriesForNav() {
 
         parents.forEach(parent => {
             const li = document.createElement('li');
-            
-            // 👇 KEY CHANGE: Links now point to 'category.html'
             const parentLink = document.createElement('a');
             parentLink.href = `category.html?catId=${parent._id}`; 
             parentLink.innerText = parent.name;
@@ -40,7 +36,6 @@ async function loadCategoriesForNav() {
                 list.className = 'mega-menu-list';
                 myChildren.forEach(child => {
                     const itemLink = document.createElement('a');
-                    // 👇 KEY CHANGE: Links now point to 'category.html'
                     itemLink.href = `category.html?catId=${child._id}`; 
                     itemLink.className = 'mega-menu-item';
                     itemLink.innerHTML = `<div class="item-text"><span class="item-name">${child.name}</span></div><i class='bx bx-chevron-right item-icon'></i>`;
@@ -54,11 +49,8 @@ async function loadCategoriesForNav() {
 
     } catch (error) { console.error("Error loading navbar categories:", error); }
 }
-
-// --- 2. USER AUTH UI ---
 function updateUserInterface() {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    // Find the link that contains the user icon
     const userIcon = document.querySelector('.nav-icons .bx-user');
     if(userIcon) {
         const userLink = userIcon.parentElement;
@@ -75,8 +67,6 @@ function updateUserInterface() {
     const badge = document.querySelector('.cart-count');
     if (badge) badge.innerText = cart.length;
 }
-
-// --- 3. SEARCH LOGIC ---
 function setupSearch() {
     const searchInput = document.querySelector('.search-box input');
     const searchIcon = document.querySelector('.search-box .bx-search');

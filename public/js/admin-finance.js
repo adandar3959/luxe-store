@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     fetchFinanceData();
 });
 
@@ -10,13 +10,9 @@ async function fetchFinanceData() {
             headers: { 'Authorization': `Bearer ${userInfo.token}` }
         });
         const data = await res.json();
-
-        // 1. Update KPIs
         document.getElementById('totalRevenue').innerText = `${data.totalRevenue.toLocaleString()}RS`;
         document.getElementById('totalExpenses').innerText = `${data.totalExpenses.toLocaleString()}RS`;
         document.getElementById('netProfit').innerText = `${data.netProfit.toLocaleString()}RS`;
-
-        // 2. Render Payroll Table
         const payrollTable = document.getElementById('payrollTable');
         payrollTable.innerHTML = '';
         
@@ -36,8 +32,6 @@ async function fetchFinanceData() {
                 </tr>
             `;
         });
-
-        // 3. Render Transactions
         const txTable = document.getElementById('transactionTable');
         txTable.innerHTML = '';
 
@@ -80,8 +74,6 @@ window.paySalary = async (id, amount) => {
 
         if(res.ok) {
             alert("Salary Paid Successfully!");
-            
-            // 👇 RELOAD DATA IMMEDIATELY
             await fetchFinanceData(); 
             
         } else {

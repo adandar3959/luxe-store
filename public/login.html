@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,7 @@
     <title>Login / Sign Up | LUXE</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
-        /* (Keep your existing CSS here) */
+        
         body { background: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: sans-serif; }
         .auth-container { background: #fff; width: 400px; padding: 40px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; }
         .logo { font-size: 24px; font-weight: bold; margin-bottom: 30px; display: block; color: #1a1a1a; text-decoration: none; }
@@ -23,7 +23,7 @@
         .admin-link-box { margin-top: 25px; border-top: 1px solid #eee; padding-top: 15px; }
         .admin-link-box a { color: #1a1a1a; font-weight: 600; text-decoration: none; }
 
-        /* --- NEW MODAL STYLES --- */
+        
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
         .modal-content { background-color: #fff; padding: 30px; border-radius: 12px; width: 350px; position: relative; text-align: left; }
         .close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; }
@@ -98,7 +98,6 @@
 
     <script src="js/customer-login.js"></script>
     <script>
-        // Modal Logic
         const API_URL_BASE = '/api/users'; // Adjust if needed
 
         function openForgotModal() {

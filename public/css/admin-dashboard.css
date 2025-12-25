@@ -1,4 +1,4 @@
-/* --- DARK THEME VARIABLES --- */
+﻿
 :root {
     --bg-dark: #151521;
     --panel-dark: #1e1e2d;
@@ -25,7 +25,6 @@ body {
     min-height: 100vh;
 }
 
-/* --- SIDEBAR --- */
 .sidebar {
     width: 260px;
     background: var(--panel-dark);
@@ -75,14 +74,12 @@ body {
 
 .logout-btn { margin-top: auto; }
 
-/* --- MAIN CONTENT --- */
 .main-content {
     margin-left: 260px;
     padding: 30px;
     width: calc(100% - 260px);
 }
 
-/* Top Bar */
 .top-bar {
     background: var(--panel-dark);
     padding: 15px 20px;
@@ -109,11 +106,9 @@ body {
     display: flex; align-items: center; justify-content: center; font-weight: bold;
 }
 
-/* Stats Section */
 .section-title { font-size: 24px; margin-bottom: 5px; }
 .section-subtitle { color: var(--text-muted); margin-bottom: 25px; font-size: 14px; }
 
-/* Update the grid to handle 5 items automatically */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -121,7 +116,6 @@ body {
     margin-bottom: 30px;
 }
 
-/* Newsletter Card Specifics */
 .newsletter-card {
     cursor: pointer;
     border: 1px solid transparent;
@@ -158,7 +152,6 @@ body {
 .blue { color: var(--blue); background: rgba(0,143,251,0.1); }
 .purple { color: var(--red); background: rgba(255,69,96,0.1); }
 
-/* Middle Section */
 .middle-section {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -166,7 +159,6 @@ body {
     margin-bottom: 30px;
 }
 
-/* Earnings Specifics */
 .earnings-box { text-align: center; }
 .earning-amount { color: var(--green); margin: 10px 0; font-size: 32px; }
 .profit-text { font-size: 12px; margin-top: 10px; opacity: 0.7; }
@@ -182,7 +174,6 @@ body {
     font-size: 28px; font-weight: bold; color: white;
 }
 
-/* Tables */
 table { width: 100%; border-collapse: collapse; margin-top: 15px; }
 th { text-align: left; color: var(--text-muted); padding: 12px; border-bottom: 1px solid #2b2b40; font-size: 13px; }
 td { padding: 12px; border-bottom: 1px solid #2b2b40; font-size: 14px; color: var(--text-light); }
@@ -196,13 +187,9 @@ td { padding: 12px; border-bottom: 1px solid #2b2b40; font-size: 14px; color: va
 .action-icons i { margin-right: 10px; cursor: pointer; transition: 0.2s; }
 .action-icons i:hover { color: white; }
 
-/* Progress Bar for Top Products */
 .progress-bg { width: 100px; height: 6px; background: #2b2b40; border-radius: 3px; }
 .progress-fill { height: 100%; background: var(--yellow); border-radius: 3px; }
 
-/* --- MODAL FIXES --- */
-
-/* The Background Overlay */
 .modal {
     display: none; 
     position: fixed; 
@@ -214,23 +201,21 @@ td { padding: 12px; border-bottom: 1px solid #2b2b40; font-size: 14px; color: va
     background-color: rgba(0,0,0,0.7); 
 }
 
-/* The White/Dark Box Content */
 .modal-content {
-    background-color: var(--panel-dark); /* Matches your theme */
-    margin: 3vh auto; /* Small top margin to center it */
+    background-color: var(--panel-dark); 
+    margin: 3vh auto; 
     padding: 30px;
     border-radius: 12px;
     width: 500px;
     color: white;
     border: 1px solid #333;
     
-    /* 👇 KEY FIX FOR SCROLLING 👇 */
-    max-height: 90vh;       /* Limit height to 90% of screen */
-    overflow-y: auto;       /* Enable vertical scrolling */
-    position: relative;     /* Ensure it respects layout */
+    
+    max-height: 90vh;       
+    overflow-y: auto;       
+    position: relative;     
 }
 
-/* Optional: Custom Scrollbar for Modal to match your theme */
 .modal-content::-webkit-scrollbar {
     width: 8px;
 }
@@ -238,11 +223,10 @@ td { padding: 12px; border-bottom: 1px solid #2b2b40; font-size: 14px; color: va
     background: #151521; 
 }
 .modal-content::-webkit-scrollbar-thumb {
-    background: var(--accent); /* Uses your purple accent */
+    background: var(--accent); 
     border-radius: 4px;
 }
 
-/* Form inputs inside modal */
 .modal-content input, 
 .modal-content select, 
 .modal-content textarea {

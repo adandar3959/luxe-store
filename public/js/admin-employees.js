@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     checkAdmin();
     fetchEmployees();
 });
@@ -38,8 +38,6 @@ async function fetchEmployees() {
         });
     } catch (e) { console.error(e); }
 }
-
-// Open Modal
 window.openModal = () => {
     document.getElementById('modalTitle').innerText = "Add Employee";
     document.getElementById('employeeForm').reset();
@@ -50,8 +48,6 @@ window.openModal = () => {
 window.closeModal = () => {
     document.getElementById('employeeModal').style.display = "none";
 }
-
-// Edit Prep
 window.editEmployee = (id, name, email, pos, salary) => {
     document.getElementById('modalTitle').innerText = "Edit Employee";
     document.getElementById('editId').value = id;
@@ -62,8 +58,6 @@ window.editEmployee = (id, name, email, pos, salary) => {
     document.getElementById('ePass').placeholder = "Leave blank to keep current";
     document.getElementById('employeeModal').style.display = "block";
 }
-
-// Submit Form
 document.getElementById('employeeForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -96,8 +90,6 @@ document.getElementById('employeeForm').addEventListener('submit', async (e) => 
     closeModal();
     fetchEmployees();
 });
-
-// Delete
 window.deleteEmployee = async (id) => {
     if(!confirm("Fire this employee?")) return;
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));

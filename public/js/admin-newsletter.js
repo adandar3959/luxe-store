@@ -1,7 +1,6 @@
-const token = localStorage.getItem('userToken');
+﻿const token = localStorage.getItem('userToken');
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if token exists
     if (!token) {
         window.location.href = 'admin-login.html';
         return;
@@ -14,14 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
         broadcastForm.addEventListener('submit', sendBroadcast);
     }
 });
-
-// 1. Fetch and Display Subscribers
 async function fetchSubscribers() {
     const listBody = document.getElementById('subscriberList');
     if (!listBody) return;
 
     try {
-        // Use your live Render URL if testing on the web
         const response = await fetch('/api/newsletter/list', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -47,16 +43,12 @@ async function fetchSubscribers() {
         console.error("Error fetching subscribers:", err);
     }
 }
-
-// 2. Send Mass Email
 async function sendBroadcast(e) {
     e.preventDefault();
     const subject = document.getElementById('emailSubject').value;
     const message = document.getElementById('emailMessage').value;
 
     if(!confirm("Send this broadcast to ALL subscribers?")) return;
-
-    // Show loading state
     const submitBtn = e.target.querySelector('button');
     const originalText = submitBtn.innerText;
     submitBtn.innerText = "Sending...";
@@ -86,8 +78,6 @@ async function sendBroadcast(e) {
         submitBtn.disabled = false;
     }
 }
-
-// 3. Delete Subscriber
 async function deleteSubscriber(id) {
     if (!confirm("Remove this email from the newsletter list?")) return;
 

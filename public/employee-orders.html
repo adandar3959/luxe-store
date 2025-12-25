@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,14 +8,14 @@
     <link rel="stylesheet" href="css/admin-dashboard.css">
     
     <style>
-        /* --- STATS GRID --- */
+        
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
         }
 
-        /* --- MODAL STYLES --- */
+        
         .modal {
             display: none; 
             position: fixed;
@@ -261,18 +261,12 @@
                 
                 if (!res.ok) throw new Error('Could not fetch orders');
                 let orders = await res.json();
-                
-                // ============================================
-                // 1. ROBUST STATS COUNTING (Case Insensitive)
-                // ============================================
                 const totalEl = document.getElementById('totalCount');
                 const processEl = document.getElementById('processingCount');
                 const deliverEl = document.getElementById('deliveredCount');
                 const cancelEl = document.getElementById('cancelledCount');
 
                 totalEl.innerText = orders.length;
-
-                // Helper to clean strings: " Processing " -> "processing"
                 const clean = (str) => (str || "").toLowerCase().trim();
 
                 processEl.innerText = orders.filter(o => {
@@ -289,10 +283,6 @@
                     const s = clean(o.orderStatus || o.status);
                     return s === 'cancelled';
                 }).length;
-
-                // ============================================
-                // 2. SORTING (Pending/Processing First)
-                // ============================================
                 orders.sort((a, b) => {
                     const statusA = clean(a.orderStatus || a.status);
                     const statusB = clean(b.orderStatus || b.status);
@@ -305,10 +295,6 @@
                     if (!isAActive && isBActive) return 1;
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 });
-
-                // ============================================
-                // 3. RENDER TABLE
-                // ============================================
                 tableBody.innerHTML = '';
                 if (orders.length === 0) {
                     tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No orders assigned.</td></tr>';
@@ -356,8 +342,6 @@
                 default: return '#777';
             }
         }
-
-        // --- MODAL FUNCTIONS ---
         function openModal(orderEncoded) {
             const order = JSON.parse(decodeURIComponent(orderEncoded));
             currentOrderId = order._id;
@@ -375,7 +359,6 @@
             productBody.innerHTML = '';
             
             if (order.orderItems && order.orderItems.length > 0) {
-                // Inside openModal in employee-orders.html
                 order.orderItems.forEach(item => {
                     const imgUrl = item.image ? item.image : 'https://via.placeholder.com/40';
                     const pRow = document.createElement('tr');

@@ -1,6 +1,4 @@
-let isLogin = true;
-
-// Toggle between Login and Sign Up
+﻿let isLogin = true;
 function switchTab(tab) {
     const nameGroup = document.getElementById('nameGroup');
     const submitBtn = document.getElementById('submitBtn');
@@ -13,7 +11,6 @@ function switchTab(tab) {
         isLogin = false;
         nameGroup.classList.remove('hidden');
         submitBtn.innerText = "Create Account";
-        // Update active tab style (assuming you have 2 tabs)
         if(tabs[0]) tabs[0].classList.remove('active');
         if(tabs[1]) tabs[1].classList.add('active');
     } else {
@@ -24,8 +21,6 @@ function switchTab(tab) {
         if(tabs[1]) tabs[1].classList.remove('active');
     }
 }
-
-// Handle Form Submit
 document.getElementById('authForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -33,19 +28,13 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
     const password = document.getElementById('password').value.trim();
     const name = document.getElementById('name').value.trim();
     const errorMsg = document.getElementById('errorMsg');
-
-    // Basic Validation
     if(!email || !password) {
         alert("Please fill in all fields");
         return;
     }
-
-    // Determine URL
     const url = isLogin 
         ? '/api/users/login' 
         : '/api/users';
-
-    // Prepare Data
     const bodyData = { email, password };
     if (!isLogin) bodyData.name = name; // Only add name for signup
 
@@ -59,20 +48,16 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            // ✅ CRITICAL FIX: Save the Token & User Info
             localStorage.setItem('userToken', data.token);
             localStorage.setItem('userInfo', JSON.stringify(data));
 
             console.log("Login Successful! Token Saved.");
-
-            // Redirect based on Admin status (using isAdmin check)
             if (data.isAdmin) {
                 window.location.href = 'admin-dashboard.html';
             } else {
                 window.location.href = 'index.html'; 
             }
         } else {
-            // --- SERVER ERROR ---
             console.error("Server Error:", data.message);
             if(errorMsg) {
                 errorMsg.innerText = data.message || "Invalid Email or Password";
@@ -83,7 +68,6 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
         }
 
     } catch (error) {
-        // --- NETWORK ERROR ---
         console.error("Network Error:", error);
         if(errorMsg) {
             errorMsg.innerText = "Cannot connect to server. Is Backend running?";

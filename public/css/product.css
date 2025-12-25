@@ -1,8 +1,8 @@
-/* --- PRODUCT PAGE LAYOUT --- */
+﻿
 .product-details-section {
     padding: 40px 20px;
     max-width: 1200px;
-    margin: 80px auto 40px; /* Top margin for fixed navbar */
+    margin: 80px auto 40px; 
 }
 
 .product-container {
@@ -11,7 +11,6 @@
     gap: 50px;
 }
 
-/* --- IMAGE GALLERY --- */
 .product-gallery {
     display: flex;
     flex-direction: column;
@@ -51,7 +50,6 @@
     border: 1px solid var(--primary);
 }
 
-/* --- PRODUCT INFO --- */
 .product-info h1 {
     font-size: 32px;
     margin: 10px 0;
@@ -64,7 +62,7 @@
 }
 
 .rating {
-    color: #FFD700; /* Gold */
+    color: #FFD700; 
     font-size: 14px;
     margin-bottom: 20px;
 }
@@ -85,7 +83,6 @@
     margin-bottom: 30px;
 }
 
-/* --- SIZE SELECTOR --- */
 .options h3 { font-size: 14px; margin-bottom: 10px; }
 .sizes { display: flex; gap: 10px; margin-bottom: 30px; }
 
@@ -108,7 +105,6 @@
     border-color: var(--primary);
 }
 
-/* --- ACTIONS --- */
 .actions {
     display: flex;
     gap: 15px;
@@ -130,7 +126,7 @@
 }
 .sm-img.active, .sm-img:hover {
     opacity: 1;
-    border: 2px solid #695CFE; /* Highlight color */
+    border: 2px solid #695CFE; 
 }
 
 .btn-outline {
@@ -150,7 +146,6 @@
 }
 .meta-info span { color: var(--text-dark); font-weight: 500; }
 
-/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
     .product-container { grid-template-columns: 1fr; }
     .main-image { height: 350px; }

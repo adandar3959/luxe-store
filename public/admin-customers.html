@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -79,11 +79,7 @@
                     headers: { 'Authorization': `Bearer ${userInfo.token}` }
                 });
                 const customers = await res.json();
-
-                // Update Count
                 document.getElementById('totalCustomers').innerText = customers.length;
-
-                // Render Table
                 const tbody = document.getElementById('customerTableBody');
                 tbody.innerHTML = '';
 

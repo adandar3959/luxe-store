@@ -1,10 +1,7 @@
-// frontend/js/cart.js
-
+﻿
 document.addEventListener('DOMContentLoaded', () => {
     loadCartItems();
     updateTotals();
-
-    // Handle Checkout Form Submission
     const checkoutForm = document.getElementById('checkoutForm');
     if (checkoutForm) {
         checkoutForm.addEventListener('submit', (e) => {
@@ -15,8 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Your cart is empty!");
                 return;
             }
-
-            // 1. Save Shipping Info to LocalStorage
             const shippingAddress = {
                 fullName: document.getElementById('fullName').value,
                 address: document.getElementById('address').value,
@@ -26,14 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             localStorage.setItem('shippingAddress', JSON.stringify(shippingAddress));
-
-            // 2. Redirect to Payment Page
             window.location.href = 'payment.html';
         });
     }
 });
-
-// --- HELPER FUNCTIONS ---
 
 function getUniversalImg(imageSource) {
     const BACKEND_URL = '/uploads/';
@@ -57,7 +48,6 @@ function loadCartItems() {
 
     if (cart.length === 0) {
         container.innerHTML = '<p>Your cart is empty. <a href="category.html">Go Shop</a></p>';
-        // Hide total section if empty (Optional)
         return;
     }
 
@@ -82,29 +72,17 @@ function loadCartItems() {
         container.appendChild(div);
     });
 }
-
-// ✅ FIX: REMOVE FROM BROWSER + SYNC TO DATABASE
 window.removeFromCart = async (index) => {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    // 1. Remove item locally
     cart.splice(index, 1);
-    
-    // 2. Update Local Storage
     localStorage.setItem('cart', JSON.stringify(cart));
-    
-    // 3. Update UI Immediately
     loadCartItems();
     updateTotals();
-    
-    // Update Navbar Badge
     const badge = document.querySelector('.cart-count');
     if(badge) {
         const total = cart.reduce((acc, item) => acc + (item.quantity || 1), 0);
         badge.innerText = total;
     }
-
-    // 4. 🚀 SYNC TO DATABASE (The Missing Part)
     const token = localStorage.getItem('userToken');
     if (token) {
         try {

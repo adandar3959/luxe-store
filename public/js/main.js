@@ -1,15 +1,12 @@
-let currentHomePage = 1;
+﻿let currentHomePage = 1;
 const homeItemsPerPage = 8; 
 let globalHomeProducts = []; 
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initial Load
     loadProducts();          
     loadUserCart(); 
     loadHomeCategories();
 });
-
-// Helper function to get URL parameters
 function getQueryParam(param) {
     const params = new URLSearchParams(window.location.search);
     return params.get(param); 
@@ -18,8 +15,6 @@ function getQueryParam(param) {
 async function loadProducts() {
     const productContainer = document.getElementById('productContainer');
     if(!productContainer) return; 
-
-    // Get filters from URL
     const categoryNameFilter = getQueryParam('category'); // From Footer links
     const catIdFilter = getQueryParam('catId');           // From Category cards
     const searchFilter = getQueryParam('search');
@@ -34,8 +29,6 @@ async function loadProducts() {
 
         let products = await prodRes.json();
         const categories = await catRes.json();
-
-        // --- TITLE UPDATE LOGIC ---
         const sectionTitle = document.querySelector('.products-section .section-header h2');
         if (sectionTitle) {
             if (categoryNameFilter) {
@@ -49,17 +42,10 @@ async function loadProducts() {
                 sectionTitle.innerText = 'Trending Now';
             }
         }
-
-        // --- FILTERING LOGIC ---
-        
-        // Filter by Category Name (Footer Links: ?category=Men)
         if (categoryNameFilter) {
             products = products.filter(p => {
                 const pCatObj = categories.find(c => c._id === p.category);
-                // Check if the product's category name OR its parent's name matches
                 if (pCatObj && pCatObj.name.toLowerCase() === categoryNameFilter.toLowerCase()) return true;
-                
-                // Also check parent categories
                 if (pCatObj && pCatObj.parentId) {
                     const parent = categories.find(c => c._id === pCatObj.parentId);
                     return parent && parent.name.toLowerCase() === categoryNameFilter.toLowerCase();
@@ -67,8 +53,6 @@ async function loadProducts() {
                 return false;
             });
         }
-
-        // Filter by ID (Category Cards: ?catId=123)
         if (catIdFilter) {
             products = products.filter(p => {
                 if (p.category === catIdFilter) return true;
@@ -77,14 +61,10 @@ async function loadProducts() {
                 return false;
             });
         }
-
-        // Filter by Search
         if (searchFilter) {
             const term = searchFilter.toLowerCase();
             products = products.filter(p => p.name.toLowerCase().includes(term));
         }
-
-        // --- SAVE & RENDER ---
         globalHomeProducts = products; 
         currentHomePage = 1;           
         renderHomePagination();        
@@ -149,9 +129,6 @@ function renderHomePagination() {
     }
 }
 
-// ... Keep your loadUserCart and loadHomeCategories as they are, 
-// they look good and will work with the logic above.
-
 async function loadUserCart() {
     const token = localStorage.getItem('userToken');
     if (!token) return; 
@@ -175,8 +152,6 @@ async function loadUserCart() {
                 }));
                 localStorage.setItem('cart', JSON.stringify(formattedCart));
             }
-            // If you have a cart count function in main.js, call it:
-            // updateCartCount();
         }
     } catch (error) { console.error("Cart Load Error", error); }
 }
@@ -186,7 +161,6 @@ async function loadHomeCategories() {
     if (!container) return;
 
     try {
-        // Fetch Categories & Products (Parallel for speed)
         const [catRes, prodRes] = await Promise.all([
             fetch('/api/categories'),
             fetch('/api/products')
@@ -196,28 +170,19 @@ async function loadHomeCategories() {
         const products = await prodRes.json();
 
         container.innerHTML = '';
-
-        // Filter only Parent Categories (e.g. Men, Women) to keep it clean
-        // (Or remove .filter if you want to show subcategories too)
         const displayCategories = categories.filter(c => !c.parentId);
 
         displayCategories.forEach(cat => {
-            // 1. Calculate Product Count
-            // Matches if product category ID matches OR if product is in a subcategory of this parent
             const count = products.filter(p => {
                 if (p.category === cat._id) return true;
                 const pCatObj = categories.find(c => c._id === p.category);
                 return pCatObj && pCatObj.parentId === cat._id;
             }).length;
-
-            // 2. Determine Background Image
-            // Priority: Category Image -> First Product's Image -> Default Placeholder
             let bgImage = 'https://via.placeholder.com/400x600?text=No+Image';
             
             if (cat.image) {
                 bgImage = cat.image.startsWith('http') ? cat.image : `/uploads/${cat.image}`;
             } else {
-                // Find a product in this category to steal its image
                 const representativeProduct = products.find(p => {
                     if (p.category === cat._id) return true;
                     const pCatObj = categories.find(c => c._id === p.category);
@@ -230,8 +195,6 @@ async function loadHomeCategories() {
                         : `/uploads/${representativeProduct.image}`;
                 }
             }
-
-            // 3. Create Card HTML
             const card = document.createElement('div');
             card.className = 'cat-card';
             card.onclick = () => window.location.href = `category.html?catId=${cat._id}`;

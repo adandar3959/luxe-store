@@ -1,5 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Security Check
+﻿document.addEventListener('DOMContentLoaded', async () => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
     if (!userInfo || (userInfo.role !== 'admin' && userInfo.role !== 'employee')) {
@@ -7,15 +6,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = 'admin-login.html';
         return;
     }
-
-    // Set Admin Avatar
     if(document.getElementById('adminAvatar')) {
         document.getElementById('adminAvatar').innerText = userInfo.name.charAt(0).toUpperCase();
     }
 
     try {
-        // 2. Fetch DATA in Parallel (Stats + Orders)
-        // We need 'Authorization' header for the secure routes
         const headers = { 'Authorization': `Bearer ${userInfo.token}` };
 
         const [resStats, resOrders] = await Promise.all([
@@ -27,28 +22,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         const statsData = await resStats.json();
         const ordersData = await resOrders.json();
-
-        // 3. Render Everything
         renderStats(statsData);
         renderOrdersTable(ordersData);
         renderTopProducts(statsData.topProducts);
 
     } catch (err) {
         console.error(err);
-        // alert('Error loading dashboard data. Ensure backend is running.');
     }
 });
 
-// --- RENDER FUNCTIONS ---
-
 function renderStats(data) {
-    // Update Number Cards
     if(document.getElementById('statSales')) document.getElementById('statSales').innerText = `${data.totalSales.toFixed(2)}RS`;
     if(document.getElementById('statOrders')) document.getElementById('statOrders').innerText = data.totalOrders;
     if(document.getElementById('statProducts')) document.getElementById('statProducts').innerText = data.productSold;
     if(document.getElementById('statCustomers')) document.getElementById('statCustomers').innerText = data.customerCount;
-    
-    // Update Earnings Widget
     const earningElement = document.querySelector('.earning-amount');
     if(earningElement) earningElement.innerText = `$${data.totalSales.toFixed(2)}`;
 }
@@ -64,15 +51,10 @@ function renderOrdersTable(orders) {
         tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center">No orders found.</td></tr>';
         return;
     }
-
-    // Show last 5 orders (Newest First)
     const recentOrders = orders.slice(0, 5); 
 
     recentOrders.forEach(order => {
-        // 1. Fix Date
         const date = new Date(order.createdAt).toLocaleDateString();
-
-        // 2. Fix Customer Name & City (Handle nested objects safely)
         let customerName = "Guest";
         let customerCity = "Unknown";
 
@@ -85,14 +67,8 @@ function renderOrdersTable(orders) {
         if (order.shippingAddress && order.shippingAddress.city) {
             customerCity = order.shippingAddress.city;
         }
-
-        // 3. Fix ID (MongoDB uses _id)
         const orderId = order._id ? order._id.substring(20, 24) : '???';
-        
-        // 4. Fix Status
         const status = order.orderStatus || "Processing";
-        
-        // 5. Payment Method
         const payment = order.paymentInfo ? order.paymentInfo.type : 'COD';
 
         const row = document.createElement('tr');

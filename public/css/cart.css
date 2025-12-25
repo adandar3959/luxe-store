@@ -1,4 +1,4 @@
-.cart-page-container {
+﻿.cart-page-container {
     max-width: 1200px;
     margin: 100px auto 50px;
     padding: 0 20px;
@@ -7,7 +7,6 @@
     gap: 40px;
 }
 
-/* --- LEFT SIDE: ITEMS --- */
 .cart-left h2 { margin-bottom: 20px; }
 
 .cart-item {
@@ -45,7 +44,6 @@
 }
 .remove-btn:hover { color: darkred; }
 
-/* --- RIGHT SIDE: CHECKOUT --- */
 .summary-box {
     background: #f9f9f9;
     padding: 30px;
@@ -83,7 +81,6 @@
 }
 .checkout-btn:hover { background: #695CFE; }
 
-/* Responsive */
 @media (max-width: 768px) {
     .cart-page-container { grid-template-columns: 1fr; }
 }

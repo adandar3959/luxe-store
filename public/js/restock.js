@@ -1,4 +1,4 @@
-const LOW_STOCK_URL = '/api/products/lowstock';
+﻿const LOW_STOCK_URL = '/api/products/lowstock';
 const token = localStorage.getItem('userToken');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -35,8 +35,6 @@ async function loadLowStockProducts() {
 
         products.forEach(p => {
             const imgUrl = p.image ? (p.image.startsWith('http') ? p.image : `/uploads/${p.image}`) : 'https://via.placeholder.com/50';
-            
-            // Determine status text
             let statusText = "Low Stock";
             if (p.countInStock === 0) statusText = "Out of Stock";
 

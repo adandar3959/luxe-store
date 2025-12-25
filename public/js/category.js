@@ -1,4 +1,4 @@
-let currentPage = 1;
+﻿let currentPage = 1;
 const itemsPerPage = 8; // 👈 Set limit to 8 products
 let currentFilteredProducts = []; // Store products globally to handle page switching
 
@@ -9,14 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadCategoryPage() {
     const titleElement = document.getElementById('categoryTitle');
     const descElement = document.getElementById('categoryDesc');
-
-    // 1. Get Filters from URL
     const urlParams = new URLSearchParams(window.location.search);
     const catId = urlParams.get('catId');
     const searchFilter = urlParams.get('search');
 
     try {
-        // 2. Fetch Data
         const [prodRes, catRes] = await Promise.all([
             fetch('/api/products'),
             fetch('/api/categories')
@@ -24,8 +21,6 @@ async function loadCategoryPage() {
 
         let products = await prodRes.json();
         const categories = await catRes.json();
-
-        // 3. Filter Logic (Same as before)
         if (catId) {
             const currentCategory = categories.find(c => c._id === catId);
             if (currentCategory) {
@@ -44,12 +39,8 @@ async function loadCategoryPage() {
             titleElement.innerText = `Results for "${searchFilter}"`;
             products = products.filter(p => p.name.toLowerCase().includes(searchFilter.toLowerCase()));
         }
-
-        // 4. Save filtered products to global variable & Reset to Page 1
         currentFilteredProducts = products;
         currentPage = 1; 
-
-        // 5. Render Initial Page
         renderPagination();
 
     } catch (error) {
@@ -78,8 +69,6 @@ function renderPagination() {
     paginatedItems.forEach(product => {
         const card = document.createElement('div');
         card.classList.add('product-card');
-        
-        // Check if product is already in wishlist for icon state
         const isLiked = wishlist.some(item => item.id === product._id);
         const heartIcon = isLiked ? 'bxs-heart' : 'bx-heart';
 
@@ -103,8 +92,6 @@ function renderPagination() {
 
     setupPaginationButtons();
 }
-
-// --- NEW: TOGGLE WISHLIST FROM CARD ---
 function toggleWishlist(event, productData) {
     event.stopPropagation(); // Prevent opening product page
     const product = JSON.parse(decodeURIComponent(productData));
@@ -116,7 +103,6 @@ function toggleWishlist(event, productData) {
     if (existingIndex > -1) {
         wishlist.splice(existingIndex, 1);
         icon.classList.replace('bxs-heart', 'bx-heart');
-        // Optional: toast notification instead of alert
     } else {
         wishlist.push({
             id: product._id,
@@ -129,13 +115,9 @@ function toggleWishlist(event, productData) {
 
     localStorage.setItem('wishlist', JSON.stringify(wishlist));
 }
-
-// --- NEW: BUTTON GENERATOR ---
 function setupPaginationButtons() {
     const paginationContainer = document.getElementById('pagination');
     const pageCount = Math.ceil(currentFilteredProducts.length / itemsPerPage);
-
-    // Only show pagination if there is more than 1 page
     if (pageCount <= 1) return; 
 
     for (let i = 1; i <= pageCount; i++) {

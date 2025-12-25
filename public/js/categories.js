@@ -1,4 +1,4 @@
-const API_URL = '/api/categories';
+﻿const API_URL = '/api/categories';
 const PROD_URL = '/api/products';
 const token = localStorage.getItem('userToken');
 
@@ -23,22 +23,13 @@ async function loadData() {
 }
 
 function renderDashboard() {
-    // 1. Separate Data
     const parents = allCategories.filter(c => !c.parentId); // Main
     const subs = allCategories.filter(c => c.parentId);     // Sub
-
-    // 2. Update Stats
     document.getElementById('totalParents').innerText = parents.length;
     document.getElementById('totalSubs').innerText = subs.length;
-
-    // 3. Render Main Categories Table
     renderMainTable(parents, subs);
-
-    // 4. Render Sub Categories Table
     renderSubTable(subs, parents);
 }
-
-// --- TABLE RENDER FUNCTIONS ---
 
 function renderMainTable(parents, allSubs) {
     const tbody = document.getElementById('mainCatBody');
@@ -50,7 +41,6 @@ function renderMainTable(parents, allSubs) {
     }
 
     parents.forEach(cat => {
-        // Count: Own products + Subcategory products
         const myChildrenIds = allSubs.filter(s => s.parentId === cat._id).map(s => s._id);
         const count = allProducts.filter(p => p.category === cat._id || myChildrenIds.includes(p.category)).length;
 
@@ -78,11 +68,8 @@ function renderSubTable(subs, allParents) {
     }
 
     subs.forEach(cat => {
-        // Find Parent Name
         const parentObj = allParents.find(p => p._id === cat.parentId);
         const parentName = parentObj ? parentObj.name : '<span style="color:red">Orphan</span>';
-
-        // Count: Only own products
         const count = allProducts.filter(p => p.category === cat._id).length;
 
         const tr = document.createElement('tr');
@@ -98,8 +85,6 @@ function renderSubTable(subs, allParents) {
         tbody.appendChild(tr);
     });
 }
-
-// --- MODAL & ACTIONS (Unchanged) ---
 window.openModal = () => {
     document.getElementById('catId').value = '';
     document.getElementById('catName').value = '';
@@ -131,8 +116,6 @@ window.viewProducts = (catId) => {
     const list = document.getElementById('modalProductList');
     
     document.getElementById('prodModalTitle').innerText = `${cat.name} Products`;
-    
-    // 1. UPDATE: Change grid columns from 60px to 140px to fit text
     list.style.display = 'grid';
     list.style.gridTemplateColumns = 'repeat(auto-fill, minmax(140px, 1fr))'; 
     list.style.gap = '15px';
@@ -141,8 +124,6 @@ window.viewProducts = (catId) => {
     list.innerHTML = '';
 
     let items = allProducts.filter(p => p.category === catId);
-
-    // Include subcategory items if this is a parent category
     if (!cat.parentId) {
          const myChildrenIds = allCategories.filter(c => c.parentId === cat._id).map(c => c._id);
          const childItems = allProducts.filter(p => myChildrenIds.includes(p.category));
@@ -156,12 +137,8 @@ window.viewProducts = (catId) => {
         modal.style.display = 'flex';
         return;
     }
-
-    // 2. UPDATE: Render a Card instead of just an Image
     items.forEach(p => {
         const img = p.image ? (p.image.startsWith('http') ? p.image : `/uploads/${p.image}`) : 'https://via.placeholder.com/150';
-        
-        // Check if price exists, otherwise show 0
         const price = p.price ? p.price : 0; 
 
         const cardHTML = `

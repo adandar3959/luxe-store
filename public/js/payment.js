@@ -1,7 +1,6 @@
-let selectedMethod = 'Cash on Delivery';
+﻿let selectedMethod = 'Cash on Delivery';
 
 function selectPayment(method) {
-    // UI Updates
     document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
     
     if (method === 'COD') {
@@ -16,7 +15,6 @@ function selectPayment(method) {
 }
 
 async function confirmOrder() {
-    // 1. Get Data from LocalStorage
     const cart = JSON.parse(localStorage.getItem('cart'));
     const shippingInfo = JSON.parse(localStorage.getItem('shippingAddress'));
     const token = localStorage.getItem('userToken'); // ✅ Get Token for Auth
@@ -32,11 +30,7 @@ async function confirmOrder() {
         window.location.href = 'login.html';
         return;
     }
-
-    // 2. Calculate Total
     const totalPrice = cart.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
-
-    // 3. Prepare Order Payload for Backend
     const orderData = {
         orderItems: cart.map(item => ({
             product: item.id, // Maps Frontend 'id' to Backend 'product' ObjectId
@@ -60,8 +54,6 @@ async function confirmOrder() {
         shippingPrice: 0,
         totalPrice: totalPrice
     };
-
-    // 4. Send to Backend
     try {
         const response = await fetch('/api/orders', {
             method: 'POST',
@@ -73,16 +65,9 @@ async function confirmOrder() {
         });
 
         const data = await response.json();
-
-        // ... inside your confirmOrder function, in the "if (response.ok)" block:
         if (response.ok) {
-            // Save order details temporarily for the slip
             localStorage.setItem('lastOrder', JSON.stringify(data)); 
-            
-            // Clear Cart but keep the lastOrder for the next screen
             localStorage.removeItem('cart');
-            
-            // Redirect to the slip page
             window.location.href = 'order-success.html'; 
         }else {
             alert("Order Failed: " + (data.message || "Unknown Error"));
