@@ -166,30 +166,203 @@ ul { list-style: none; }
 .product-title { font-size: 16px; font-weight: 600; margin: 5px 0; }
 .product-price { color: var(--secondary); font-weight: 600; }
 
-/* --- FOOTER --- */
-footer { background: var(--primary); color: var(--white); padding: 50px 20px 20px; }
-.footer-content {
+/* --- Footer Styling --- */
+.site-footer {
+    background-color: #221f1e; /* Dark brown/black background like image */
+    color: #fff;
+    padding-top: 60px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Newsletter Section */
+.footer-newsletter {
+    text-align: center;
+    margin-bottom: 60px;
+    padding: 0 20px;
+}
+
+.footer-newsletter h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.footer-newsletter p {
+    color: #a0a0a0;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+.newsletter-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 4px;
+    border: 1px solid #333;
+    background-color: #2d2a29;
+    color: #fff;
+    outline: none;
+}
+
+.newsletter-form button {
+    padding: 12px 30px;
+    background-color: #d96540; /* The orange/rust color from image */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.newsletter-form button:hover {
+    background-color: #c45533;
+}
+
+/* Main Footer Columns */
+.footer-container {
     max-width: 1200px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    padding: 0 20px;
+}
+
+.footer-row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
     gap: 40px;
-    margin-bottom: 40px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 60px;
 }
-.footer-col h4 { margin-bottom: 20px; }
-.footer-col a { display: block; color: #bbb; margin-bottom: 10px; font-size: 14px; }
-.footer-col a:hover { color: var(--white); }
-.footer-bottom { text-align: center; border-top: 1px solid #333; padding-top: 20px; color: #777; font-size: 12px; }
 
-/* RESPONSIVE */
+.footer-col {
+    flex: 1;
+    min-width: 150px;
+}
+
+.brand-col {
+    flex: 2; /* Brand column is wider */
+    max-width: 350px;
+}
+
+.footer-col h4 {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Brand Column Specifics */
+.brand-col h4 {
+    font-size: 1.5rem; /* Larger Logo Text */
+}
+
+.brand-col p {
+    color: #a0a0a0;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%; /* Circle icons */
+    background-color: transparent;
+    border: 1px solid #444;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background-color: #fff;
+    color: #221f1e;
+}
+
+/* Links Lists */
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 12px;
+}
+
+.footer-col ul li a {
+    color: #a0a0a0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.footer-col ul li a:hover {
+    color: #fff;
+}
+
+/* Bottom Bar */
+.footer-bottom {
+    padding: 25px 0;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.legal-links {
+    display: flex;
+    gap: 20px;
+}
+
+.legal-links a {
+    color: #777;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.legal-links a:hover {
+    color: #fff;
+}
+
+/* Responsive (Mobile) */
 @media (max-width: 768px) {
-    .nav-links { display: none; } 
-    /* Add JS toggle logic for mobile menu here if needed */
-    .menu-toggle { display: block; font-size: 24px; }
+    .newsletter-form {
+        flex-direction: column;
+    }
+    
+    .footer-row {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .bottom-row {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
 }
 
-
-/* Dropdown Styles */
 .dropdown { position: relative; display: inline-block; }
 .dropdown-content {
     display: none;

@@ -1,24 +1,30 @@
 let currentHomePage = 1;
-const homeItemsPerPage = 8; // Limit to 8 products per page
-let globalHomeProducts = []; // Store products for pagination
+const homeItemsPerPage = 8; 
+let globalHomeProducts = []; 
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Note: Navbar is handled by nav.js now
-    loadProducts();         
+    // 1. Initial Load
+    loadProducts();          
     loadUserCart(); 
     loadHomeCategories();
 });
+
+// Helper function to get URL parameters
+function getQueryParam(param) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(param); 
+}
 
 async function loadProducts() {
     const productContainer = document.getElementById('productContainer');
     if(!productContainer) return; 
 
-    // Optional: Check if index.html still receives filters (usually handled by category.html now)
-    const urlParams = new URLSearchParams(window.location.search);
-    const catIdFilter = urlParams.get('catId'); 
-    const searchFilter = urlParams.get('search');
+    // Get filters from URL
+    const categoryNameFilter = getQueryParam('category'); // From Footer links
+    const catIdFilter = getQueryParam('catId');           // From Category cards
+    const searchFilter = getQueryParam('search');
 
-    productContainer.innerHTML = '<h2>Loading...</h2>';
+    productContainer.innerHTML = '<h2>Loading Products...</h2>';
 
     try {
         const [prodRes, catRes] = await Promise.all([
@@ -29,10 +35,12 @@ async function loadProducts() {
         let products = await prodRes.json();
         const categories = await catRes.json();
 
-        // Update Title if filter exists (Legacy support for index.html)
-        const sectionTitle = document.querySelector('.section-header h2');
+        // --- TITLE UPDATE LOGIC ---
+        const sectionTitle = document.querySelector('.products-section .section-header h2');
         if (sectionTitle) {
-            if (catIdFilter) {
+            if (categoryNameFilter) {
+                sectionTitle.innerText = `${categoryNameFilter} Collection`;
+            } else if (catIdFilter) {
                 const catObj = categories.find(c => c._id === catIdFilter);
                 sectionTitle.innerText = catObj ? `${catObj.name} Collection` : 'Collection';
             } else if (searchFilter) {
@@ -43,6 +51,24 @@ async function loadProducts() {
         }
 
         // --- FILTERING LOGIC ---
+        
+        // Filter by Category Name (Footer Links: ?category=Men)
+        if (categoryNameFilter) {
+            products = products.filter(p => {
+                const pCatObj = categories.find(c => c._id === p.category);
+                // Check if the product's category name OR its parent's name matches
+                if (pCatObj && pCatObj.name.toLowerCase() === categoryNameFilter.toLowerCase()) return true;
+                
+                // Also check parent categories
+                if (pCatObj && pCatObj.parentId) {
+                    const parent = categories.find(c => c._id === pCatObj.parentId);
+                    return parent && parent.name.toLowerCase() === categoryNameFilter.toLowerCase();
+                }
+                return false;
+            });
+        }
+
+        // Filter by ID (Category Cards: ?catId=123)
         if (catIdFilter) {
             products = products.filter(p => {
                 if (p.category === catIdFilter) return true;
@@ -52,41 +78,40 @@ async function loadProducts() {
             });
         }
 
+        // Filter by Search
         if (searchFilter) {
             const term = searchFilter.toLowerCase();
             products = products.filter(p => p.name.toLowerCase().includes(term));
         }
 
         // --- SAVE & RENDER ---
-        globalHomeProducts = products; // Save filtered list
-        currentHomePage = 1;           // Reset to page 1
-        renderHomePagination();        // Render first 8
+        globalHomeProducts = products; 
+        currentHomePage = 1;           
+        renderHomePagination();        
 
     } catch (error) {
-        console.error(error);
+        console.error("Load Products Error:", error);
         productContainer.innerHTML = '<h3 style="color:red">Error connecting to server.</h3>';
     }
 }
 
-// --- RENDER FUNCTION (Handles Slicing 8 items) ---
 function renderHomePagination() {
     const productContainer = document.getElementById('productContainer');
     const paginationContainer = document.getElementById('homePagination');
 
+    if(!productContainer) return;
     productContainer.innerHTML = '';
-    paginationContainer.innerHTML = '';
+    if(paginationContainer) paginationContainer.innerHTML = '';
 
     if (globalHomeProducts.length === 0) {
-        productContainer.innerHTML = `<h3>No products found.</h3>`;
+        productContainer.innerHTML = `<h3 style="grid-column: 1/-1; text-align:center; padding: 50px 0;">No products found in this category.</h3>`;
         return;
     }
 
-    // A. Calculate Slice
     const start = (currentHomePage - 1) * homeItemsPerPage;
     const end = start + homeItemsPerPage;
     const paginatedItems = globalHomeProducts.slice(start, end);
 
-    // B. Render Cards
     paginatedItems.forEach(product => {
         const card = document.createElement('div');
         card.classList.add('product-card');
@@ -99,7 +124,7 @@ function renderHomePagination() {
                 <img src="${imgUrl}" alt="${product.name}" class="product-img">
             </div>
             <div class="product-details">
-                <span class="product-brand">${product.brand}</span>
+                <span class="product-brand">${product.brand || 'LUXE'}</span>
                 <h4 class="product-title">${product.name}</h4>
                 <div class="product-price">Rs. ${product.price.toLocaleString()}</div>
             </div>
@@ -107,29 +132,25 @@ function renderHomePagination() {
         productContainer.appendChild(card);
     });
 
-    // C. Create Buttons
     const pageCount = Math.ceil(globalHomeProducts.length / homeItemsPerPage);
-    if (pageCount > 1) {
+    if (pageCount > 1 && paginationContainer) {
         for (let i = 1; i <= pageCount; i++) {
             const btn = document.createElement('div');
             btn.innerText = i;
             btn.classList.add('page-btn');
             if (i === currentHomePage) btn.classList.add('active');
-
             btn.addEventListener('click', () => {
                 currentHomePage = i;
                 renderHomePagination();
-                // Scroll to top of products section
                 document.querySelector('.products-section').scrollIntoView({ behavior: 'smooth' });
             });
-
             paginationContainer.appendChild(btn);
         }
     }
 }
 
-// ... Keep your updateNavbar/loadUserCart logic here if strictly needed, 
-// but typically nav.js handles the navbar now. ...
+// ... Keep your loadUserCart and loadHomeCategories as they are, 
+// they look good and will work with the logic above.
 
 async function loadUserCart() {
     const token = localStorage.getItem('userToken');
@@ -232,3 +253,21 @@ async function loadHomeCategories() {
         container.innerHTML = '<p>Failed to load categories.</p>';
     }
 }   
+
+document.querySelector('.newsletter-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = e.target.querySelector('input').value;
+
+    try {
+        const response = await fetch('/api/newsletter/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        const data = await response.json();
+        alert(data.message);
+        e.target.reset();
+    } catch (err) {
+        alert("Subscription failed.");
+    }
+});
