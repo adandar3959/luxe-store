@@ -2,67 +2,125 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LUXE Admin | Newsletter</title>
-    <link rel="stylesheet" href="css/admin-style.css"> <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    
+    <link rel="stylesheet" href="css/admin-style.css"> 
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <style>
-        /* Newsletter Specific Adjustments */
-        .card {
-            background: #1e1e2e; /* Dark purple/black from your UI */
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        /* 1. Sidebar Scroll & Layout Fix */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #1e1e2e;
+            overflow-y: auto; /* Enables scrolling for the menu */
+            padding-bottom: 30px;
+            z-index: 1000;
         }
 
-        .broadcast-section h3, .subscriber-section h3 {
+        /* Modern Scrollbar for Sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #3f3f5a;
+            border-radius: 10px;
+        }
+
+        .admin-container {
+            margin-left: 260px; /* Moves content to the right of sidebar */
+            width: calc(100% - 260px);
+            min-height: 100vh;
+            background: #161623; 
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        /* 2. Newsletter Cards & Form Styling */
+        .card {
+            background: #1e1e2e; 
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            border: 1px solid #2d2d3f;
+        }
+
+        .main-header h1 {
+            color: #fff;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .card h3 {
             color: #fff;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-size: 18px;
+        }
+
+        .card h3 i {
+            color: #7367f0;
+            font-size: 24px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
             color: #a0a0a0;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
         }
 
         .form-group input, .form-group textarea {
             width: 100%;
-            padding: 12px;
+            padding: 12px 15px;
             background: #2b2b3d;
             border: 1px solid #3f3f5a;
-            border-radius: 5px;
+            border-radius: 8px;
             color: #fff;
-            font-family: inherit;
+            font-family: 'Poppins', sans-serif;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #7367f0;
+            outline: none;
         }
 
         .btn-primary {
-            background: #7367f0; /* Default admin accent color */
+            background: #7367f0;
             color: white;
-            padding: 12px 25px;
+            padding: 12px 28px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            transition: 0.3s;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .btn-primary:hover {
             background: #5e50ee;
+            transform: translateY(-2px);
         }
 
-        /* Table styling to match your Customers page */
+        /* 3. Table Styling */
         .admin-table {
             width: 100%;
             border-collapse: collapse;
-            color: #e0e0e0;
+            margin-top: 10px;
         }
 
         .admin-table th {
@@ -70,37 +128,69 @@
             padding: 15px;
             background: #252538;
             color: #7367f0;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
         }
 
         .admin-table td {
             padding: 15px;
+            color: #e0e0e0;
             border-bottom: 1px solid #2b2b3d;
+            font-size: 14px;
         }
 
         .btn-delete {
+            background: rgba(234, 84, 85, 0.1);
+            color: #ea5455;
+            border: 1px solid #ea5455;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-delete:hover {
             background: #ea5455;
             color: white;
-            border: none;
-            padding: 8px;
-            border-radius: 4px;
-            cursor: pointer;
+        }
+
+        /* Active Menu State */
+        .menu-item.active-link {
+            background: rgba(115, 103, 240, 0.15);
+            color: #7367f0;
+            border-right: 3px solid #7367f0;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .sidebar { width: 70px; }
+            .admin-container { margin-left: 70px; width: calc(100% - 70px); }
+            .sidebar .logo, .sidebar span { display: none; }
         }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="logo"><i class='bx bxs-pie-chart-alt-2'></i> Sales<br>MANAGEMENT</div>
-        <a href="admin-dashboard.html" class="menu-item"><i class='bx bxs-dashboard'></i> Dashboard</a>
-        <a href="profile.html" class="menu-item"><i class='bx bx-user'></i> Profile</a>
-        <a href="admin-products.html" class="menu-item"><i class='bx bx-shopping-bag'></i> Products</a>
-        <a href="admin-orders.html" class="menu-item"><i class='bx bx-cart'></i> Orders</a>
-        <a href="admin-customers.html" class="menu-item"><i class='bx bx-group'></i> Customers</a>
-        <a href="admin-employees.html" class="menu-item"><i class='bx bx-id-card'></i> Employees</a>
-        <a href="admin-finance.html" class="menu-item active"><i class='bx bx-wallet'></i> Finance</a>
-        <a href="categories.html" class="menu-item active"><i class='bx bx-category'></i> Categories</a>
-        <a href="admin-newsletter.html" class="menu-item"><i class='bx bx-envelope'></i> Newsletter</a>
-        <a href="index.html" class="menu-item"><i class='bx bx-store'></i> View Store</a>
+        <div class="logo">
+            <i class='bx bxs-pie-chart-alt-2'></i> 
+            <span>Sales<br>MANAGEMENT</span>
+        </div>
+        <a href="admin-dashboard.html" class="menu-item"><i class='bx bxs-dashboard'></i> <span>Dashboard</span></a>
+        <a href="profile.html" class="menu-item"><i class='bx bx-user'></i> <span>Profile</span></a>
+        <a href="admin-products.html" class="menu-item"><i class='bx bx-shopping-bag'></i> <span>Products</span></a>
+        <a href="admin-orders.html" class="menu-item"><i class='bx bx-cart'></i> <span>Orders</span></a>
+        <a href="admin-customers.html" class="menu-item"><i class='bx bx-group'></i> <span>Customers</span></a>
+        <a href="admin-employees.html" class="menu-item"><i class='bx bx-id-card'></i> <span>Employees</span></a>
+        <a href="admin-finance.html" class="menu-item"><i class='bx bx-wallet'></i> <span>Finance</span></a>
+        <a href="categories.html" class="menu-item"><i class='bx bx-category'></i> <span>Categories</span></a>
+        <a href="admin-newsletter.html" class="menu-item active-link"><i class='bx bx-envelope'></i> <span>Newsletter</span></a>
+        <a href="index.html" class="menu-item"><i class='bx bx-store'></i> <span>View Store</span></a>
+        <a href="#" class="menu-item logout-btn" style="margin-top: 20px; color: #ea5455;">
+            <i class='bx bx-log-out'></i> <span>Logout</span>
+        </a>
     </div>
 
     <div class="admin-container">
@@ -120,27 +210,32 @@
                         <label>Message Content (HTML allowed)</label>
                         <textarea id="emailMessage" rows="6" placeholder="Write your announcement here..." required></textarea>
                     </div>
-                    <button type="submit" class="btn-primary">Send to All Subscribers</button>
+                    <button type="submit" class="btn-primary">
+                        <i class='bx bx-paper-plane'></i> Send to All Subscribers
+                    </button>
                 </form>
             </section>
 
             <section class="subscriber-section card">
                 <h3><i class='bx bx-group'></i> Subscribers List</h3>
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Email Address</th>
-                            <th>Date Joined</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="subscriberList">
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Email Address</th>
+                                <th>Date Joined</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subscriberList">
+                            <tr><td colspan="3" style="text-align:center;">Loading subscribers...</td></tr>
                         </tbody>
-                </table>
+                    </table>
+                </div>
             </section>
         </main>
     </div>
 
     <script src="js/admin-newsletter.js"></script>
-</body>
+    <script src="js/admin-role.js"></script> </body>
 </html>

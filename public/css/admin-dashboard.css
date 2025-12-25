@@ -30,7 +30,7 @@ body {
     width: 260px; /* Or your current width */
     height: 100vh; /* Full viewport height */
     position: fixed;
-    top: 0;
+    top: 10;
     left: 0;
     background: #1e1e2e;
     
