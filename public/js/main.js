@@ -253,21 +253,29 @@ async function loadHomeCategories() {
         container.innerHTML = '<p>Failed to load categories.</p>';
     }
 }   
-
 document.querySelector('.newsletter-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = e.target.querySelector('input').value;
 
+    const API_URL = 'https://luxe-store-nmvs.onrender.com/api/newsletter/subscribe';
+
     try {
-        const response = await fetch('/api/newsletter/subscribe', {
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
         });
+        
         const data = await response.json();
-        alert(data.message);
-        e.target.reset();
+        
+        if (response.ok) {
+            alert("Subscribed successfully!");
+            e.target.reset();
+        } else {
+            alert(data.message || "Subscription failed.");
+        }
     } catch (err) {
-        alert("Subscription failed.");
+        console.error("Newsletter Error:", err);
+        alert("Subscription failed. Make sure your server is online.");
     }
 });
