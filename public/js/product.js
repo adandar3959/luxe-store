@@ -101,9 +101,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function renderVariations(product) {
     const sizeContainer = document.querySelector('.sizes');
+    if (!sizeContainer) return;
+
     sizeContainer.innerHTML = ''; 
 
-    // Use product.sizes which you just added in the Admin panel
+    // FIX: Specifically look for the 'sizes' array from your database
     const availableSizes = product.sizes || [];
 
     if (availableSizes.length === 0) {
@@ -116,7 +118,7 @@ function renderVariations(product) {
         btn.classList.add('size-box');
         btn.innerText = size;
         
-        // Auto-select the first size
+        // Auto-select the first available size
         if (index === 0) btn.classList.add('active');
 
         btn.onclick = () => {

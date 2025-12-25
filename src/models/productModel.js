@@ -26,9 +26,10 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    sizes: {
-        type: [String],
-        default: ["S", "M", "L", "XL"]
+sizes: {
+        type: [String], // Array of strings
+        required: true,
+        default: []
     },
     reviews: [],
     rating: {

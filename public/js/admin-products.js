@@ -163,17 +163,12 @@ window.openEditModal = (id) => {
 
 window.closeModal = () => { document.getElementById('productModal').style.display = 'none'; };
 
-// --- 3. SAVE ---
 document.getElementById('productForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const id = document.getElementById('editId').value;
-    const parentSelect = document.getElementById('pParentCategory');
-    const subSelect = document.getElementById('pSubCategory');
-
-    let finalCategory = subSelect.value || parentSelect.value;
-
-    // COLLECT SELECTED SIZES
+    
+    // FIX: Scrape all checked boxes with the name 'pSizes'
     const selectedSizes = Array.from(document.querySelectorAll('input[name="pSizes"]:checked'))
                                .map(cb => cb.value);
 
@@ -181,32 +176,35 @@ document.getElementById('productForm').addEventListener('submit', async (e) => {
         name: document.getElementById('pName').value,
         price: Number(document.getElementById('pPrice').value),
         brand: document.getElementById('pBrand').value,
-        category: finalCategory,
-        image: document.getElementById('pImage').value,
-        description: document.getElementById('pDesc').value,
+        // ... (other fields like category, image, description)
         countInStock: Number(document.getElementById('pQty').value),
-        sizes: selectedSizes // NEW FIELD SENT TO BACKEND
+        sizes: selectedSizes // This must match the field name in your Product Model
     };
 
     const method = id ? 'PUT' : 'POST';
-    const url = id ? `${API_URL}/${id}` : API_URL;
+    const url = id ? `/api/products/${id}` : '/api/products';
 
     try {
         const res = await fetch(url, {
             method: method,
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            headers: { 
+                'Content-Type': 'application/json', 
+                'Authorization': `Bearer ${token}` 
+            },
             body: JSON.stringify(productData)
         });
 
         if (res.ok) {
-            alert(id ? "Product Updated" : "Product Added");
-            window.closeModal();
-            loadProducts();
+            alert(id ? "Product Updated Successfully" : "Product Added Successfully");
+            closeModal();
+            loadProducts(); // Refresh the table
         } else {
-            const data = await res.json();
-            alert(data.message || "Failed to save");
+            const error = await res.json();
+            alert("Error: " + error.message);
         }
-    } catch (error) { console.error(error); }
+    } catch (error) {
+        console.error("Save failed:", error);
+    }
 });
 
 // Delete function
