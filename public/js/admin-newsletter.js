@@ -63,7 +63,7 @@ async function sendBroadcast(e) {
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch('/api/newsletter/send-bulk', {
+        const response = await fetch('https://luxe-store-nmvs.onrender.com/api/newsletter/send-bulk', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
