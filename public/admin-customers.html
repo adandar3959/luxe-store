@@ -74,7 +74,7 @@
             }
 
             try {
-                const res = await fetch('http://localhost:5000/api/admin/customers', {
+                const res = await fetch('/api/admin/customers', {
                     headers: { 'Authorization': `Bearer ${userInfo.token}` }
                 });
                 const customers = await res.json();

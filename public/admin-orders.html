@@ -447,7 +447,7 @@
             btn.disabled = true;
 
             try {
-                const res = await fetch(`http://localhost:5000/api/orders/${currentOrderId}`, {
+                const res = await fetch(`/api/orders/${currentOrderId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
