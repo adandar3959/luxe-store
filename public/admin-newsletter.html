@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LUXE Admin | Newsletter</title>
+    
     <link rel="stylesheet" href="css/admin-style.css"> 
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <style>
-        /* 1. Sidebar Fix - Matches Image 2 */
+        /* Sidebar Fix - Matches Sales Management Dashboard */
         .sidebar {
             width: 260px;
             height: 100vh;
@@ -17,10 +19,18 @@
             background: #1e1e2e; /* Dark theme color */
             overflow-y: auto;
             z-index: 1000;
-            transition: all 0.5s ease;
         }
 
-        /* 2. Container Fix - Ensures content starts AFTER sidebar */
+        /* Modern Scrollbar for Sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #3f3f5a;
+            border-radius: 10px;
+        }
+
+        /* Container Fix - Prevents content from being hidden behind sidebar */
         .admin-container {
             margin-left: 260px; 
             width: calc(100% - 260px);
@@ -30,7 +40,7 @@
             box-sizing: border-box;
         }
 
-        /* 3. Modern Card Styling */
+        /* Modern Card Styling */
         .card {
             background: #1e1e2e; 
             padding: 30px;
@@ -58,7 +68,7 @@
 
         .card h3 i { color: #7367f0; }
 
-        /* 4. Form Controls */
+        /* Form Controls */
         .form-group { margin-bottom: 20px; }
         .form-group label {
             display: block;
@@ -79,11 +89,6 @@
             transition: 0.3s;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: #7367f0;
-            background: #32324a;
-        }
-
         .btn-primary {
             background: #7367f0;
             color: white;
@@ -98,13 +103,7 @@
             transition: 0.3s;
         }
 
-        .btn-primary:hover {
-            background: #5e50ee;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(115, 103, 244, 0.4);
-        }
-
-        /* 5. Table Styling - Matches Customers/Orders page */
+        /* Table Styling */
         .admin-table {
             width: 100%;
             border-collapse: collapse;
@@ -118,7 +117,6 @@
             color: #7367f0;
             font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .admin-table td {
@@ -128,24 +126,12 @@
             font-size: 15px;
         }
 
-        .btn-delete {
-            background: rgba(234, 84, 85, 0.1);
-            color: #ea5455;
-            border: 1px solid #ea5455;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
+        /* Sidebar Item States */
+        .menu-item.active {
+            background: rgba(115, 103, 240, 0.1);
+            color: #7367f0;
+            border-right: 4px solid #7367f0;
         }
-
-        .btn-delete:hover {
-            background: #ea5455;
-            color: #fff;
-        }
-
-        /* Custom Scrollbar for Sidebar */
-        .sidebar::-webkit-scrollbar { width: 5px; }
-        .sidebar::-webkit-scrollbar-thumb { background: #3f3f5a; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -160,7 +146,7 @@
         <a href="admin-employees.html" class="menu-item"><i class='bx bx-id-card'></i> Employees</a>
         <a href="admin-finance.html" class="menu-item"><i class='bx bx-wallet'></i> Finance</a>
         <a href="categories.html" class="menu-item"><i class='bx bx-category'></i> Categories</a>
-        <a href="admin-newsletter.html" class="menu-item active" style="background: rgba(115, 103, 240, 0.1); color: #7367f0; border-right: 4px solid #7367f0;"><i class='bx bx-envelope'></i> Newsletter</a>
+        <a href="admin-newsletter.html" class="menu-item active"><i class='bx bx-envelope'></i> Newsletter</a>
         <a href="index.html" class="menu-item"><i class='bx bx-store'></i> View Store</a>
     </div>
 
@@ -171,7 +157,7 @@
             </header>
 
             <section class="broadcast-section card">
-                <h3><i class='bx bx-paper-plane'></i> Send Mass Email</h3>
+                <h3><i class='bx bx-send'></i> Send Mass Email</h3>
                 <form id="broadcastForm">
                     <div class="form-group">
                         <label>Email Subject</label>
@@ -182,7 +168,7 @@
                         <textarea id="emailMessage" rows="6" placeholder="Write your announcement here..." required></textarea>
                     </div>
                     <button type="submit" class="btn-primary">
-                        <i class='bx bx-send'></i> Send to All Subscribers
+                        <i class='bx bx-paper-plane'></i> Send to All Subscribers
                     </button>
                 </form>
             </section>
@@ -198,7 +184,8 @@
                         </tr>
                     </thead>
                     <tbody id="subscriberList">
-                        </tbody>
+                        <tr><td colspan="3" style="text-align:center;">Loading subscribers...</td></tr>
+                    </tbody>
                 </table>
             </section>
         </main>
