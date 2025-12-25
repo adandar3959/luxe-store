@@ -16,6 +16,8 @@ const bulkUploadRoutes = require('./routes/bulkUploadRoutes');
 const wishlistRoutes = require('./routes/wishlistRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const newsletterRoutes = require('./routes/newsletter');
+
 
 connectDB();
 const app = express();
@@ -32,6 +34,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/bulk', bulkUploadRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/newsletter', newsletterRoutes);
 
 app.use(express.static(path.join(__dirname, '../public')));
 
