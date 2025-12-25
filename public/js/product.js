@@ -51,6 +51,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('productPrice').innerText = `Rs. ${product.price.toLocaleString()}`;
         document.getElementById('productDesc').innerText = product.description;
 
+        // --- DYNAMIC METADATA ---
+        // Display real category from DB
+        const catDisplay = document.getElementById('displayCategory');
+        if (catDisplay) catDisplay.innerText = product.category || "General";
+
+        // Display real stock status
+        const stockStatus = document.getElementById('availabilityStatus');
+        if (stockStatus) {
+            stockStatus.innerText = product.countInStock > 0 ? "In Stock" : "Out of Stock";
+            stockStatus.style.color = product.countInStock > 0 ? "#00c851" : "#ff4444";
+        }
+
         const mainImage = document.getElementById('mainImg');
         const smallImagesContainer = document.querySelector('.small-images');
         const firstImgData = (product.images && product.images.length > 0) ? product.images[0] : product.image;
@@ -72,26 +84,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
 
-        // FIX 1: Pass the whole product to render sizes correctly
         renderVariations(product);
-        
-        // FIX 2: Correct function call for related products
         loadRelatedProducts(product._id);
-        
         setupButtons(product);
 
     } catch (error) { console.error("Error loading product:", error); }
 });
 
-// Inside renderVariations
 function renderVariations(product) {
     const sizeContainer = document.querySelector('.sizes');
     if (!sizeContainer) return;
     sizeContainer.innerHTML = ''; 
 
-    // Look for 'sizes' array
     const availableSizes = product.sizes || [];
-
     if (availableSizes.length === 0) {
         sizeContainer.innerHTML = '<p>One Size Available</p>';
         return;
@@ -101,7 +106,7 @@ function renderVariations(product) {
         const btn = document.createElement('div');
         btn.classList.add('size-box');
         btn.innerText = size;
-        if (index === 0) btn.classList.add('active'); // Default selection
+        if (index === 0) btn.classList.add('active'); 
         btn.onclick = () => {
             document.querySelectorAll('.size-box').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -110,7 +115,6 @@ function renderVariations(product) {
     });
 }
 
-// FIX: Ensure this hits the correct API path
 async function loadRelatedProducts(currentId) {
     const container = document.getElementById('relatedContainer');
     if (!container) return;
@@ -120,11 +124,6 @@ async function loadRelatedProducts(currentId) {
         const related = allProducts.filter(p => p._id !== currentId).slice(0, 4);
 
         container.innerHTML = '';
-        if (related.length === 0) {
-            container.innerHTML = '<p style="color:#888;">No related products found.</p>';
-            return;
-        }
-
         related.forEach(p => {
             const displayImg = resolveImg(p.image);
             const card = document.createElement('div');
@@ -145,6 +144,7 @@ async function loadRelatedProducts(currentId) {
 }
 
 function setupButtons(product) {
+    // --- CART LOGIC ---
     const cartBtn = document.querySelector('.btn-primary'); 
     const quantityInput = document.getElementById('quantity');
 
@@ -152,7 +152,6 @@ function setupButtons(product) {
         cartBtn.innerText = "Out of Stock";
         cartBtn.disabled = true;
         cartBtn.style.backgroundColor = "#ccc"; 
-        return; 
     }
 
     cartBtn.onclick = () => {
@@ -175,9 +174,40 @@ function setupButtons(product) {
                 quantity: quantityToAdd
             });
         }
-
         localStorage.setItem('cart', JSON.stringify(cart));
         syncCartToDB(cart); 
         alert("Item Added to Cart!");
+    };
+
+    // --- WISHLIST LOGIC ---
+    const wishBtn = document.querySelector('.btn-outline'); 
+    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    
+    // Check if already in wishlist to set initial icon state
+    if (wishlist.some(item => item.id === product._id)) {
+        wishBtn.querySelector('i').classList.replace('bx-heart', 'bxs-heart');
+    }
+
+    wishBtn.onclick = () => {
+        wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        const existingIndex = wishlist.findIndex(item => item.id === product._id);
+
+        if (existingIndex > -1) {
+            // Remove if already exists
+            wishlist.splice(existingIndex, 1);
+            wishBtn.querySelector('i').classList.replace('bxs-heart', 'bx-heart');
+            alert("Removed from Wishlist");
+        } else {
+            // Add new item
+            wishlist.push({
+                id: product._id,
+                name: product.name,
+                price: product.price,
+                image: resolveImg(product.image)
+            });
+            wishBtn.querySelector('i').classList.replace('bx-heart', 'bxs-heart');
+            alert("Added to Wishlist");
+        }
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
     };
 }

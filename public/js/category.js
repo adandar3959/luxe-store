@@ -58,10 +58,10 @@ async function loadCategoryPage() {
     }
 }
 
-// --- NEW: RENDER FUNCTION (Handles Slicing 8 items) ---
 function renderPagination() {
     const productContainer = document.getElementById('allProductsContainer');
     const paginationContainer = document.getElementById('pagination');
+    const wishlist = JSON.parse(localStorage.getItem('wishlist')) || []; // Get current wishlist
 
     productContainer.innerHTML = '';
     paginationContainer.innerHTML = '';
@@ -71,24 +71,28 @@ function renderPagination() {
         return;
     }
 
-    // A. Calculate Start & End Index for Slice
     const start = (currentPage - 1) * itemsPerPage;
     const end = start + itemsPerPage;
     const paginatedItems = currentFilteredProducts.slice(start, end);
 
-    // B. Render the Product Cards (Only the 8 for this page)
     paginatedItems.forEach(product => {
         const card = document.createElement('div');
         card.classList.add('product-card');
-        card.onclick = () => window.location.href = `product.html?id=${product._id}`;
+        
+        // Check if product is already in wishlist for icon state
+        const isLiked = wishlist.some(item => item.id === product._id);
+        const heartIcon = isLiked ? 'bxs-heart' : 'bx-heart';
 
         const imgUrl = product.image ? (product.image.startsWith('http') ? product.image : `/uploads/${product.image}`) : 'https://via.placeholder.com/300';
 
         card.innerHTML = `
             <div class="img-box">
-                <img src="${imgUrl}" alt="${product.name}" class="product-img">
+                <img src="${imgUrl}" alt="${product.name}" class="product-img" onclick="window.location.href='product.html?id=${product._id}'">
+                <div class="wishlist-icon" onclick="toggleWishlist(event, '${encodeURIComponent(JSON.stringify(product))}')">
+                    <i class='bx ${heartIcon}'></i>
+                </div>
             </div>
-            <div class="product-details">
+            <div class="product-details" onclick="window.location.href='product.html?id=${product._id}'">
                 <span class="product-brand">${product.brand}</span>
                 <h4 class="product-title">${product.name}</h4>
                 <div class="product-price">Rs. ${product.price.toLocaleString()}</div>
@@ -97,8 +101,33 @@ function renderPagination() {
         productContainer.appendChild(card);
     });
 
-    // C. Render Page Buttons (1, 2, 3...)
     setupPaginationButtons();
+}
+
+// --- NEW: TOGGLE WISHLIST FROM CARD ---
+function toggleWishlist(event, productData) {
+    event.stopPropagation(); // Prevent opening product page
+    const product = JSON.parse(decodeURIComponent(productData));
+    let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    
+    const existingIndex = wishlist.findIndex(item => item.id === product._id);
+    const icon = event.currentTarget.querySelector('i');
+
+    if (existingIndex > -1) {
+        wishlist.splice(existingIndex, 1);
+        icon.classList.replace('bxs-heart', 'bx-heart');
+        // Optional: toast notification instead of alert
+    } else {
+        wishlist.push({
+            id: product._id,
+            name: product.name,
+            price: product.price,
+            image: product.image 
+        });
+        icon.classList.replace('bx-heart', 'bxs-heart');
+    }
+
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
 }
 
 // --- NEW: BUTTON GENERATOR ---

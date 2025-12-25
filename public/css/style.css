@@ -605,3 +605,38 @@ ul { list-style: none; }
 .cat-card:hover .cat-info i {
     margin-left: 8px; /* Arrow moves right on hover */
 }
+
+.product-card .img-box {
+    position: relative;
+}
+
+.wishlist-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: white;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    z-index: 5;
+}
+
+.wishlist-icon i {
+    font-size: 20px;
+    color: #695CFE; /* Your accent color */
+}
+
+.wishlist-icon:hover {
+    transform: scale(1.1);
+    background: #695CFE;
+}
+
+.wishlist-icon:hover i {
+    color: white;
+}
