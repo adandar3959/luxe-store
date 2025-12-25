@@ -10,6 +10,16 @@ function resolveImg(imgInput) {
     return `${BACKEND_URL}${formattedName}`;
 }
 
+// --- NEW HELPER: Update Wishlist Navigation Count ---
+function updateWishlistCount() {
+    const countElement = document.getElementById('wishlistCount');
+    if (!countElement) return;
+    const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    countElement.innerText = wishlist.length;
+    // Show/Hide badge based on count
+    countElement.style.display = wishlist.length > 0 ? 'flex' : 'none';
+}
+
 // --- Sync Cart to MongoDB ---
 async function syncCartToDB(cart) {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -42,9 +52,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const productId = urlParams.get('id');
     if (!productId) return;
 
+    // Initialize the counter on page load
+    updateWishlistCount();
+
     try {
-        const response = await fetch(`/api/products/${productId}`);
-        const product = await response.json();
+        // --- FIX: Fetch both product and categories to resolve the ID to a Name ---
+        const [prodRes, catRes] = await Promise.all([
+            fetch(`/api/products/${productId}`),
+            fetch('/api/categories')
+        ]);
+        
+        const product = await prodRes.json();
+        const categories = await catRes.json();
 
         document.title = `${product.name} | LUXE`;
         document.getElementById('productName').innerText = product.name;
@@ -52,11 +71,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('productDesc').innerText = product.description;
 
         // --- DYNAMIC METADATA ---
-        // Display real category from DB
+        // FIX: Find the category name that matches the ID saved in the product
         const catDisplay = document.getElementById('displayCategory');
-        if (catDisplay) catDisplay.innerText = product.category || "General";
+        if (catDisplay) {
+            const matchedCategory = categories.find(c => c._id === product.category);
+            catDisplay.innerText = matchedCategory ? matchedCategory.name : "General Collection";
+        }
 
-        // Display real stock status
         const stockStatus = document.getElementById('availabilityStatus');
         if (stockStatus) {
             stockStatus.innerText = product.countInStock > 0 ? "In Stock" : "Out of Stock";
@@ -95,13 +116,11 @@ function renderVariations(product) {
     const sizeContainer = document.querySelector('.sizes');
     if (!sizeContainer) return;
     sizeContainer.innerHTML = ''; 
-
     const availableSizes = product.sizes || [];
     if (availableSizes.length === 0) {
         sizeContainer.innerHTML = '<p>One Size Available</p>';
         return;
     }
-
     availableSizes.forEach((size, index) => {
         const btn = document.createElement('div');
         btn.classList.add('size-box');
@@ -122,7 +141,6 @@ async function loadRelatedProducts(currentId) {
         const res = await fetch('/api/products');
         const allProducts = await res.json();
         const related = allProducts.filter(p => p._id !== currentId).slice(0, 4);
-
         container.innerHTML = '';
         related.forEach(p => {
             const displayImg = resolveImg(p.image);
@@ -135,8 +153,7 @@ async function loadRelatedProducts(currentId) {
                 <div class="product-details" style="padding:10px">
                     <h4 style="font-size:14px">${p.name}</h4>
                     <div style="color:#695CFE; font-weight:bold">Rs. ${p.price.toLocaleString()}</div>
-                </div>
-            `;
+                </div>`;
             card.onclick = () => window.location.href = `product.html?id=${p._id}`;
             container.appendChild(card);
         });
@@ -144,24 +161,20 @@ async function loadRelatedProducts(currentId) {
 }
 
 function setupButtons(product) {
-    // --- CART LOGIC ---
+    // --- CART ---
     const cartBtn = document.querySelector('.btn-primary'); 
     const quantityInput = document.getElementById('quantity');
-
     if (product.countInStock <= 0) {
         cartBtn.innerText = "Out of Stock";
         cartBtn.disabled = true;
         cartBtn.style.backgroundColor = "#ccc"; 
     }
-
     cartBtn.onclick = () => {
         const selectedSize = document.querySelector('.size-box.active');
         const sizeValue = selectedSize ? selectedSize.innerText : 'One Size';
         const quantityToAdd = parseInt(quantityInput.value) || 1;
-
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         const existingItemIndex = cart.findIndex(item => item.id === product._id && item.size === sizeValue);
-
         if (existingItemIndex > -1) {
             cart[existingItemIndex].quantity += quantityToAdd;
         } else {
@@ -179,26 +192,20 @@ function setupButtons(product) {
         alert("Item Added to Cart!");
     };
 
-    // --- WISHLIST LOGIC ---
+    // --- WISHLIST ---
     const wishBtn = document.querySelector('.btn-outline'); 
     let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-    
-    // Check if already in wishlist to set initial icon state
     if (wishlist.some(item => item.id === product._id)) {
         wishBtn.querySelector('i').classList.replace('bx-heart', 'bxs-heart');
     }
-
     wishBtn.onclick = () => {
         wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
         const existingIndex = wishlist.findIndex(item => item.id === product._id);
-
         if (existingIndex > -1) {
-            // Remove if already exists
             wishlist.splice(existingIndex, 1);
             wishBtn.querySelector('i').classList.replace('bxs-heart', 'bx-heart');
             alert("Removed from Wishlist");
         } else {
-            // Add new item
             wishlist.push({
                 id: product._id,
                 name: product.name,
@@ -209,5 +216,6 @@ function setupButtons(product) {
             alert("Added to Wishlist");
         }
         localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        updateWishlistCount(); // NEW: Update the counter instantly
     };
 }
