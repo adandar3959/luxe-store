@@ -31,7 +31,7 @@ const getProductById = asyncHandler(async (req, res) => {
 
 //  POST /api/products
 const createProduct = asyncHandler(async (req, res) => {
-    const { name, price, image, brand, category, countInStock, description } = req.body;
+    const { name, price,sizes, image, brand, category, countInStock, description } = req.body;
 
     if (!req.user) {
         res.status(401);
@@ -47,7 +47,8 @@ const createProduct = asyncHandler(async (req, res) => {
         category,
         countInStock,
         numReviews: 0,
-        description
+        description,
+        sizes: sizes || []
     });
 
     const createdProduct = await product.save();
@@ -69,12 +70,13 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
 //  PUT /api/products/:id
 const updateProduct = asyncHandler(async (req, res) => {
-    const { name, price, description, image, brand, category, countInStock } = req.body;
+    const { name, price, sizes, description, image, brand, category, countInStock } = req.body;
     const product = await Product.findById(req.params.id);
 
     if (product) {
         product.name = name || product.name;
         product.price = price || product.price;
+        product.sizes = sizes || product.sizes;
         product.description = description || product.description;
         product.image = image || product.image;
         product.brand = brand || product.brand;

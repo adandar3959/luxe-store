@@ -83,13 +83,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) { console.error("Error loading product:", error); }
 });
 
-// FIX: Updated to use the 'sizes' array from your Admin panel
+// Inside renderVariations
 function renderVariations(product) {
     const sizeContainer = document.querySelector('.sizes');
     if (!sizeContainer) return;
     sizeContainer.innerHTML = ''; 
 
-    // Look for the 'sizes' array we added in the Admin panel
+    // Look for 'sizes' array
     const availableSizes = product.sizes || [];
 
     if (availableSizes.length === 0) {
@@ -101,10 +101,7 @@ function renderVariations(product) {
         const btn = document.createElement('div');
         btn.classList.add('size-box');
         btn.innerText = size;
-        
-        // Auto-select the first size
-        if (index === 0) btn.classList.add('active');
-
+        if (index === 0) btn.classList.add('active'); // Default selection
         btn.onclick = () => {
             document.querySelectorAll('.size-box').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
