@@ -270,7 +270,7 @@
             const tableBody = document.getElementById('orders-table-body');
             
             try {
-                const res = await fetch('https://luxe-store.onrender.com/api/orders', {
+                const res = await fetch('/api/orders', {
                     headers: { 'Authorization': `Bearer ${userInfo.token}` }
                 });
                 
