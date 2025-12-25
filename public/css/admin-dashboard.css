@@ -27,15 +27,27 @@ body {
 
 /* --- SIDEBAR --- */
 .sidebar {
-    width: 260px;
-    background: var(--panel-dark);
-    height: 100vh;
-    padding: 20px;
+    width: 260px; /* Or your current width */
+    height: 100vh; /* Full viewport height */
     position: fixed;
     top: 0;
     left: 0;
+    background: #1e1e2e;
+    
+    /* ADD THESE THREE LINES */
+    overflow-y: auto;       /* Enables vertical scrolling */
     display: flex;
     flex-direction: column;
+}
+
+/* Optional: Make the scrollbar look modern and thin */
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #3f3f5a;
+    border-radius: 10px;
 }
 
 .logo {
