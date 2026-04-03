@@ -80,11 +80,10 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
     if (order) {
         order.isPaid = true;
         order.paidAt = Date.now();
-        order.paymentResult = {
-            id: req.body.id,
-            status: req.body.status,
-            update_time: req.body.update_time,
-            email_address: req.body.email_address,
+        order.paymentInfo = {
+            id: req.body.id || order.paymentInfo.id,
+            status: req.body.status || 'Paid',
+            type: order.paymentInfo.type,
         };
 
         const updatedOrder = await order.save();
@@ -116,31 +115,27 @@ const getOrders = asyncHandler(async (req, res) => {
 // @desc    Update order status
 // @route   PUT /api/orders/:id
 // @access  Private/Admin/Employee
-const updateOrderStatus = async (req, res) => {
-  try {
+const updateOrderStatus = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);
 
-    if (order) {
-      order.orderStatus = req.body.status || order.orderStatus;
+    if (!order) {
+        res.status(404);
+        throw new Error('Order not found');
+    }
 
-      if (req.body.status === 'Delivered') {
+    order.orderStatus = req.body.status || order.orderStatus;
+
+    if (req.body.status === 'Delivered') {
         order.isDelivered = true;
         order.deliveredAt = Date.now();
-      } else {
+    } else {
         order.isDelivered = false;
         order.deliveredAt = null;
-      }
-
-      const updatedOrder = await order.save();
-      res.json(updatedOrder);
-    } else {
-      res.status(404);
-      throw new Error('Order not found');
     }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+});
 
 const cancelOrder = asyncHandler(async (req, res) => {
     const order = await Order.findById(req.params.id);

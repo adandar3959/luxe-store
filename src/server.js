@@ -18,7 +18,6 @@ const cartRoutes = require('./routes/cartRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const newsletterRoutes = require('./routes/newsletter');
 
-
 connectDB();
 const app = express();
 

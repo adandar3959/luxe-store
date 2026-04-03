@@ -129,7 +129,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 // GET /api/users/profile
 
-const getUserProfile = async (req, res) => {
+const getUserProfile = asyncHandler(async (req, res) => {
 
     const user = await User.findById(req.user._id);
 
@@ -138,16 +138,16 @@ const getUserProfile = async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            role: user.role,       
+            role: user.role,
             phone: user.phone,
             address: user.address,
-            isAdmin: user.isAdmin,
+            isAdmin: user.role === 'admin',
         });
     } else {
         res.status(404);
         throw new Error('User not found');
     }
-};
+});
 
 const updateUserProfile = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
@@ -172,7 +172,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
             role: updatedUser.role,
             phone: updatedUser.phone,
             address: updatedUser.address,
-            isAdmin: updatedUser.isAdmin, 
+            isAdmin: updatedUser.role === 'admin',
             token: generateToken(updatedUser._id),
         });
     } else {

@@ -19,13 +19,16 @@ const uploadBulkProducts = (req, res) => {
             // 2. Map CSV columns to Database Fields
             // Use fallback values (|| 0) to prevent Database Errors if cells are empty
             results.push({
-                name: data.name, 
-                price: Number(data.price) || 0, 
+                name: data.name,
+                price: Number(data.price) || 0,
                 brand: data.brand || 'Generic',
                 category: data.category || 'Uncategorized',
-                image: data.image || '', // Ensure this matches your Schema (image vs images)
+                image: data.image || '',
                 description: data.description || '',
-                stock: Number(data.stock) || 0 
+                countInStock: Number(data.stock) || Number(data.countInStock) || 0,
+                user: req.user._id,
+                rating: 0,
+                numReviews: 0
             });
         })
         .on('end', async () => {
