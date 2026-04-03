@@ -7,67 +7,136 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .wishlist-container { max-width: 1200px; margin: 100px auto; padding: 0 20px; }
-        .wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; margin-top: 30px; }
-        .wish-card { position: relative; border: 1px solid #eee; border-radius: 8px; overflow: hidden; }
-        .wish-remove { 
-            position: absolute; top: 10px; right: 10px; background: #fff; border-radius: 50%; 
-            padding: 5px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
+        .wishlist-page { max-width: 1200px; margin: 110px auto 80px; padding: 0 20px; }
+        .wishlist-page h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .wishlist-page .sub { color: #777; font-size: 14px; margin-bottom: 40px; }
+        .wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
+        .wish-card { position: relative; border: 1px solid #eee; border-radius: 12px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; background: #fff; }
+        .wish-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .wish-card img { width: 100%; height: 280px; object-fit: cover; display: block; }
+        .wish-card-body { padding: 15px; }
+        .wish-card-body h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+        .wish-price { color: #695CFE; font-weight: 700; font-size: 15px; margin-bottom: 12px; }
+        .wish-actions { display: flex; gap: 8px; }
+        .wish-actions .btn-view { flex: 1; padding: 9px; background: #1a1a1a; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: background 0.3s; }
+        .wish-actions .btn-view:hover { background: #695CFE; }
+        .wish-actions .btn-remove { padding: 9px 12px; background: #fff; border: 1px solid #eee; border-radius: 6px; cursor: pointer; color: #ff4444; transition: 0.3s; }
+        .wish-actions .btn-remove:hover { background: #ff4444; color: #fff; }
+        .wish-remove-top { position: absolute; top: 12px; right: 12px; background: #fff; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12); transition: 0.3s; z-index: 5; }
+        .wish-remove-top:hover { background: #ff4444; color: #fff; }
+        .empty-state { text-align: center; padding: 80px 20px; grid-column: 1/-1; }
+        .empty-state i { font-size: 60px; color: #ddd; margin-bottom: 20px; }
+        .empty-state h3 { font-size: 22px; color: #555; margin-bottom: 10px; }
+        .empty-state p { color: #999; margin-bottom: 25px; }
+        .empty-state a { background: #695CFE; color: #fff; padding: 12px 30px; border-radius: 6px; font-weight: 600; font-size: 14px; }
     </style>
 </head>
 <body>
-
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo"><a href="index.html">LUXE.</a></div>
+            <a href="index.html"><div class="logo">LUXE.</div></a>
             <div class="nav-icons">
-                 <a href="wishlist.html"><i class='bx bx-heart'></i></a> 
-                 <a href="cart.html"><i class='bx bx-shopping-bag'></i></a>
+                <a href="wishlist.html"><i class='bx bx-heart'></i></a>
+                <a href="cart.html"><i class='bx bx-shopping-bag'></i></a>
+                <a href="profile.html"><i class='bx bx-user'></i></a>
             </div>
         </div>
     </nav>
 
-    <div class="wishlist-container">
+    <div class="wishlist-page">
         <h2>My Wishlist</h2>
-        <div class="wishlist-grid" id="wishlistContainer">
-            <p>Your wishlist is empty.</p>
-        </div>
+        <p class="sub" id="wishCount">Loading...</p>
+        <div class="wishlist-grid" id="wishlistContainer"></div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        async function loadWishlist() {
             const container = document.getElementById('wishlistContainer');
-            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const countEl = document.getElementById('wishCount');
+            const token = localStorage.getItem('userToken');
 
-            if (wishlist.length === 0) {
-                container.innerHTML = '<p>No items liked yet.</p>';
+            let items = [];
+
+            // Try server first if logged in
+            if (token) {
+                try {
+                    const res = await fetch('/api/wishlist', {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (res.ok) {
+                        const serverItems = await res.json();
+                        if (Array.isArray(serverItems) && serverItems.length > 0) {
+                            items = serverItems.map(p => ({
+                                id: p._id,
+                                name: p.name,
+                                price: p.price,
+                                image: p.image ? (p.image.startsWith('http') ? p.image : `/uploads/${p.image}`) : 'https://via.placeholder.com/300'
+                            }));
+                            // Sync back to localStorage
+                            localStorage.setItem('wishlist', JSON.stringify(items));
+                        }
+                    }
+                } catch (e) { console.error(e); }
+            }
+
+            // Fallback to localStorage
+            if (items.length === 0) {
+                items = JSON.parse(localStorage.getItem('wishlist')) || [];
+            }
+
+            countEl.innerText = `${items.length} item${items.length !== 1 ? 's' : ''}`;
+
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class='bx bx-heart'></i>
+                        <h3>Your wishlist is empty</h3>
+                        <p>Save items you love and find them here anytime.</p>
+                        <a href="index.html">Start Shopping</a>
+                    </div>`;
                 return;
             }
 
             container.innerHTML = '';
-            wishlist.forEach((item, index) => {
+            items.forEach((item) => {
                 const div = document.createElement('div');
                 div.classList.add('wish-card');
                 div.innerHTML = `
-                    <div class="wish-remove" onclick="removeFromWishlist(${index})"><i class='bx bx-x'></i></div>
-                    <img src="${item.image || 'https://via.placeholder.com/300'}" style="width:100%; height:250px; object-fit:cover;">
-                    <div style="padding:15px;">
-                        <h4>${item.name}</h4>
-                        <<div style="...">Rs. ${item.price.toLocaleString()}</div>
-                        <button onclick="window.location.href='product.html?id=${item.id}'" class="btn-primary" style="width:100%; border:none; cursor:pointer;">View</button>
+                    <div class="wish-remove-top" onclick="removeItem('${item.id}', this)">
+                        <i class='bx bx-x'></i>
                     </div>
-                `;
+                    <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/300'">
+                    <div class="wish-card-body">
+                        <h4>${item.name}</h4>
+                        <div class="wish-price">Rs. ${item.price.toLocaleString()}</div>
+                        <div class="wish-actions">
+                            <button class="btn-view" onclick="window.location.href='product.html?id=${item.id}'">View Product</button>
+                            <button class="btn-remove" onclick="removeItem('${item.id}', this)" title="Remove">
+                                <i class='bx bx-trash'></i>
+                            </button>
+                        </div>
+                    </div>`;
                 container.appendChild(div);
             });
-        });
-
-        function removeFromWishlist(index) {
-            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
-            wishlist.splice(index, 1);
-            localStorage.setItem('wishlist', JSON.stringify(wishlist));
-            location.reload(); // Refresh page to show changes
         }
+
+        async function removeItem(productId, el) {
+            const token = localStorage.getItem('userToken');
+            // Remove from server
+            if (token) {
+                await fetch(`/api/wishlist/${productId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).catch(() => {});
+            }
+            // Remove from localStorage
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            wishlist = wishlist.filter(i => i.id !== productId);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            loadWishlist();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadWishlist);
     </script>
 </body>
-</html> 
+</html>

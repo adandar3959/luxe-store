@@ -24,9 +24,12 @@ async function fetchSubscribers() {
         const subscribers = await response.json();
         
         if (subscribers.length === 0) {
-            listBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No subscribers found.</td></tr>';
+            listBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:var(--muted);">No subscribers found.</td></tr>';
             return;
         }
+
+        const countEl = document.getElementById('subCount');
+        if (countEl) countEl.innerText = subscribers.length;
 
         listBody.innerHTML = subscribers.map(s => `
             <tr>
@@ -55,7 +58,7 @@ async function sendBroadcast(e) {
     submitBtn.disabled = true;
 
     try {
-        const response = await fetch('https://luxe-store-nmvs.onrender.com/api/newsletter/send-bulk', {
+        const response = await fetch('/api/newsletter/send-bulk', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',

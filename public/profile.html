@@ -13,17 +13,10 @@
             <i class='bx bxs-pie-chart-alt-2'></i> 
             Sales<br>MANAGEMENT
         </div>
-        <a href="admin-dashboard.html" class="menu-item"><i class='bx bxs-dashboard'></i> Dashboard</a>
         <a href="profile.html" class="menu-item active"><i class='bx bx-user'></i> Profile</a>
-        <a href="admin-products.html" class="menu-item"><i class='bx bx-shopping-bag'></i> Products</a>
-        <a href="admin-orders.html" class="menu-item"><i class='bx bx-cart'></i> Orders</a>
-        <a href="admin-customers.html" class="menu-item"><i class='bx bx-group'></i> Customers</a>
-        <a href="admin-employees.html" class="menu-item"><i class='bx bx-id-card'></i> Employees</a>
-        <a href="admin-finance.html" class="menu-item"><i class='bx bx-wallet'></i> Finance</a>
         <a href="customer-orders.html" class="menu-item"><i class='bx bx-list-ul'></i> My Orders</a>
-        <a href="categories.html" class="menu-item active"><i class='bx bx-category'></i> Categories</a>
         <a href="index.html" class="menu-item"><i class='bx bx-store'></i> View Store</a>
-
+        <a href="#" class="menu-item logout-btn"><i class='bx bx-log-out'></i> Logout</a>
     </div>
 
     <div class="main-content">
@@ -93,6 +86,14 @@
     </div>
 
     <script src="js/profile.js"></script>
-    <script src="js/sidebar-access.js"></script>
+    <script>
+        document.querySelector('.logout-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm("Are you sure you want to logout?")) {
+                localStorage.clear();
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
 </body>
 </html>

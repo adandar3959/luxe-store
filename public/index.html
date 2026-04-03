@@ -35,12 +35,41 @@
         </div>
     </nav>
 
-    <header class="hero">
-        <div class="hero-content">
-            <h4>New Arrivals</h4>
-            <h1>Autumn Collection 2025</h1>
-            <p>Discover the latest trends in fashion. Quality comfort for every occasion.</p>
-            <a href="category.html" class="btn-primary">Shop Now</a>
+    <header class="hero-carousel">
+        <div class="carousel-track" id="carouselTrack">
+            <div class="carousel-slide" style="background-image: url('https://breakout.com.pk/cdn/shop/files/Men_65.jpg?v=1761136358&width=1512')">
+                <div class="hero-content">
+                    <h4>New Arrivals</h4>
+                    <h1>Autumn Collection 2025</h1>
+                    <p>Discover the latest trends in fashion. Quality comfort for every occasion.</p>
+                    <a href="category.html" class="btn-primary">Shop Now</a>
+                </div>
+            </div>
+            <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1512')">
+                <div class="hero-content">
+                    <h4>Women's Edit</h4>
+                    <h1>Effortless Style</h1>
+                    <p>Curated pieces for the modern woman. Timeless, elegant, bold.</p>
+                    <a href="category.html?category=Women" class="btn-primary">Explore Women</a>
+                </div>
+            </div>
+            <div class="carousel-slide" style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1512')">
+                <div class="hero-content">
+                    <h4>Accessories</h4>
+                    <h1>Complete the Look</h1>
+                    <p>The finishing touch to every outfit. Shop our accessories collection.</p>
+                    <a href="category.html?category=Accessories" class="btn-primary">Shop Accessories</a>
+                </div>
+            </div>
+        </div>
+
+        <button class="carousel-btn prev" id="carouselPrev"><i class='bx bx-chevron-left'></i></button>
+        <button class="carousel-btn next" id="carouselNext"><i class='bx bx-chevron-right'></i></button>
+
+        <div class="carousel-dots" id="carouselDots">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
         </div>
     </header>
 
@@ -72,8 +101,11 @@
 
     <section class="home-categories">
         <div class="section-header">
-            <h2>Shop by Category</h2>
-            <p style="color:#777; margin-top:5px;">Explore our curated collections</p>
+            <div>
+                <h2>Shop by Category</h2>
+                <p style="color:#777; margin-top:5px; font-size:14px;">Explore our curated collections</p>
+            </div>
+            <a href="category.html" class="view-all-btn">View All</a>
         </div>
         
         <div class="category-grid" id="homeCategoryContainer">
@@ -151,5 +183,27 @@
 
     <script src="js/nav.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 3;
+        let autoSlideTimer;
+
+        function goToSlide(index) {
+            currentSlide = index;
+            document.getElementById('carouselTrack').style.transform = `translateX(-${currentSlide * 100}%)`;
+            document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+        }
+
+        function nextSlide() { goToSlide((currentSlide + 1) % totalSlides); }
+        function prevSlide() { goToSlide((currentSlide - 1 + totalSlides) % totalSlides); }
+
+        function startAutoSlide() { autoSlideTimer = setInterval(nextSlide, 5000); }
+        function resetAutoSlide() { clearInterval(autoSlideTimer); startAutoSlide(); }
+
+        document.getElementById('carouselNext').addEventListener('click', () => { nextSlide(); resetAutoSlide(); });
+        document.getElementById('carouselPrev').addEventListener('click', () => { prevSlide(); resetAutoSlide(); });
+
+        startAutoSlide();
+    </script>
 </body>
 </html>

@@ -22,7 +22,8 @@ async function loadMyOrders() {
         });
 
         if (!response.ok) {
-            throw new Error("Failed to fetch orders");
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.message || `HTTP ${response.status}`);
         }
 
         const orders = await response.json();

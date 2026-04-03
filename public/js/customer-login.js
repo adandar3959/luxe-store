@@ -51,11 +51,12 @@ document.getElementById('authForm').addEventListener('submit', async (e) => {
             localStorage.setItem('userToken', data.token);
             localStorage.setItem('userInfo', JSON.stringify(data));
 
-            console.log("Login Successful! Token Saved.");
-            if (data.isAdmin) {
+            if (data.role === 'admin') {
                 window.location.href = 'admin-dashboard.html';
+            } else if (data.role === 'employee') {
+                window.location.href = 'employee-orders.html';
             } else {
-                window.location.href = 'index.html'; 
+                window.location.href = 'index.html';
             }
         } else {
             console.error("Server Error:", data.message);

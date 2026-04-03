@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadProducts();          
     loadUserCart(); 
     loadHomeCategories();
+    loadWishlistFromServer();
 });
 function getQueryParam(param) {
     const params = new URLSearchParams(window.location.search);
@@ -129,6 +130,27 @@ function renderHomePagination() {
     }
 }
 
+async function loadWishlistFromServer() {
+    const token = localStorage.getItem('userToken');
+    if (!token) return;
+    try {
+        const res = await fetch('/api/wishlist', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) return;
+        const items = await res.json();
+        if (Array.isArray(items) && items.length > 0) {
+            const formatted = items.map(p => ({
+                id: p._id,
+                name: p.name,
+                price: p.price,
+                image: p.image ? (p.image.startsWith('http') ? p.image : `/uploads/${p.image}`) : ''
+            }));
+            localStorage.setItem('wishlist', JSON.stringify(formatted));
+        }
+    } catch (e) { console.error("Wishlist load error", e); }
+}
+
 async function loadUserCart() {
     const token = localStorage.getItem('userToken');
     if (!token) return; 
@@ -220,7 +242,7 @@ document.querySelector('.newsletter-form').addEventListener('submit', async (e) 
     e.preventDefault();
     const email = e.target.querySelector('input').value;
 
-    const API_URL = 'https://luxe-store-nmvs.onrender.com/api/newsletter/subscribe';
+    const API_URL = '/api/newsletter/subscribe';
 
     try {
         const response = await fetch(API_URL, {

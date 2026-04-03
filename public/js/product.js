@@ -183,12 +183,22 @@ function setupButtons(product) {
     if (wishlist.some(item => item.id === product._id)) {
         wishBtn.querySelector('i').classList.replace('bx-heart', 'bxs-heart');
     }
-    wishBtn.onclick = () => {
+    wishBtn.onclick = async () => {
+        const token = localStorage.getItem('userToken');
         wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
         const existingIndex = wishlist.findIndex(item => item.id === product._id);
+
         if (existingIndex > -1) {
+            // Remove from local
             wishlist.splice(existingIndex, 1);
             wishBtn.querySelector('i').classList.replace('bxs-heart', 'bx-heart');
+            // Remove from server
+            if (token) {
+                await fetch(`/api/wishlist/${product._id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).catch(() => {});
+            }
             alert("Removed from Wishlist");
         } else {
             wishlist.push({
@@ -198,9 +208,20 @@ function setupButtons(product) {
                 image: resolveImg(product.image)
             });
             wishBtn.querySelector('i').classList.replace('bx-heart', 'bxs-heart');
+            // Add to server
+            if (token) {
+                await fetch('/api/wishlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ productId: product._id })
+                }).catch(() => {});
+            }
             alert("Added to Wishlist");
         }
         localStorage.setItem('wishlist', JSON.stringify(wishlist));
-        updateWishlistCount(); // NEW: Update the counter instantly
+        updateWishlistCount();
     };
 }

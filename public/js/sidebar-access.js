@@ -12,11 +12,12 @@
     if (role === 'employee') {
         if (!document.querySelector('.restock-link')) {
             const restockLink = document.createElement('a');
-            restockLink.href = 'restock.html'; // You will create this page next
+            restockLink.href = 'restock.html';
             restockLink.className = 'menu-item restock-link';
             restockLink.innerHTML = `<i class='bx bx-low-vision'></i> Restock`;
-            if(menuItems.length > 4) {
-                sidebar.insertBefore(restockLink, menuItems[4]);
+            const insertBefore = menuItems[4];
+            if (insertBefore) {
+                sidebar.insertBefore(restockLink, insertBefore);
             } else {
                 sidebar.appendChild(restockLink);
             }
