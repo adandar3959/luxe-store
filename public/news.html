@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Promotions | LUXE</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Page Banner */
+        .page-banner {
+            margin-top: 60px;
+            height: 300px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                        url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1512') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+        .page-banner h1 { font-size: 44px; font-weight: 700; margin-bottom: 10px; }
+        .page-banner p { font-size: 15px; opacity: 0.85; }
+        .breadcrumb { font-size: 13px; opacity: 0.8; margin-top: 10px; }
+        .breadcrumb a { color: #fff; }
+        .breadcrumb span { margin: 0 8px; }
+
+        .section-wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ── Promo Countdown Banner ── */
+        .promo-countdown-bar {
+            background: linear-gradient(135deg, #695CFE, #9b5de5);
+            color: #fff;
+            text-align: center;
+            padding: 24px 20px;
+        }
+        .promo-countdown-bar h2 { font-size: 22px; margin-bottom: 8px; }
+        .promo-countdown-bar p { font-size: 14px; opacity: 0.9; margin-bottom: 16px; }
+        .countdown-timer { display: flex; justify-content: center; gap: 20px; }
+        .countdown-box {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
+            padding: 12px 20px;
+            min-width: 70px;
+            text-align: center;
+        }
+        .countdown-box .num { font-size: 28px; font-weight: 800; display: block; }
+        .countdown-box .label { font-size: 11px; text-transform: uppercase; opacity: 0.8; letter-spacing: 1px; }
+
+        /* ── Promo Cards ── */
+        .promos-section { padding: 80px 0; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 34px; font-weight: 700; }
+        .section-title p { color: #777; margin-top: 10px; font-size: 15px; }
+
+        .promos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .promo-card {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            height: 280px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .promo-card:hover { transform: translateY(-6px); }
+        .promo-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .promo-card:hover img { transform: scale(1.06); }
+        .promo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+        }
+        .promo-tag {
+            display: inline-block;
+            background: #695CFE;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            width: fit-content;
+        }
+        .promo-tag.sale { background: #e63946; }
+        .promo-tag.new { background: #2a9d8f; }
+        .promo-overlay h3 { color: #fff; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .promo-overlay p { color: rgba(255,255,255,0.85); font-size: 13px; }
+        .promo-card-wide {
+            grid-column: span 2;
+        }
+
+        /* ── Discount Codes ── */
+        .codes-section { padding: 60px 0; background: #f9f9f9; }
+        .codes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .code-card {
+            background: #fff;
+            border-radius: 16px;
+            border: 2px dashed #695CFE;
+            padding: 30px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .code-card::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 120px; height: 120px;
+            background: #f4f2ff;
+            border-radius: 50%;
+        }
+        .code-card .discount-pct {
+            font-size: 48px;
+            font-weight: 800;
+            color: #695CFE;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+        .code-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+        .code-card .desc { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.5; }
+        .code-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f4f2ff;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+        }
+        .code-box .code-text { font-size: 15px; font-weight: 700; color: #695CFE; letter-spacing: 2px; }
+        .copy-btn {
+            background: #695CFE;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover { background: #5548e0; }
+        .code-card .expiry { font-size: 12px; color: #aaa; }
+
+        /* ── Blog / News Posts ── */
+        .blog-section { padding: 80px 0; }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+        .blog-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .blog-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
+        .blog-card img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.4s; }
+        .blog-card:hover img { transform: scale(1.04); }
+        .blog-body { padding: 24px; }
+        .blog-meta { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+        .blog-cat {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #695CFE;
+            background: #f4f2ff;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        .blog-date { font-size: 12px; color: #aaa; display: flex; align-items: center; gap: 4px; }
+        .blog-body h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
+        .blog-body p { font-size: 13px; color: #666; line-height: 1.7; margin-bottom: 18px; }
+        .read-more {
+            font-size: 13px;
+            font-weight: 700;
+            color: #695CFE;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: gap 0.2s;
+        }
+        .blog-card:hover .read-more { gap: 10px; }
+
+        /* ── Filter Tabs ── */
+        .filter-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+        .tab-btn {
+            padding: 9px 22px;
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #fff;
+            color: #666;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background: #695CFE; color: #fff; border-color: #695CFE;
+        }
+
+        /* ── CTA Banner ── */
+        .cta-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            text-align: center;
+        }
+        .cta-section h2 { font-size: 36px; font-weight: 700; color: #fff; margin-bottom: 14px; }
+        .cta-section p { font-size: 15px; color: #aaa; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .cta-btn {
+            display: inline-block;
+            padding: 14px 40px;
+            background: #695CFE;
+            color: #fff;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .cta-btn:hover { background: #5548e0; transform: translateY(-2px); }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .promos-grid { grid-template-columns: repeat(2, 1fr); }
+            .promo-card-wide { grid-column: span 2; }
+            .codes-grid { grid-template-columns: repeat(2, 1fr); }
+            .blog-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .page-banner h1 { font-size: 28px; }
+            .promos-grid { grid-template-columns: 1fr; }
+            .promo-card-wide { grid-column: span 1; }
+            .codes-grid { grid-template-columns: 1fr; }
+            .blog-grid { grid-template-columns: 1fr; }
+            .countdown-timer { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html"><div class="logo">LUXE.</div></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <i class='bx bx-search'></i>
+                </div>
+                <a href="wishlist.html"><i class='bx bx-heart'></i></a>
+                <a href="login.html" id="userLink"><i class='bx bx-user'></i></a>
+                <a href="cart.html" class="cart-icon">
+                    <i class='bx bx-shopping-bag'></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <div class="menu-toggle" id="menuToggle"><i class='bx bx-menu'></i></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BANNER -->
+    <div class="page-banner">
+        <h1>News &amp; Promotions</h1>
+        <p>Exclusive deals, discount codes, and the latest from LUXE</p>
+        <p class="breadcrumb"><a href="index.html">Home</a><span>/</span>News &amp; Promotions</p>
+    </div>
+
+    <!-- COUNTDOWN PROMO BAR -->
+    <div class="promo-countdown-bar">
+        <h2>🔥 End of Season Sale — Up to 50% Off!</h2>
+        <p>Hurry! This offer expires in:</p>
+        <div class="countdown-timer">
+            <div class="countdown-box"><span class="num" id="cd-days">00</span><span class="label">Days</span></div>
+            <div class="countdown-box"><span class="num" id="cd-hours">00</span><span class="label">Hours</span></div>
+            <div class="countdown-box"><span class="num" id="cd-mins">00</span><span class="label">Mins</span></div>
+            <div class="countdown-box"><span class="num" id="cd-secs">00</span><span class="label">Secs</span></div>
+        </div>
+    </div>
+
+    <!-- FEATURED PROMOS -->
+    <section class="promos-section">
+        <div class="section-wrap">
+            <div class="section-title">
+                <h2>Current Promotions</h2>
+                <p>Don't miss out on these limited-time offers</p>
+            </div>
+            <div class="promos-grid">
+                <div class="promo-card promo-card-wide">
+                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800" alt="Summer Sale">
+                    <div class="promo-overlay">
+                        <span class="promo-tag sale">Mega Sale</span>
+                        <h3>Summer Collection — Flat 40% Off</h3>
+                        <p>Shop the full summer range at unbeatable prices. Limited stock available.</p>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <img src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400" alt="New Arrivals">
+                    <div class="promo-overlay">
+                        <span class="promo-tag new">New Arrival</span>
+                        <h3>Autumn Collection 2025</h3>
+                        <p>Fresh styles just dropped. Be the first to wear them.</p>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400" alt="Accessories">
+                    <div class="promo-overlay">
+                        <span class="promo-tag sale">Buy 2 Get 1</span>
+                        <h3>Accessories Bundle Deal</h3>
+                        <p>Buy any 2 accessories and get the 3rd one absolutely free.</p>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400" alt="Women Sale">
+                    <div class="promo-overlay">
+                        <span class="promo-tag">Flash Sale</span>
+                        <h3>Women's Flash Sale</h3>
+                        <p>48-hour flash sale on all women's dresses and tops.</p>
+                    </div>
+                </div>
+                <div class="promo-card">
+                    <img src="https://images.unsplash.com/photo-1624378441864-6eda7eba3862?w=400" alt="Men Sale">
+                    <div class="promo-overlay">
+                        <span class="promo-tag sale">30% Off</span>
+                        <h3>Men's Essentials Week</h3>
+                        <p>All men's basics and formal wear — 30% off this week only.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DISCOUNT CODES -->
+    <section class="codes-section">
+        <div class="section-wrap">
+            <div class="section-title">
+                <h2>Exclusive Discount Codes</h2>
+                <p>Copy a code and paste it at checkout to redeem your discount</p>
+            </div>
+            <div class="codes-grid">
+                <div class="code-card">
+                    <p class="discount-pct">20%</p>
+                    <h3>Welcome Discount</h3>
+                    <p class="desc">For first-time shoppers only. Valid on all categories with no minimum order.</p>
+                    <div class="code-box">
+                        <span class="code-text">LUXE20</span>
+                        <button class="copy-btn" onclick="copyCode('LUXE20', this)">Copy</button>
+                    </div>
+                    <p class="expiry"><i class='bx bx-time-five'></i> Expires: 31 Dec 2025</p>
+                </div>
+                <div class="code-card">
+                    <p class="discount-pct">15%</p>
+                    <h3>Summer Special</h3>
+                    <p class="desc">Valid on all summer collection items. Minimum order of Rs. 3,000 required.</p>
+                    <div class="code-box">
+                        <span class="code-text">SUMMER15</span>
+                        <button class="copy-btn" onclick="copyCode('SUMMER15', this)">Copy</button>
+                    </div>
+                    <p class="expiry"><i class='bx bx-time-five'></i> Expires: 15 Oct 2025</p>
+                </div>
+                <div class="code-card">
+                    <p class="discount-pct">10%</p>
+                    <h3>Newsletter Subscriber</h3>
+                    <p class="desc">Exclusive for newsletter subscribers. Stackable with sale items.</p>
+                    <div class="code-box">
+                        <span class="code-text">NEWS10</span>
+                        <button class="copy-btn" onclick="copyCode('NEWS10', this)">Copy</button>
+                    </div>
+                    <p class="expiry"><i class='bx bx-time-five'></i> Expires: 31 Mar 2026</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BLOG / NEWS POSTS -->
+    <section class="blog-section">
+        <div class="section-wrap">
+            <div class="section-title">
+                <h2>Latest News &amp; Style Tips</h2>
+                <p>Stay inspired with our latest articles and fashion guides</p>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="tab-btn active" onclick="filterPosts('all', this)">All</button>
+                <button class="tab-btn" onclick="filterPosts('style', this)">Style Tips</button>
+                <button class="tab-btn" onclick="filterPosts('news', this)">Brand News</button>
+                <button class="tab-btn" onclick="filterPosts('deals', this)">Deals</button>
+                <button class="tab-btn" onclick="filterPosts('guide', this)">Guides</button>
+            </div>
+
+            <div class="blog-grid" id="blogGrid">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="section-wrap">
+            <h2>Ready to Shop the Latest Deals?</h2>
+            <p>Browse our full collection and take advantage of these limited-time offers before they're gone.</p>
+            <a href="shop.html" class="cta-btn">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-newsletter">
+            <div class="newsletter-content">
+                <h3>Join Our Newsletter</h3>
+                <p>Be the first to know about exclusive offers and style inspiration.</p>
+                <form class="newsletter-form" onsubmit="return false;">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-container">
+            <div class="footer-row">
+                <div class="footer-col brand-col">
+                    <h4>LUXE.</h4>
+                    <p>Timeless elegance for the modern wardrobe. Quality craftsmanship, sustainable practices.</p>
+                    <div class="social-links">
+                        <a href="#"><i class='bx bxl-instagram'></i></a>
+                        <a href="#"><i class='bx bxl-facebook'></i></a>
+                        <a href="#"><i class='bx bxl-twitter'></i></a>
+                        <a href="#"><i class='bx bxl-youtube'></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html">All Products</a></li>
+                        <li><a href="categories.html">Categories</a></li>
+                        <li><a href="shop.html?filter=sale">Sale</a></li>
+                        <li><a href="shop.html?filter=new">New Arrivals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Help</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="news.html">News &amp; Promotions</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-container bottom-row">
+                <p>&copy; 2025 LUXE. All rights reserved.</p>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/nav.js"></script>
+    <script>
+        // ── Countdown Timer ──
+        const saleEnd = new Date();
+        saleEnd.setDate(saleEnd.getDate() + 5);
+        saleEnd.setHours(23, 59, 59);
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = saleEnd - now;
+            if (diff <= 0) { document.querySelector('.promo-countdown-bar').style.display = 'none'; return; }
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('cd-days').textContent  = String(d).padStart(2,'0');
+            document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+            document.getElementById('cd-mins').textContent  = String(m).padStart(2,'0');
+            document.getElementById('cd-secs').textContent  = String(s).padStart(2,'0');
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // ── Copy Code ──
+        function copyCode(code, btn) {
+            navigator.clipboard.writeText(code).catch(() => {});
+            btn.textContent = 'Copied!';
+            btn.style.background = '#2a9d8f';
+            setTimeout(() => { btn.textContent = 'Copy'; btn.style.background = ''; }, 2000);
+        }
+
+        // ── Blog Posts Data ──
+        const posts = [
+            {
+                cat: 'style', catLabel: 'Style Tips',
+                date: 'Sep 20, 2025', img: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=400',
+                title: '10 Ways to Style a White Shirt',
+                excerpt: 'The white shirt is the most versatile piece in your wardrobe. Here are 10 creative ways to wear it for any occasion.',
+            },
+            {
+                cat: 'news', catLabel: 'Brand News',
+                date: 'Sep 15, 2025', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400',
+                title: 'LUXE Autumn 2025 Collection Launch',
+                excerpt: 'Our most anticipated collection is finally here. Discover the Autumn 2025 lineup featuring rich textures and earthy tones.',
+            },
+            {
+                cat: 'deals', catLabel: 'Deals',
+                date: 'Sep 10, 2025', img: 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400',
+                title: 'Flash Sale This Weekend — Up to 40% Off',
+                excerpt: 'This Saturday and Sunday only, save up to 40% on selected items. Use code FLASH40 at checkout.',
+            },
+            {
+                cat: 'guide', catLabel: 'Guides',
+                date: 'Sep 5, 2025', img: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400',
+                title: 'The Ultimate Size Guide for Online Shopping',
+                excerpt: 'Never worry about wrong sizes again. Our comprehensive guide explains how to measure yourself correctly.',
+            },
+            {
+                cat: 'style', catLabel: 'Style Tips',
+                date: 'Aug 28, 2025', img: 'https://images.unsplash.com/photo-1624378441864-6eda7eba3862?w=400',
+                title: 'Building a Capsule Wardrobe on a Budget',
+                excerpt: 'You don't need to spend a fortune to look great every day. Here's how to build a capsule wardrobe with just 20 pieces.',
+            },
+            {
+                cat: 'news', catLabel: 'Brand News',
+                date: 'Aug 20, 2025', img: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400',
+                title: 'LUXE Goes Green — Our Sustainability Report',
+                excerpt: 'We've reduced our carbon footprint by 35% this year. Read about our journey toward fully sustainable fashion.',
+            },
+        ];
+
+        let activeCategory = 'all';
+
+        function renderPosts(data) {
+            const grid = document.getElementById('blogGrid');
+            grid.innerHTML = data.map(p => `
+                <div class="blog-card">
+                    <img src="${p.img}" alt="${p.title}" loading="lazy">
+                    <div class="blog-body">
+                        <div class="blog-meta">
+                            <span class="blog-cat">${p.catLabel}</span>
+                            <span class="blog-date"><i class='bx bx-calendar'></i>${p.date}</span>
+                        </div>
+                        <h3>${p.title}</h3>
+                        <p>${p.excerpt}</p>
+                        <a href="#" class="read-more">Read More <i class='bx bx-right-arrow-alt'></i></a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterPosts(cat, btn) {
+            activeCategory = cat;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const filtered = cat === 'all' ? posts : posts.filter(p => p.cat === cat);
+            renderPosts(filtered);
+        }
+
+        renderPosts(posts);
+    </script>
+</body>
+</html>

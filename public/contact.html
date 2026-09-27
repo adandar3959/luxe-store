@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | LUXE</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Page Banner */
+        .page-banner {
+            margin-top: 60px;
+            height: 280px;
+            background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                        url('https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1512') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+        .page-banner h1 { font-size: 44px; font-weight: 700; margin-bottom: 10px; }
+        .page-banner p { font-size: 15px; opacity: 0.85; }
+        .breadcrumb { font-size: 13px; opacity: 0.8; margin-top: 10px; }
+        .breadcrumb a { color: #fff; }
+        .breadcrumb span { margin: 0 8px; }
+
+        .section-wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ── Info Cards ── */
+        .info-cards-section { padding: 70px 0 50px; }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        .info-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 34px 24px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            border-top: 4px solid transparent;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .info-card:hover { border-top-color: #695CFE; transform: translateY(-5px); }
+        .info-icon {
+            width: 64px; height: 64px;
+            background: #f4f2ff;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 18px;
+        }
+        .info-icon i { font-size: 28px; color: #695CFE; }
+        .info-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+        .info-card p { font-size: 13px; color: #777; line-height: 1.6; }
+        .info-card a { color: #695CFE; font-weight: 600; font-size: 13px; }
+        .info-card a:hover { text-decoration: underline; }
+
+        /* ── Main Contact Section ── */
+        .contact-main { padding: 30px 0 90px; }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        /* Left — Map + Social */
+        .contact-left {}
+        .map-wrap {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            margin-bottom: 28px;
+        }
+        .map-wrap iframe { width: 100%; height: 300px; border: none; display: block; }
+
+        /* Fake map fallback using a styled div */
+        .map-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #e8e8f8, #d4d0f8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #695CFE;
+        }
+        .map-placeholder i { font-size: 48px; margin-bottom: 12px; }
+        .map-placeholder p { font-size: 14px; font-weight: 600; }
+        .map-placeholder small { font-size: 12px; color: #888; margin-top: 4px; }
+
+        .store-hours { margin-bottom: 28px; }
+        .store-hours h3 { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+        .hours-list { display: flex; flex-direction: column; gap: 8px; }
+        .hours-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #555;
+        }
+        .hours-row .day { font-weight: 600; color: #1a1a1a; }
+        .hours-row .open { color: #2a9d8f; font-weight: 600; }
+        .hours-row .closed { color: #e63946; font-weight: 600; }
+
+        .social-connect h3 { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+        .social-icons-row { display: flex; gap: 12px; }
+        .social-btn {
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 18px;
+            border: 1px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            transition: all 0.2s;
+        }
+        .social-btn i { font-size: 18px; }
+        .social-btn.insta:hover  { background: #e1306c; color: #fff; border-color: #e1306c; }
+        .social-btn.fb:hover     { background: #1877f2; color: #fff; border-color: #1877f2; }
+        .social-btn.twitter:hover{ background: #1da1f2; color: #fff; border-color: #1da1f2; }
+
+        /* Right — Contact Form */
+        .contact-form-wrap {
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+        }
+        .contact-form-wrap h2 { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+        .contact-form-wrap > p { font-size: 14px; color: #777; margin-bottom: 28px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 7px;
+        }
+        .form-group label span { color: #e63946; }
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fff;
+            color: #333;
+            font-family: inherit;
+        }
+        .form-control:focus {
+            border-color: #695CFE;
+            box-shadow: 0 0 0 3px rgba(105,92,254,0.1);
+        }
+        .form-control.error { border-color: #e63946; }
+        textarea.form-control { resize: vertical; min-height: 130px; }
+
+        .subject-select { appearance: none; cursor: pointer; }
+
+        .char-count { font-size: 11px; color: #aaa; text-align: right; margin-top: 4px; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #695CFE;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .submit-btn:hover { background: #5548e0; transform: translateY(-2px); }
+        .submit-btn:disabled { background: #aaa; cursor: not-allowed; transform: none; }
+
+        /* Success Message */
+        .success-msg {
+            display: none;
+            background: #e6f9f2;
+            border: 1px solid #2a9d8f;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-top: 20px;
+            text-align: center;
+            color: #1a7a5e;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .success-msg i { font-size: 28px; display: block; margin-bottom: 8px; }
+
+        /* Error text */
+        .err-text { font-size: 11px; color: #e63946; margin-top: 4px; display: none; }
+
+        /* ── FAQ ── */
+        .faq-section { padding: 80px 0; background: #f9f9f9; }
+        .faq-section .section-title { text-align: center; margin-bottom: 50px; }
+        .faq-section .section-title h2 { font-size: 34px; font-weight: 700; }
+        .faq-section .section-title p { color: #777; margin-top: 10px; font-size: 15px; }
+        .faq-list { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+        .faq-item {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        .faq-q {
+            padding: 20px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        .faq-q i { font-size: 20px; color: #695CFE; transition: transform 0.3s; }
+        .faq-q.open i { transform: rotate(180deg); }
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.3s;
+            font-size: 14px;
+            color: #666;
+            line-height: 1.7;
+            padding: 0 24px;
+        }
+        .faq-a.open { max-height: 200px; padding: 0 24px 20px; }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .info-grid { grid-template-columns: repeat(2, 1fr); }
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .page-banner h1 { font-size: 28px; }
+            .form-row { grid-template-columns: 1fr; }
+            .info-grid { grid-template-columns: 1fr 1fr; }
+            .contact-form-wrap { padding: 24px; }
+            .social-icons-row { flex-wrap: wrap; }
+        }
+        @media (max-width: 400px) {
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html"><div class="logo">LUXE.</div></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <i class='bx bx-search'></i>
+                </div>
+                <a href="wishlist.html"><i class='bx bx-heart'></i></a>
+                <a href="login.html" id="userLink"><i class='bx bx-user'></i></a>
+                <a href="cart.html" class="cart-icon">
+                    <i class='bx bx-shopping-bag'></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <div class="menu-toggle" id="menuToggle"><i class='bx bx-menu'></i></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BANNER -->
+    <div class="page-banner">
+        <h1>Contact Us</h1>
+        <p>We'd love to hear from you — reach out anytime</p>
+        <p class="breadcrumb"><a href="index.html">Home</a><span>/</span>Contact Us</p>
+    </div>
+
+    <!-- INFO CARDS -->
+    <section class="info-cards-section">
+        <div class="section-wrap">
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon"><i class='bx bx-map'></i></div>
+                    <h3>Visit Our Store</h3>
+                    <p>LUXE Fashion Hub<br>Mall Road, Lahore<br>Punjab, Pakistan</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class='bx bx-phone-call'></i></div>
+                    <h3>Call Us</h3>
+                    <p>Customer Support<br><a href="tel:+924235001234">+92 42 3500 1234</a><br><a href="tel:+923001234567">+92 300 123 4567</a></p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class='bx bx-envelope'></i></div>
+                    <h3>Email Us</h3>
+                    <p>General Queries<br><a href="mailto:hello@luxe.pk">hello@luxe.pk</a><br><a href="mailto:support@luxe.pk">support@luxe.pk</a></p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon"><i class='bx bx-time-five'></i></div>
+                    <h3>Working Hours</h3>
+                    <p>Mon – Fri: 10am – 8pm<br>Saturday: 10am – 6pm<br>Sunday: Closed</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTACT SECTION -->
+    <section class="contact-main">
+        <div class="section-wrap">
+            <div class="contact-grid">
+
+                <!-- LEFT -->
+                <div class="contact-left">
+                    <!-- Map -->
+                    <div class="map-wrap">
+                        <div class="map-placeholder">
+                            <i class='bx bx-map-pin'></i>
+                            <p>LUXE Store — Mall Road, Lahore</p>
+                            <small>Interactive map placeholder</small>
+                        </div>
+                    </div>
+
+                    <!-- Store Hours -->
+                    <div class="store-hours">
+                        <h3>Store Hours</h3>
+                        <div class="hours-list">
+                            <div class="hours-row"><span class="day">Monday</span><span class="open">10:00 AM – 8:00 PM</span></div>
+                            <div class="hours-row"><span class="day">Tuesday</span><span class="open">10:00 AM – 8:00 PM</span></div>
+                            <div class="hours-row"><span class="day">Wednesday</span><span class="open">10:00 AM – 8:00 PM</span></div>
+                            <div class="hours-row"><span class="day">Thursday</span><span class="open">10:00 AM – 8:00 PM</span></div>
+                            <div class="hours-row"><span class="day">Friday</span><span class="open">10:00 AM – 8:00 PM</span></div>
+                            <div class="hours-row"><span class="day">Saturday</span><span class="open">10:00 AM – 6:00 PM</span></div>
+                            <div class="hours-row"><span class="day">Sunday</span><span class="closed">Closed</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Social -->
+                    <div class="social-connect">
+                        <h3>Find Us On Social Media</h3>
+                        <div class="social-icons-row">
+                            <a href="#" class="social-btn insta"><i class='bx bxl-instagram'></i> Instagram</a>
+                            <a href="#" class="social-btn fb"><i class='bx bxl-facebook'></i> Facebook</a>
+                            <a href="#" class="social-btn twitter"><i class='bx bxl-twitter'></i> Twitter</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT — FORM -->
+                <div class="contact-form-wrap">
+                    <h2>Send Us a Message</h2>
+                    <p>Fill out the form below and our team will get back to you within 24 hours.</p>
+
+                    <form id="contactForm" novalidate>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name <span>*</span></label>
+                                <input type="text" class="form-control" id="firstName" placeholder="Ahmad" required>
+                                <p class="err-text" id="firstNameErr">Please enter your first name.</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name <span>*</span></label>
+                                <input type="text" class="form-control" id="lastName" placeholder="Raza" required>
+                                <p class="err-text" id="lastNameErr">Please enter your last name.</p>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email Address <span>*</span></label>
+                                <input type="email" class="form-control" id="email" placeholder="ahmad@email.com" required>
+                                <p class="err-text" id="emailErr">Please enter a valid email.</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" placeholder="+92 300 1234567">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subject <span>*</span></label>
+                            <select class="form-control subject-select" id="subject" required>
+                                <option value="">-- Select a subject --</option>
+                                <option value="order">Order Inquiry</option>
+                                <option value="return">Return / Refund</option>
+                                <option value="product">Product Question</option>
+                                <option value="shipping">Shipping & Delivery</option>
+                                <option value="promo">Promotions & Discounts</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <p class="err-text" id="subjectErr">Please select a subject.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Message <span>*</span></label>
+                            <textarea class="form-control" id="message" placeholder="Write your message here..." required maxlength="500" oninput="updateCharCount(this)"></textarea>
+                            <p class="char-count"><span id="charCount">0</span> / 500</p>
+                            <p class="err-text" id="messageErr">Please enter your message (min 20 characters).</p>
+                        </div>
+
+                        <div class="form-group" style="display:flex;align-items:center;gap:10px;">
+                            <input type="checkbox" id="agree" style="width:16px;height:16px;accent-color:#695CFE">
+                            <label for="agree" style="font-size:13px;font-weight:400;color:#666;cursor:pointer;margin:0">
+                                I agree to the <a href="#" style="color:#695CFE">Privacy Policy</a> and consent to being contacted.
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <i class='bx bx-send'></i> Send Message
+                        </button>
+
+                        <div class="success-msg" id="successMsg">
+                            <i class='bx bx-check-circle'></i>
+                            Thank you! Your message has been sent successfully.<br>
+                            <span style="font-weight:400;font-size:13px">We'll get back to you within 24 hours.</span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+        <div class="section-wrap">
+            <div class="section-title">
+                <h2>Frequently Asked Questions</h2>
+                <p>Quick answers to the most common questions</p>
+            </div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        How long does delivery take? <i class='bx bx-chevron-down'></i>
+                    </div>
+                    <div class="faq-a">
+                        Standard delivery takes 3–5 business days within Pakistan. Express delivery (1–2 days) is available for an additional fee. International orders typically arrive within 7–14 business days.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        What is your return policy? <i class='bx bx-chevron-down'></i>
+                    </div>
+                    <div class="faq-a">
+                        We offer a hassle-free 14-day return policy on all items in original condition with tags attached. Simply contact us to initiate a return and we'll guide you through the process.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        Do you offer size exchanges? <i class='bx bx-chevron-down'></i>
+                    </div>
+                    <div class="faq-a">
+                        Yes! Size exchanges are available within 14 days of purchase. The item must be unworn and in original packaging. Shipping for exchanges is free for the first exchange on each order.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        How do I track my order? <i class='bx bx-chevron-down'></i>
+                    </div>
+                    <div class="faq-a">
+                        Once your order ships, you'll receive a tracking link via email and SMS. You can also check your order status by logging into your LUXE account and visiting the "My Orders" section.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q" onclick="toggleFaq(this)">
+                        Can I cancel or modify my order? <i class='bx bx-chevron-down'></i>
+                    </div>
+                    <div class="faq-a">
+                        Orders can be cancelled or modified within 2 hours of placement. After that, the order moves to fulfillment and cannot be changed. Please contact us immediately at support@luxe.pk.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-newsletter">
+            <div class="newsletter-content">
+                <h3>Join Our Newsletter</h3>
+                <p>Be the first to know about exclusive offers and style inspiration.</p>
+                <form class="newsletter-form" onsubmit="return false;">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-container">
+            <div class="footer-row">
+                <div class="footer-col brand-col">
+                    <h4>LUXE.</h4>
+                    <p>Timeless elegance for the modern wardrobe. Quality craftsmanship, sustainable practices.</p>
+                    <div class="social-links">
+                        <a href="#"><i class='bx bxl-instagram'></i></a>
+                        <a href="#"><i class='bx bxl-facebook'></i></a>
+                        <a href="#"><i class='bx bxl-twitter'></i></a>
+                        <a href="#"><i class='bx bxl-youtube'></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html">All Products</a></li>
+                        <li><a href="categories.html">Categories</a></li>
+                        <li><a href="shop.html?filter=sale">Sale</a></li>
+                        <li><a href="shop.html?filter=new">New Arrivals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Help</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="news.html">News &amp; Promotions</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-container bottom-row">
+                <p>&copy; 2025 LUXE. All rights reserved.</p>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/nav.js"></script>
+    <script>
+        // ── FAQ Accordion ──
+        function toggleFaq(el) {
+            const ans = el.nextElementSibling;
+            const isOpen = ans.classList.contains('open');
+            // Close all
+            document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+            document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+            // Open clicked
+            if (!isOpen) { ans.classList.add('open'); el.classList.add('open'); }
+        }
+
+        // ── Char Count ──
+        function updateCharCount(el) {
+            document.getElementById('charCount').textContent = el.value.length;
+        }
+
+        // ── Form Validation ──
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+
+            const fields = [
+                { id: 'firstName', errId: 'firstNameErr', check: v => v.trim().length > 0 },
+                { id: 'lastName',  errId: 'lastNameErr',  check: v => v.trim().length > 0 },
+                { id: 'email',     errId: 'emailErr',     check: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) },
+                { id: 'subject',   errId: 'subjectErr',   check: v => v !== '' },
+                { id: 'message',   errId: 'messageErr',   check: v => v.trim().length >= 20 },
+            ];
+
+            fields.forEach(f => {
+                const input = document.getElementById(f.id);
+                const err   = document.getElementById(f.errId);
+                if (!f.check(input.value)) {
+                    input.classList.add('error');
+                    err.style.display = 'block';
+                    valid = false;
+                } else {
+                    input.classList.remove('error');
+                    err.style.display = 'none';
+                }
+            });
+
+            if (!valid) return;
+
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Sending...`;
+
+            // Simulate submission
+            setTimeout(() => {
+                btn.style.display = 'none';
+                document.getElementById('successMsg').style.display = 'block';
+                this.reset();
+                document.getElementById('charCount').textContent = '0';
+            }, 1500);
+        });
+
+        // Clear error on input
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('error');
+                const errEl = document.getElementById(this.id + 'Err');
+                if (errEl) errEl.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

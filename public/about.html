@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | LUXE</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Page Banner */
+        .page-banner {
+            margin-top: 60px;
+            height: 320px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                        url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1512') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+        .page-banner h1 { font-size: 46px; font-weight: 700; margin-bottom: 12px; }
+        .page-banner p { font-size: 16px; opacity: 0.85; max-width: 500px; line-height: 1.6; }
+        .breadcrumb { font-size: 13px; opacity: 0.8; margin-top: 12px; }
+        .breadcrumb a { color: #fff; }
+        .breadcrumb span { margin: 0 8px; }
+
+        /* Section wrapper */
+        .section-wrap { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ── Our Story ── */
+        .story-section { padding: 90px 0; }
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 70px;
+            align-items: center;
+        }
+        .story-img-wrap { position: relative; }
+        .story-img-wrap img {
+            width: 100%;
+            height: 520px;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+        .story-badge {
+            position: absolute;
+            bottom: -24px;
+            right: -24px;
+            background: #695CFE;
+            color: #fff;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.4;
+            box-shadow: 0 8px 24px rgba(105,92,254,0.4);
+        }
+        .story-badge span { font-size: 28px; font-weight: 800; }
+        .story-text .eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #695CFE;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .story-text h2 { font-size: 38px; font-weight: 700; line-height: 1.2; margin-bottom: 24px; }
+        .story-text p { font-size: 15px; color: #555; line-height: 1.8; margin-bottom: 18px; }
+        .story-text .btn-solid {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 14px 32px;
+            background: #695CFE;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 30px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .story-text .btn-solid:hover { background: #5548e0; transform: translateY(-2px); }
+
+        /* ── Stats ── */
+        .stats-section {
+            background: #1a1a1a;
+            padding: 70px 0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+        .stat-item { color: #fff; }
+        .stat-item .number {
+            font-size: 48px;
+            font-weight: 800;
+            color: #695CFE;
+            display: block;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+        .stat-item p { font-size: 14px; color: #aaa; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* ── Values ── */
+        .values-section { padding: 90px 0; background: #f9f9f9; }
+        .values-section .section-title { text-align: center; margin-bottom: 60px; }
+        .values-section .section-title h2 { font-size: 36px; font-weight: 700; }
+        .values-section .section-title p { color: #777; margin-top: 12px; font-size: 15px; }
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        .value-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .value-card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
+        .value-icon {
+            width: 72px;
+            height: 72px;
+            background: #f4f2ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        .value-icon i { font-size: 32px; color: #695CFE; }
+        .value-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+        .value-card p { font-size: 14px; color: #666; line-height: 1.7; }
+
+        /* ── Team ── */
+        .team-section { padding: 90px 0; }
+        .team-section .section-title { text-align: center; margin-bottom: 60px; }
+        .team-section .section-title h2 { font-size: 36px; font-weight: 700; }
+        .team-section .section-title p { color: #777; margin-top: 12px; font-size: 15px; }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+        }
+        .team-card {
+            text-align: center;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s;
+        }
+        .team-card:hover { transform: translateY(-6px); }
+        .team-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            object-position: top;
+        }
+        .team-info { padding: 20px; }
+        .team-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+        .team-info .role { font-size: 13px; color: #695CFE; font-weight: 600; margin-bottom: 12px; }
+        .team-socials { display: flex; justify-content: center; gap: 10px; }
+        .team-socials a {
+            width: 32px; height: 32px;
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px; color: #666;
+            transition: all 0.2s;
+        }
+        .team-socials a:hover { background: #695CFE; color: #fff; border-color: #695CFE; }
+
+        /* ── Timeline ── */
+        .timeline-section { padding: 90px 0; background: #f9f9f9; }
+        .timeline-section .section-title { text-align: center; margin-bottom: 60px; }
+        .timeline-section .section-title h2 { font-size: 36px; font-weight: 700; }
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0; bottom: 0;
+            width: 2px;
+            background: #e0e0e0;
+            transform: translateX(-50%);
+        }
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: calc(50% + 40px);
+            margin-bottom: 50px;
+            position: relative;
+        }
+        .timeline-item:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: calc(50% + 40px);
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            width: 16px; height: 16px;
+            background: #695CFE;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 3px #695CFE;
+        }
+        .timeline-content {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+            max-width: 340px;
+        }
+        .timeline-content .year {
+            font-size: 12px;
+            font-weight: 700;
+            color: #695CFE;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .timeline-content h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+        .timeline-content p { font-size: 13px; color: #666; line-height: 1.6; }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .story-grid { grid-template-columns: 1fr; gap: 40px; }
+            .story-img-wrap { order: -1; }
+            .story-badge { right: 20px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+            .values-grid { grid-template-columns: repeat(2, 1fr); }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .page-banner h1 { font-size: 30px; }
+            .story-text h2 { font-size: 28px; }
+            .values-grid { grid-template-columns: 1fr; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .timeline-item, .timeline-item:nth-child(even) { padding: 0 0 0 40px; justify-content: flex-start; }
+            .timeline::before { left: 8px; }
+            .timeline-dot { left: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html"><div class="logo">LUXE.</div></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <i class='bx bx-search'></i>
+                </div>
+                <a href="wishlist.html"><i class='bx bx-heart'></i></a>
+                <a href="login.html" id="userLink"><i class='bx bx-user'></i></a>
+                <a href="cart.html" class="cart-icon">
+                    <i class='bx bx-shopping-bag'></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <div class="menu-toggle" id="menuToggle"><i class='bx bx-menu'></i></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BANNER -->
+    <div class="page-banner">
+        <h1>About LUXE</h1>
+        <p>Crafting timeless style for the modern wardrobe since 2015</p>
+        <p class="breadcrumb"><a href="index.html">Home</a><span>/</span>About Us</p>
+    </div>
+
+    <!-- OUR STORY -->
+    <section class="story-section">
+        <div class="section-wrap">
+            <div class="story-grid">
+                <div class="story-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700" alt="Our Story">
+                    <div class="story-badge">
+                        <span>10+</span>
+                        Years of<br>Excellence
+                    </div>
+                </div>
+                <div class="story-text">
+                    <span class="eyebrow">Our Story</span>
+                    <h2>Fashion That Speaks for Itself</h2>
+                    <p>LUXE was born from a simple belief — that great clothing should be both beautiful and responsible. Founded in 2015, we set out to bridge the gap between high-end fashion and everyday wearability.</p>
+                    <p>We partner directly with artisan craftspeople and ethically certified manufacturers to bring you pieces that last — not just a season, but a lifetime. Every stitch, every fabric choice, every design detail is intentional.</p>
+                    <p>Today, LUXE serves thousands of customers who share our philosophy: invest in fewer, better things.</p>
+                    <a href="shop.html" class="btn-solid">Explore the Collection</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-section">
+        <div class="section-wrap">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="number" data-target="50000">0</span>
+                    <p>Happy Customers</p>
+                </div>
+                <div class="stat-item">
+                    <span class="number" data-target="1200">0</span>
+                    <p>Products Available</p>
+                </div>
+                <div class="stat-item">
+                    <span class="number" data-target="30">0</span>
+                    <p>Countries Shipped</p>
+                </div>
+                <div class="stat-item">
+                    <span class="number" data-target="10">0</span>
+                    <p>Years in Business</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VALUES -->
+    <section class="values-section">
+        <div class="section-wrap">
+            <div class="section-title">
+                <h2>What We Stand For</h2>
+                <p>Our core values guide every decision we make — from design to delivery.</p>
+            </div>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon"><i class='bx bx-leaf'></i></div>
+                    <h3>Sustainability</h3>
+                    <p>We use eco-friendly fabrics and packaging. Our factories are certified for ethical labor and low environmental impact.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class='bx bx-diamond'></i></div>
+                    <h3>Quality First</h3>
+                    <p>Every product passes rigorous quality checks before it reaches you. We believe in craftsmanship that stands the test of time.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class='bx bx-group'></i></div>
+                    <h3>Inclusivity</h3>
+                    <p>Fashion is for everyone. We design for all body types, cultures, and occasions — because style has no boundaries.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class='bx bx-shield-quarter'></i></div>
+                    <h3>Transparency</h3>
+                    <p>We openly share our supply chain, pricing philosophy, and impact reports. No greenwashing — just honest fashion.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class='bx bx-bulb'></i></div>
+                    <h3>Innovation</h3>
+                    <p>From smart fabric technology to AI-powered sizing tools, we constantly invest in making your shopping experience better.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon"><i class='bx bx-heart'></i></div>
+                    <h3>Community</h3>
+                    <p>We give back through social programs and local partnerships. When LUXE grows, so does the community around us.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM -->
+    <section class="team-section">
+        <div class="section-wrap">
+            <div class="section-title">
+                <h2>Meet the Team</h2>
+                <p>The passionate people behind every piece we create.</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400" alt="CEO">
+                    <div class="team-info">
+                        <h3>Ahmad Raza</h3>
+                        <p class="role">Founder & CEO</p>
+                        <div class="team-socials">
+                            <a href="#"><i class='bx bxl-linkedin'></i></a>
+                            <a href="#"><i class='bx bxl-instagram'></i></a>
+                            <a href="#"><i class='bx bxl-twitter'></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400" alt="Creative Director">
+                    <div class="team-info">
+                        <h3>Sara Malik</h3>
+                        <p class="role">Creative Director</p>
+                        <div class="team-socials">
+                            <a href="#"><i class='bx bxl-linkedin'></i></a>
+                            <a href="#"><i class='bx bxl-instagram'></i></a>
+                            <a href="#"><i class='bx bxl-twitter'></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400" alt="Head of Operations">
+                    <div class="team-info">
+                        <h3>Usman Khan</h3>
+                        <p class="role">Head of Operations</p>
+                        <div class="team-socials">
+                            <a href="#"><i class='bx bxl-linkedin'></i></a>
+                            <a href="#"><i class='bx bxl-instagram'></i></a>
+                            <a href="#"><i class='bx bxl-twitter'></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400" alt="Head of Design">
+                    <div class="team-info">
+                        <h3>Ayesha Noor</h3>
+                        <p class="role">Head of Design</p>
+                        <div class="team-socials">
+                            <a href="#"><i class='bx bxl-linkedin'></i></a>
+                            <a href="#"><i class='bx bxl-instagram'></i></a>
+                            <a href="#"><i class='bx bxl-twitter'></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="timeline-section">
+        <div class="section-wrap">
+            <div class="section-title">
+                <h2>Our Journey</h2>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="year">2015</span>
+                        <h3>LUXE is Founded</h3>
+                        <p>Started as a small boutique in Lahore with just 20 products and a big dream.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="year">2017</span>
+                        <h3>Online Store Launch</h3>
+                        <p>Launched our e-commerce platform, reaching customers across Pakistan in the first month.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="year">2019</span>
+                        <h3>International Shipping</h3>
+                        <p>Began shipping to 15 countries. LUXE went global with our signature collections.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="year">2022</span>
+                        <h3>Sustainability Pledge</h3>
+                        <p>Committed to 100% sustainable packaging and ethical sourcing across all product lines.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="year">2025</span>
+                        <h3>50,000 Happy Customers</h3>
+                        <p>Hit a major milestone — 50,000 customers worldwide and still growing strong.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-newsletter">
+            <div class="newsletter-content">
+                <h3>Join Our Newsletter</h3>
+                <p>Be the first to know about exclusive offers and style inspiration.</p>
+                <form class="newsletter-form" onsubmit="return false;">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-container">
+            <div class="footer-row">
+                <div class="footer-col brand-col">
+                    <h4>LUXE.</h4>
+                    <p>Timeless elegance for the modern wardrobe. Quality craftsmanship, sustainable practices.</p>
+                    <div class="social-links">
+                        <a href="#"><i class='bx bxl-instagram'></i></a>
+                        <a href="#"><i class='bx bxl-facebook'></i></a>
+                        <a href="#"><i class='bx bxl-twitter'></i></a>
+                        <a href="#"><i class='bx bxl-youtube'></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html">All Products</a></li>
+                        <li><a href="categories.html">Categories</a></li>
+                        <li><a href="shop.html?filter=sale">Sale</a></li>
+                        <li><a href="shop.html?filter=new">New Arrivals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Help</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="news.html">News &amp; Promotions</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-container bottom-row">
+                <p>&copy; 2025 LUXE. All rights reserved.</p>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/nav.js"></script>
+    <script>
+        // Animate counters
+        function animateCounters() {
+            document.querySelectorAll('.number[data-target]').forEach(el => {
+                const target = +el.dataset.target;
+                const step = Math.ceil(target / 60);
+                let current = 0;
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= target) { el.textContent = target.toLocaleString(); clearInterval(timer); }
+                    else el.textContent = current.toLocaleString();
+                }, 25);
+            });
+        }
+        // Trigger on scroll into view
+        const statsSection = document.querySelector('.stats-section');
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) { animateCounters(); observer.disconnect(); }
+        }, { threshold: 0.3 });
+        if (statsSection) observer.observe(statsSection);
+    </script>
+</body>
+</html>

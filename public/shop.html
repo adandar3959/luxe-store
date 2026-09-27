@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop | LUXE</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ── Page Header Banner ── */
+        .page-banner {
+            margin-top: 60px;
+            height: 280px;
+            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+                        url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1512') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+        .page-banner h1 { font-size: 42px; font-weight: 700; margin-bottom: 10px; }
+        .breadcrumb { font-size: 14px; opacity: 0.85; }
+        .breadcrumb a { color: #fff; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb span { margin: 0 8px; }
+
+        /* ── Shop Layout ── */
+        .shop-layout {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 36px;
+        }
+
+        /* ── Sidebar Filters ── */
+        .filter-sidebar { position: sticky; top: 90px; align-self: start; }
+        .filter-block {
+            background: #fff;
+            border: 1px solid #ebebeb;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+        .filter-block h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+            color: #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .filter-block h3 i { font-size: 18px; color: #999; transition: transform 0.3s; }
+        .filter-block h3.collapsed i { transform: rotate(-90deg); }
+        .filter-options { display: flex; flex-direction: column; gap: 10px; }
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #444;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .filter-option:hover { color: #695CFE; }
+        .filter-option input[type="checkbox"] {
+            width: 16px; height: 16px; accent-color: #695CFE; cursor: pointer;
+        }
+        .filter-option .count { margin-left: auto; color: #aaa; font-size: 12px; }
+
+        /* Price Range */
+        .price-range-inputs { display: flex; gap: 10px; margin-top: 10px; }
+        .price-range-inputs input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .price-range-inputs input:focus { border-color: #695CFE; }
+        .apply-price-btn {
+            width: 100%;
+            margin-top: 14px;
+            padding: 10px;
+            background: #695CFE;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .apply-price-btn:hover { background: #5548e0; }
+
+        /* Color swatches */
+        .color-swatches { display: flex; flex-wrap: wrap; gap: 10px; }
+        .swatch {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .swatch:hover, .swatch.active { border-color: #695CFE; transform: scale(1.15); }
+
+        /* Size pills */
+        .size-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+        .size-pill {
+            padding: 6px 14px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #444;
+        }
+        .size-pill:hover, .size-pill.active {
+            background: #695CFE; color: #fff; border-color: #695CFE;
+        }
+
+        /* Clear filters */
+        .clear-filters-btn {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.2s;
+        }
+        .clear-filters-btn:hover { border-color: #695CFE; color: #695CFE; }
+
+        /* ── Products Area ── */
+        .products-area {}
+        .shop-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .results-count { font-size: 14px; color: #777; }
+        .results-count strong { color: #1a1a1a; }
+
+        .toolbar-right { display: flex; gap: 12px; align-items: center; }
+        .sort-select {
+            padding: 9px 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #444;
+            outline: none;
+            cursor: pointer;
+            transition: border 0.2s;
+            background: #fff;
+        }
+        .sort-select:focus { border-color: #695CFE; }
+
+        .view-toggle { display: flex; gap: 6px; }
+        .view-btn {
+            width: 36px; height: 36px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 18px; color: #999;
+            transition: all 0.2s; background: #fff;
+        }
+        .view-btn.active, .view-btn:hover { border-color: #695CFE; color: #695CFE; background: #f4f2ff; }
+
+        /* List view override */
+        .product-grid.list-view {
+            grid-template-columns: 1fr;
+        }
+        .product-grid.list-view .product-card {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+        }
+        .product-grid.list-view .product-img { height: 200px; }
+        .product-grid.list-view .product-details { padding: 20px; display: flex; flex-direction: column; justify-content: center; }
+        .product-grid.list-view .product-details p {
+            font-size: 13px; color: #777; margin: 8px 0 14px; line-height: 1.6;
+        }
+
+        /* Active filters tags */
+        .active-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+        .filter-tag {
+            background: #f4f2ff;
+            color: #695CFE;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex; align-items: center; gap: 6px;
+            cursor: pointer;
+        }
+        .filter-tag i { font-size: 14px; }
+        .filter-tag:hover { background: #695CFE; color: #fff; }
+
+        /* Pagination */
+        .shop-pagination {
+            display: flex; justify-content: center; align-items: center;
+            gap: 8px; margin-top: 50px;
+        }
+        .page-btn {
+            width: 40px; height: 40px;
+            border: 1px solid #e0e0e0; background: #fff;
+            border-radius: 8px; font-size: 14px; font-weight: 600;
+            cursor: pointer; color: #444; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .page-btn:hover { border-color: #695CFE; color: #695CFE; }
+        .page-btn.active { background: #695CFE; color: #fff; border-color: #695CFE; }
+        .page-btn.arrow { font-size: 20px; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .shop-layout { grid-template-columns: 1fr; }
+            .filter-sidebar { position: static; }
+        }
+        @media (max-width: 600px) {
+            .page-banner h1 { font-size: 28px; }
+            .product-grid.list-view .product-card { grid-template-columns: 1fr; }
+        }
+
+        /* Mobile filter toggle */
+        .mobile-filter-btn {
+            display: none;
+            width: 100%;
+            padding: 12px;
+            background: #695CFE;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 16px;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        @media (max-width: 900px) {
+            .mobile-filter-btn { display: flex; }
+            .filter-sidebar { display: none; }
+            .filter-sidebar.open { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html"><div class="logo">LUXE.</div></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+            <div class="nav-icons">
+                <div class="search-box">
+                    <input type="text" placeholder="Search...">
+                    <i class='bx bx-search'></i>
+                </div>
+                <a href="wishlist.html"><i class='bx bx-heart'></i></a>
+                <a href="login.html" id="userLink"><i class='bx bx-user'></i></a>
+                <a href="cart.html" class="cart-icon">
+                    <i class='bx bx-shopping-bag'></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <div class="menu-toggle" id="menuToggle"><i class='bx bx-menu'></i></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PAGE BANNER -->
+    <div class="page-banner">
+        <h1>Our Shop</h1>
+        <p class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span> Shop
+        </p>
+    </div>
+
+    <!-- SHOP LAYOUT -->
+    <div class="shop-layout">
+
+        <!-- SIDEBAR FILTERS -->
+        <button class="mobile-filter-btn" id="mobileFilterBtn">
+            <i class='bx bx-filter-alt'></i> Show Filters
+        </button>
+
+        <aside class="filter-sidebar" id="filterSidebar">
+
+            <!-- Categories -->
+            <div class="filter-block">
+                <h3><span>Categories</span><i class='bx bx-chevron-down'></i></h3>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="checkbox" value="all" checked onchange="applyFilters()"> All Products
+                        <span class="count">120</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="women" onchange="applyFilters()"> Women
+                        <span class="count">48</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="men" onchange="applyFilters()"> Men
+                        <span class="count">36</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="accessories" onchange="applyFilters()"> Accessories
+                        <span class="count">24</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="sale" onchange="applyFilters()"> Sale
+                        <span class="count">12</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Price -->
+            <div class="filter-block">
+                <h3><span>Price Range</span><i class='bx bx-chevron-down'></i></h3>
+                <div class="price-range-inputs">
+                    <input type="number" id="minPrice" placeholder="Min" min="0">
+                    <input type="number" id="maxPrice" placeholder="Max" min="0">
+                </div>
+                <button class="apply-price-btn" onclick="applyFilters()">Apply</button>
+            </div>
+
+            <!-- Colors -->
+            <div class="filter-block">
+                <h3><span>Color</span><i class='bx bx-chevron-down'></i></h3>
+                <div class="color-swatches">
+                    <div class="swatch active" style="background:#1a1a1a;" title="Black" onclick="toggleSwatch(this)"></div>
+                    <div class="swatch" style="background:#fff; border-color:#ddd;" title="White" onclick="toggleSwatch(this)"></div>
+                    <div class="swatch" style="background:#695CFE;" title="Purple" onclick="toggleSwatch(this)"></div>
+                    <div class="swatch" style="background:#e63946;" title="Red" onclick="toggleSwatch(this)"></div>
+                    <div class="swatch" style="background:#2a9d8f;" title="Teal" onclick="toggleSwatch(this)"></div>
+                    <div class="swatch" style="background:#e9c46a;" title="Yellow" onclick="toggleSwatch(this)"></div>
+                    <div class="swatch" style="background:#457b9d;" title="Blue" onclick="toggleSwatch(this)"></div>
+                    <div class="swatch" style="background:#d4a373;" title="Beige" onclick="toggleSwatch(this)"></div>
+                </div>
+            </div>
+
+            <!-- Sizes -->
+            <div class="filter-block">
+                <h3><span>Size</span><i class='bx bx-chevron-down'></i></h3>
+                <div class="size-pills">
+                    <span class="size-pill" onclick="toggleSize(this)">XS</span>
+                    <span class="size-pill active" onclick="toggleSize(this)">S</span>
+                    <span class="size-pill active" onclick="toggleSize(this)">M</span>
+                    <span class="size-pill" onclick="toggleSize(this)">L</span>
+                    <span class="size-pill" onclick="toggleSize(this)">XL</span>
+                    <span class="size-pill" onclick="toggleSize(this)">XXL</span>
+                </div>
+            </div>
+
+            <!-- Rating -->
+            <div class="filter-block">
+                <h3><span>Rating</span><i class='bx bx-chevron-down'></i></h3>
+                <div class="filter-options">
+                    <label class="filter-option"><input type="radio" name="rating" value="4"> ★★★★☆ &amp; up</label>
+                    <label class="filter-option"><input type="radio" name="rating" value="3"> ★★★☆☆ &amp; up</label>
+                    <label class="filter-option"><input type="radio" name="rating" value="2"> ★★☆☆☆ &amp; up</label>
+                    <label class="filter-option"><input type="radio" name="rating" value="0" checked> All Ratings</label>
+                </div>
+            </div>
+
+            <button class="clear-filters-btn" onclick="clearFilters()">
+                <i class='bx bx-x'></i> Clear All Filters
+            </button>
+        </aside>
+
+        <!-- PRODUCTS AREA -->
+        <div class="products-area">
+
+            <!-- Active Filter Tags -->
+            <div class="active-filters" id="activeFilters">
+                <span class="filter-tag">S <i class='bx bx-x'></i></span>
+                <span class="filter-tag">M <i class='bx bx-x'></i></span>
+                <span class="filter-tag">Black <i class='bx bx-x'></i></span>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="shop-toolbar">
+                <p class="results-count">Showing <strong id="resultCount">12</strong> of <strong>120</strong> products</p>
+                <div class="toolbar-right">
+                    <select class="sort-select" id="sortSelect" onchange="sortProducts()">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="newest">Newest First</option>
+                        <option value="rating">Top Rated</option>
+                    </select>
+                    <div class="view-toggle">
+                        <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')" title="Grid View">
+                            <i class='bx bx-grid-alt'></i>
+                        </button>
+                        <button class="view-btn" id="listViewBtn" onclick="setView('list')" title="List View">
+                            <i class='bx bx-list-ul'></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="product-grid" id="shopProductGrid"></div>
+
+            <!-- Pagination -->
+            <div class="shop-pagination" id="shopPagination"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-newsletter">
+            <div class="newsletter-content">
+                <h3>Join Our Newsletter</h3>
+                <p>Be the first to know about exclusive offers and style inspiration.</p>
+                <form class="newsletter-form" onsubmit="return false;">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer-container">
+            <div class="footer-row">
+                <div class="footer-col brand-col">
+                    <h4>LUXE.</h4>
+                    <p>Timeless elegance for the modern wardrobe. Quality craftsmanship, sustainable practices.</p>
+                    <div class="social-links">
+                        <a href="#"><i class='bx bxl-instagram'></i></a>
+                        <a href="#"><i class='bx bxl-facebook'></i></a>
+                        <a href="#"><i class='bx bxl-twitter'></i></a>
+                        <a href="#"><i class='bx bxl-youtube'></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="shop.html">All Products</a></li>
+                        <li><a href="categories.html">Categories</a></li>
+                        <li><a href="shop.html?filter=sale">Sale</a></li>
+                        <li><a href="shop.html?filter=new">New Arrivals</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Help</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Size Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="news.html">News & Promotions</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-container bottom-row">
+                <p>&copy; 2025 LUXE. All rights reserved.</p>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/nav.js"></script>
+    <script>
+        // ── Static product data (frontend-only, no backend) ──
+        const products = [
+            { id: 1, name: "Classic Linen Blazer",       brand: "LUXE Studio",    price: 8999,  oldPrice: 12000, img: "https://images.unsplash.com/photo-1594938298603-c8148c4bea3f?w=400", category: "women", rating: 4.8, isNew: true,  isSale: false },
+            { id: 2, name: "Slim Fit Chinos",             brand: "LUXE Men",       price: 4299,  oldPrice: null,  img: "https://images.unsplash.com/photo-1624378441864-6eda7eba3862?w=400", category: "men",   rating: 4.5, isNew: false, isSale: false },
+            { id: 3, name: "Floral Wrap Dress",           brand: "LUXE Studio",    price: 6499,  oldPrice: 8500,  img: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=400", category: "women", rating: 4.7, isNew: true,  isSale: true },
+            { id: 4, name: "Leather Tote Bag",            brand: "LUXE Accents",   price: 11500, oldPrice: null,  img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400", category: "accessories", rating: 4.9, isNew: false, isSale: false },
+            { id: 5, name: "Oversized Knit Sweater",      brand: "LUXE Studio",    price: 5799,  oldPrice: 7200,  img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400", category: "women", rating: 4.6, isNew: false, isSale: true },
+            { id: 6, name: "Oxford Button-Down Shirt",    brand: "LUXE Men",       price: 3999,  oldPrice: null,  img: "https://images.unsplash.com/photo-1602810316483-7f2d66e01a4c?w=400", category: "men",   rating: 4.3, isNew: true,  isSale: false },
+            { id: 7, name: "Silk Scarf",                  brand: "LUXE Accents",   price: 2999,  oldPrice: 4000,  img: "https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=400", category: "accessories", rating: 4.5, isNew: false, isSale: true },
+            { id: 8, name: "High-Waist Trousers",         brand: "LUXE Studio",    price: 5299,  oldPrice: null,  img: "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400", category: "women", rating: 4.4, isNew: true,  isSale: false },
+            { id: 9, name: "Casual Polo Shirt",           brand: "LUXE Men",       price: 2799,  oldPrice: null,  img: "https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=400", category: "men",   rating: 4.2, isNew: false, isSale: false },
+            { id: 10, name: "Minimalist Watch",           brand: "LUXE Accents",   price: 15999, oldPrice: 18000, img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400", category: "accessories", rating: 4.9, isNew: false, isSale: true },
+            { id: 11, name: "Ruffled Blouse",             brand: "LUXE Studio",    price: 4199,  oldPrice: null,  img: "https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?w=400", category: "women", rating: 4.1, isNew: true,  isSale: false },
+            { id: 12, name: "Denim Jacket",               brand: "LUXE Men",       price: 7299,  oldPrice: 9500,  img: "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?w=400", category: "men",   rating: 4.7, isNew: false, isSale: true },
+        ];
+
+        const ITEMS_PER_PAGE = 8;
+        let currentPage = 1;
+        let filteredProducts = [...products];
+
+        function formatPrice(p) { return 'Rs. ' + p.toLocaleString(); }
+
+        function renderProducts() {
+            const grid = document.getElementById('shopProductGrid');
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const pageItems = filteredProducts.slice(start, start + ITEMS_PER_PAGE);
+
+            if (pageItems.length === 0) {
+                grid.innerHTML = `<div style="text-align:center;padding:60px;color:#999;grid-column:1/-1">
+                    <i class='bx bx-search-alt' style="font-size:48px;margin-bottom:16px;display:block"></i>
+                    <p style="font-size:16px">No products match your filters.</p>
+                    <button onclick="clearFilters()" style="margin-top:16px;padding:10px 24px;background:#695CFE;color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px">Clear Filters</button>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = pageItems.map(p => `
+                <div class="product-card" onclick="window.location.href='product.html?id=${p.id}'">
+                    <div class="img-box">
+                        <img src="${p.img}" alt="${p.name}" class="product-img" loading="lazy">
+                        ${p.isNew ? `<span style="position:absolute;top:12px;left:12px;background:#1a1a1a;color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:1px">NEW</span>` : ''}
+                        ${p.isSale ? `<span style="position:absolute;top:${p.isNew ? '40px' : '12px'};left:12px;background:#e63946;color:#fff;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:1px">SALE</span>` : ''}
+                        <div class="wishlist-icon" onclick="event.stopPropagation(); toggleWishlist(${p.id}, this)">
+                            <i class='bx bx-heart'></i>
+                        </div>
+                    </div>
+                    <div class="product-details">
+                        <p class="product-brand">${p.brand}</p>
+                        <h3 class="product-title">${p.name}</h3>
+                        <p class="product-price">
+                            ${formatPrice(p.price)}
+                            ${p.oldPrice ? `<span style="text-decoration:line-through;color:#aaa;font-size:12px;margin-left:6px">${formatPrice(p.oldPrice)}</span>` : ''}
+                        </p>
+                        <div style="font-size:12px;color:#f4a261;margin-top:4px">
+                            ${'★'.repeat(Math.round(p.rating))}${'☆'.repeat(5-Math.round(p.rating))}
+                            <span style="color:#999;margin-left:4px">(${p.rating})</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('resultCount').textContent = filteredProducts.length;
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const total = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+            const pag = document.getElementById('shopPagination');
+            if (total <= 1) { pag.innerHTML = ''; return; }
+            let html = `<button class="page-btn arrow" onclick="changePage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+            for (let i = 1; i <= total; i++) {
+                html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            html += `<button class="page-btn arrow" onclick="changePage(${currentPage+1})" ${currentPage===total?'disabled':''}>›</button>`;
+            pag.innerHTML = html;
+        }
+
+        function changePage(n) {
+            const total = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+            if (n < 1 || n > total) return;
+            currentPage = n;
+            renderProducts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function sortProducts() {
+            const val = document.getElementById('sortSelect').value;
+            if (val === 'price-low')  filteredProducts.sort((a,b) => a.price - b.price);
+            if (val === 'price-high') filteredProducts.sort((a,b) => b.price - a.price);
+            if (val === 'newest')     filteredProducts.sort((a,b) => b.isNew - a.isNew);
+            if (val === 'rating')     filteredProducts.sort((a,b) => b.rating - a.rating);
+            if (val === 'featured')   filteredProducts.sort((a,b) => a.id - b.id);
+            currentPage = 1;
+            renderProducts();
+        }
+
+        function applyFilters() {
+            filteredProducts = [...products];
+            currentPage = 1;
+            renderProducts();
+        }
+
+        function clearFilters() {
+            document.querySelectorAll('.filter-option input[type=checkbox]').forEach(cb => cb.checked = false);
+            document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.size-pill').forEach(s => s.classList.remove('active'));
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('activeFilters').innerHTML = '';
+            filteredProducts = [...products];
+            currentPage = 1;
+            renderProducts();
+        }
+
+        function setView(mode) {
+            const grid = document.getElementById('shopProductGrid');
+            document.getElementById('gridViewBtn').classList.toggle('active', mode === 'grid');
+            document.getElementById('listViewBtn').classList.toggle('active', mode === 'list');
+            grid.classList.toggle('list-view', mode === 'list');
+        }
+
+        function toggleSwatch(el) { el.classList.toggle('active'); }
+        function toggleSize(el) { el.classList.toggle('active'); }
+
+        function toggleWishlist(id, btn) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const idx = wishlist.indexOf(id);
+            if (idx === -1) { wishlist.push(id); btn.querySelector('i').className = 'bx bxs-heart'; btn.querySelector('i').style.color = '#e63946'; }
+            else { wishlist.splice(idx,1); btn.querySelector('i').className = 'bx bx-heart'; btn.querySelector('i').style.color = ''; }
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        }
+
+        // Mobile filter toggle
+        document.getElementById('mobileFilterBtn').addEventListener('click', function() {
+            const sidebar = document.getElementById('filterSidebar');
+            sidebar.classList.toggle('open');
+            this.innerHTML = sidebar.classList.contains('open')
+                ? "<i class='bx bx-x'></i> Hide Filters"
+                : "<i class='bx bx-filter-alt'></i> Show Filters";
+        });
+
+        // Filter block toggle (accordion)
+        document.querySelectorAll('.filter-block h3').forEach(h => {
+            h.addEventListener('click', function() {
+                this.classList.toggle('collapsed');
+                const opts = this.nextElementSibling;
+                opts.style.display = this.classList.contains('collapsed') ? 'none' : '';
+            });
+        });
+
+        // URL params (e.g. ?filter=sale)
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('filter') === 'sale') {
+            filteredProducts = products.filter(p => p.isSale);
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>
