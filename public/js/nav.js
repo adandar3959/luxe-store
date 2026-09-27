@@ -14,6 +14,11 @@ async function loadCategoriesForNav() {
 
         navLinksContainer.innerHTML = '<li><a href="index.html">Home</a></li>';
 
+        // ── Static links before categories ──
+        const shopLi = document.createElement('li');
+        shopLi.innerHTML = `<a href="shop.html">Shop</a>`;
+        navLinksContainer.appendChild(shopLi);
+
         const parents = allCategories.filter(c => !c.parentId || c.parentId === 'null');
         const children = allCategories.filter(c => c.parentId && c.parentId !== 'null');
 
@@ -47,7 +52,31 @@ async function loadCategoriesForNav() {
             navLinksContainer.appendChild(li);
         });
 
-    } catch (error) { console.error("Error loading navbar categories:", error); }
+        // ── Static links after categories ──
+        [
+            { href: 'about.html',   label: 'About'   },
+            { href: 'news.html',    label: 'News & Deals' },
+            { href: 'contact.html', label: 'Contact' },
+        ].forEach(({ href, label }) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="${href}">${label}</a>`;
+            navLinksContainer.appendChild(li);
+        });
+
+    } catch (error) {
+        // API unavailable (frontend-only mode) — render static nav
+        console.warn("Categories API unavailable, using static nav.");
+        const navLinksContainer = document.getElementById('navLinks');
+        if (!navLinksContainer) return;
+        navLinksContainer.innerHTML = `
+            <li><a href="index.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="categories.html">Categories</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="news.html">News &amp; Deals</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        `;
+    }
 }
 function updateUserInterface() {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
