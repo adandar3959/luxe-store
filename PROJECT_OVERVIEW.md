@@ -12,6 +12,24 @@ A full-stack e-commerce app for a clothing store. Node.js/Express backend with M
 
 ---
 
+## Frontend Pages (11 Total)
+
+| Page | File | Description |
+|------|------|-------------|
+| Home | `index.html` | Landing page with hero, featured products, categories |
+| Shop | `shop.html` | Full product listing with filters, sorting, grid/list view |
+| Shop by Category | `categories.html` / `category.html` | Browse by category with mega menu |
+| About Us | `about.html` | Brand story, stats, values, team, timeline |
+| News & Promotions | `news.html` | Promo banners, discount codes, countdown timer, blog posts |
+| Contact Us | `contact.html` | Contact form, store hours, FAQ accordion |
+| Single Product | `product.html` | Product detail, images, size picker, reviews |
+| Wishlist | `wishlist.html` | Saved items list |
+| Cart | `cart.html` | Add to cart, quantity management |
+| Checkout | `payment.html` | Payment and shipping details |
+| Order Confirmation | `order-success.html` | Thank you / order success page |
+
+---
+
 ## Features
 - Customer shopping — browse products, cart, wishlist, place & cancel orders
 - Order lifecycle — Pending → Processing → Shipped → Delivered
@@ -21,6 +39,7 @@ A full-stack e-commerce app for a clothing store. Node.js/Express backend with M
 - Newsletter — public subscribe, admin sends bulk emails
 - Bulk product import — upload a CSV to insert many products at once
 - Admin dashboard — sales totals, order counts, customer stats
+- Dynamic navbar — categories loaded from API with mega menus; falls back to static nav if API is offline
 
 ---
 
@@ -45,7 +64,10 @@ src/
   controllers/       # Business logic
   routes/            # Route definitions
   utils/             # JWT helper
-public/              # Frontend static files
+public/
+  *.html             # 11 frontend pages
+  css/               # Stylesheets (style.css, product.css, cart.css, etc.)
+  js/                # Scripts (nav.js, main.js, cart.js, product.js, etc.)
 uploads/temp/        # Temp storage for CSV uploads (auto-cleaned)
 ```
 
